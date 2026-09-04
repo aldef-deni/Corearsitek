@@ -67,7 +67,7 @@
                 <p class="section-lead">Sebagian karya yang sudah kami selesaikan — dari hunian klasik hingga villa tropis.</p>
             </div>
 
-            <div class="mosaic" data-reveal-group="70">
+            <div class="mosaic" data-swipe data-reveal-group="70">
                 @foreach ($portfolios as $i => $karya)
                     <a href="{{ route('portfolio.show', $karya) }}" class="mosaic-item reveal {{ $i === 0 ? 'mosaic-lead' : '' }}">
                         <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">
@@ -81,7 +81,7 @@
             </div>
 
             <div class="section-cta reveal">
-                <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1">
+                <a href="{{ route('portfolio') }}" class="btn btn-red btn-flash magnetic" data-magnetic="0.1">
                     <i class="fa-solid fa-images"></i> LIHAT SEMUA PORTOFOLIO
                 </a>
             </div>
@@ -119,7 +119,7 @@
                 <p class="section-lead">Empat tahap yang jelas, dari obrolan pertama sampai gambar kerja di tangan Anda.</p>
             </div>
 
-            <ol class="process-grid" data-reveal-group="90">
+            <ol class="process-grid" data-swipe data-reveal-group="90">
                 @foreach ($steps as $i => $step)
                     <li class="process-step reveal">
                         <span class="process-num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
@@ -142,7 +142,7 @@
                 <h2 class="section-title">TESTIMONI KLIEN</h2>
             </div>
 
-            <div class="testimonial-grid" data-reveal-group="90">
+            <div class="testimonial-grid" data-swipe data-reveal-group="90">
                 @foreach ($testimonials as $testimonial)
                     <figure class="testimonial-card reveal" data-tilt="3">
                         <i class="fa-solid fa-quote-left quote-mark"></i>
@@ -225,7 +225,7 @@
         </div>
         <div class="contact-cta reveal">
             <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI GRATIS VIA WHATSAPP
+                <i class="fa-brands fa-whatsapp"></i> KONSULTASI
             </a>
         </div>
     </div>

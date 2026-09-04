@@ -567,6 +567,7 @@
             lembar.forEach(function (lem, i) {
                 var terbuka = i < posisi;
                 lem.classList.toggle('is-flipped', terbuka);
+                lem.classList.toggle('is-top', i === posisi);
                 // Yang sudah dibuka menumpuk ke kiri, yang belum ke kanan.
                 lem.style.zIndex = terbuka ? i : lembar.length - i;
             });
@@ -620,6 +621,96 @@
         }
     }
 
+    /* ---------------- Deretan kartu yang digeser di ponsel ----------------
+       Di layar sempit, grid kartu diubah jadi satu baris yang digeser
+       mendatar dengan scroll-snap, ditambah titik penanda posisi. Di layar
+       lebar kembali jadi grid biasa. */
+
+    var GESER_PONSEL = '(max-width: 768px)';
+
+    function initCardsSwipe() {
+        var wadah = Array.prototype.slice.call(document.querySelectorAll('[data-swipe]'));
+        if (!wadah.length) return;
+
+        var ponsel = window.matchMedia(GESER_PONSEL);
+
+        wadah.forEach(function (rak) {
+            var titik = null;
+            var kartu = Array.prototype.slice.call(rak.children);
+            if (kartu.length < 2) return;
+
+            function langkah() {
+                var pertama = rak.firstElementChild;
+                if (!pertama) return rak.clientWidth || 1;
+                var jarak = parseFloat(getComputedStyle(rak).columnGap || '0') || 0;
+                return pertama.getBoundingClientRect().width + jarak;
+            }
+
+            function segarkan() {
+                if (!titik) return;
+                var aktif = Math.round(rak.scrollLeft / langkah());
+                Array.prototype.forEach.call(titik.children, function (t, i) {
+                    t.classList.toggle('is-active', i === aktif);
+                    t.setAttribute('aria-current', i === aktif ? 'true' : 'false');
+                });
+            }
+
+            var menunggu = false;
+            function padaGeser() {
+                if (menunggu) return;
+                menunggu = true;
+                requestAnimationFrame(function () { segarkan(); menunggu = false; });
+            }
+
+            function pasang() {
+                if (titik) return;
+
+                rak.classList.add('cards-swipe');
+
+                titik = document.createElement('div');
+                titik.className = 'swipe-dots';
+                titik.setAttribute('role', 'tablist');
+                titik.setAttribute('aria-label', 'Posisi kartu');
+
+                kartu.forEach(function (_, i) {
+                    var t = document.createElement('button');
+                    t.type = 'button';
+                    t.className = 'swipe-dot';
+                    t.setAttribute('aria-label', 'Kartu ' + (i + 1));
+                    t.addEventListener('click', function () {
+                        rak.scrollTo({ left: i * langkah(), behavior: reduceMotion ? 'auto' : 'smooth' });
+                    });
+                    titik.appendChild(t);
+                });
+
+                rak.parentNode.insertBefore(titik, rak.nextSibling);
+                rak.addEventListener('scroll', padaGeser, { passive: true });
+                segarkan();
+            }
+
+            function lepas() {
+                if (!titik) return;
+                rak.classList.remove('cards-swipe');
+                rak.removeEventListener('scroll', padaGeser);
+                titik.remove();
+                titik = null;
+                rak.scrollLeft = 0;
+            }
+
+            function sesuaikan() { ponsel.matches ? pasang() : lepas(); }
+
+            sesuaikan();
+
+            if (ponsel.addEventListener) {
+                ponsel.addEventListener('change', sesuaikan);
+            }
+
+            window.addEventListener('resize', function () {
+                if (titik) segarkan();
+            }, { passive: true });
+        });
+    }
+
     /* ---------------- Bootstrap ---------------- */
 
     function init() {
@@ -627,6 +718,7 @@
         initNavbarScroll();
         initHeroSlider();
         initFlipbook();
+        initCardsSwipe();
         initBackToTop();
         initStaggerGroups();
         initReveal();

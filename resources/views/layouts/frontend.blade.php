@@ -75,35 +75,60 @@
 </main>
 
 <footer class="footer">
-    <div class="container footer-grid">
-        <div>
-            <div class="brand footer-brand">
-                <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}" class="brand-logo">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-about">
+                <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}" class="footer-logo">
+                <p class="footer-desc">{{ $contents['footer_text'] ?? '' }}</p>
+
+                <a class="footer-wa" href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}"
+                   target="_blank" rel="noopener">
+                    <i class="fa-brands fa-whatsapp"></i> Konsultasi via WhatsApp
+                </a>
             </div>
-            <p>{{ $contents['footer_text'] ?? '' }}</p>
-        </div>
-        <div>
-            <h4>Menu</h4>
-            <ul>
-                <li><a href="{{ route('home') }}">Beranda</a></li>
-                <li><a href="{{ route('services') }}">Layanan</a></li>
-                <li><a href="{{ route('portfolio') }}">Portofolio</a></li>
-                <li><a href="{{ route('gallery') }}">Galeri</a></li>
-                <li><a href="{{ route('about') }}">Tentang CoreArsitek</a></li>
-                <li><a href="{{ route('home') }}#kontak">Kontak</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4>Kontak</h4>
-            <ul class="footer-contact">
-                <li><i class="fa-solid fa-location-dot"></i> {{ $contents['contact_address'] ?? '' }}</li>
-                <li><i class="fa-solid fa-phone"></i> {{ $contents['contact_phone'] ?? '' }}</li>
-                <li><i class="fa-solid fa-envelope"></i> {{ $contents['contact_email'] ?? '' }}</li>
-            </ul>
+
+            <nav class="footer-col" aria-label="Menu footer">
+                <h4>Jelajahi</h4>
+                <ul class="footer-menu">
+                    <li><a href="{{ route('home') }}">Beranda</a></li>
+                    <li><a href="{{ route('portfolio') }}">Portofolio</a></li>
+                    <li><a href="{{ route('services') }}">Layanan</a></li>
+                    <li><a href="{{ route('gallery') }}">Galeri</a></li>
+                    <li><a href="{{ route('about') }}">Tentang CoreArsitek</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-col">
+                <h4>Hubungi Kami</h4>
+                <ul class="footer-contact">
+                    @if (!empty($contents['contact_address']))
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>{{ $contents['contact_address'] }}</span>
+                        </li>
+                    @endif
+                    @if (!empty($contents['contact_phone']))
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $contents['contact_phone']) }}">{{ $contents['contact_phone'] }}</a>
+                        </li>
+                    @endif
+                    @if (!empty($contents['contact_email']))
+                        <li>
+                            <i class="fa-regular fa-envelope"></i>
+                            <a href="mailto:{{ $contents['contact_email'] }}">{{ $contents['contact_email'] }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
         </div>
     </div>
+
     <div class="footer-bottom">
-        <div class="container">{{ $contents['footer_copyright'] ?? '© ' . date('Y') . ' CoreArsitek. All rights reserved.' }}</div>
+        <div class="container footer-bottom-inner">
+            <span>{{ $contents['footer_copyright'] ?? '© ' . date('Y') . ' CoreArsitek. All rights reserved.' }}</span>
+            <a href="{{ route('admin.login') }}" class="footer-admin">Masuk Admin</a>
+        </div>
     </div>
 </footer>
 

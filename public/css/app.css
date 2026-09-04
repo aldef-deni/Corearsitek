@@ -1376,6 +1376,8 @@ body.has-custom-cursor * { cursor: none !important; }
     /* Di layar sempit rasio 16:9 terlalu pendek untuk memuat teks hero. */
     .slides { min-height: 620px; max-height: none; }
     .is-page .slides { min-height: 360px; }
+    /* Buku disendirikan: min-height di atas hanya untuk banner. */
+    .book .book-spread { min-height: 600px; max-height: none; }
     .slider-nav { display: none; }
     .slider-dots { bottom: 62px; }
     .service-pills { grid-template-columns: 1fr; }
@@ -2061,7 +2063,7 @@ body.has-custom-cursor * { cursor: none !important; }
 /* Punggung buku tidak relevan kalau hanya ada satu halaman. */
 .book.is-single .book-spread::after { display: none; }
 
-.book.is-single .book-spread { aspect-ratio: 4 / 3; }
+.book.is-single .book-spread { aspect-ratio: 4 / 5; }
 
 .book.is-single .book-right { width: 100%; border-radius: 12px; }
 
@@ -2290,4 +2292,329 @@ body.has-custom-cursor * { cursor: none !important; }
     .work-cta { padding: 20px 0 4px; }
 
     .work-cta .btn { width: 100%; justify-content: center; }
+}
+
+/* ================================================================
+   Tombol dengan kilau menyapu terus-menerus
+
+   .btn-red sudah punya kilau saat hover, tapi di ponsel tidak ada hover
+   sama sekali. Varian ini menyapu sendiri tanpa perlu disentuh.
+   ================================================================ */
+
+.btn-flash { position: relative; overflow: hidden; isolation: isolate; }
+
+.btn-flash::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    left: -35%;
+    width: 28%;
+    z-index: 1;
+    pointer-events: none;
+    transform: skewX(-18deg);
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.14) 35%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(255, 255, 255, 0.14) 65%,
+        transparent);
+    animation: kilau-sapu 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes kilau-sapu {
+    0% { left: -35%; }
+    /* Jeda panjang di ujung supaya kilaunya tidak terasa gelisah. */
+    55%, 100% { left: 120%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-flash::after { animation: none; opacity: 0; }
+}
+
+/* ================================================================
+   Deretan kartu yang digeser (aktif di ponsel)
+   ================================================================ */
+
+.cards-swipe {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Dilebarkan sampai tepi layar supaya kartu berikutnya terlihat mengintip. */
+    margin-inline: -20px;
+    padding-inline: 20px;
+    scroll-padding-inline: 20px;
+    padding-bottom: 4px;
+}
+
+.cards-swipe::-webkit-scrollbar { display: none; }
+
+.cards-swipe > * {
+    scroll-snap-align: start;
+    flex: 0 0 84%;
+    min-width: 0;
+}
+
+/* Animasi masuk dimatikan di dalam rak geser: kartu di luar layar tidak
+   pernah memicu observer, jadi akan tetap tak terlihat saat digeser. */
+.cards-swipe > .reveal,
+.cards-swipe > .reveal-left,
+.cards-swipe > .reveal-right,
+.cards-swipe > .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+/* Kartu mozaik punya tinggi baris grid; di dalam rak geser tingginya
+   ditentukan sendiri. */
+.cards-swipe > .mosaic-item { height: 230px; }
+
+.cards-swipe > .portfolio-card,
+.cards-swipe > .testimonial-card,
+.cards-swipe > .process-step { height: auto; }
+
+.swipe-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 18px;
+}
+
+.swipe-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    transition: width var(--t-mid) var(--e-soft), background-color var(--t-mid) var(--e-glide);
+}
+
+.swipe-dot.is-active { width: 24px; background: var(--red); }
+
+/* ================================================================
+   Footer
+   ================================================================ */
+
+.footer {
+    background: linear-gradient(180deg, #08080a, #030304);
+    color: var(--text-muted);
+    border-top: 1px solid var(--line);
+}
+
+/* Garis merah tipis sebagai pemisah dari isi halaman. */
+.footer::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red-line), transparent);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.3fr;
+    gap: 52px;
+    padding: 64px 0 52px;
+}
+
+.footer-logo {
+    height: 42px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.footer-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.75;
+    max-width: 380px;
+    margin-bottom: 22px;
+}
+
+.footer-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    border: 1px solid var(--red-line);
+    border-radius: 999px;
+    color: var(--red-light);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color var(--t-mid) var(--e-glide), border-color var(--t-mid) var(--e-glide),
+                color var(--t-mid) var(--e-glide), transform var(--t-mid) var(--e-soft);
+}
+
+.footer-wa:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.footer-col h4 {
+    color: #fff;
+    font-size: 12.5px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.footer-menu, .footer-contact { list-style: none; }
+
+.footer-menu li { margin-bottom: 12px; }
+
+.footer-menu a {
+    position: relative;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    padding-left: 0;
+    transition: color var(--t-mid) var(--e-glide), padding-left var(--t-mid) var(--e-soft);
+}
+
+.footer-menu a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 1px;
+    background: var(--red);
+    transition: width var(--t-mid) var(--e-soft);
+}
+
+.footer-menu a:hover { color: #fff; padding-left: 18px; }
+
+.footer-menu a:hover::before { width: 12px; }
+
+.footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-contact i {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    width: 15px;
+    text-align: center;
+}
+
+.footer-contact a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--t-fast) var(--e-glide);
+}
+
+.footer-contact a:hover { color: var(--red-light); }
+
+.footer-bottom {
+    border-top: 1px solid var(--line);
+    padding: 20px 0;
+    font-size: 12.5px;
+    color: var(--text-dim);
+}
+
+.footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.footer-admin {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color var(--t-fast) var(--e-glide);
+}
+
+.footer-admin:hover { color: var(--red); }
+
+/* ================================================================
+   Latar flipbook & sudut kertas terangkat
+   ================================================================ */
+
+.work-book {
+    background:
+        radial-gradient(900px 420px at 50% 0%, rgba(255, 31, 31, 0.12), transparent 66%),
+        linear-gradient(180deg, #0d0709, var(--ink) 72%);
+}
+
+/* Halaman sampul dan penutup memakai gradasi merah ke hitam. */
+.leaf-plate,
+.book-side {
+    background: linear-gradient(155deg, #2a0d10 0%, #14080a 42%, var(--ink) 100%);
+}
+
+.book-spread {
+    background: linear-gradient(160deg, #1d0a0d, var(--ink) 70%);
+}
+
+/* Sudut kanan bawah lembar teratas seolah sedikit terangkat, sebagai
+   isyarat halus bahwa halamannya bisa dibalik. */
+.leaf.is-top .leaf-front::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 0 0 46px 46px;
+    border-color: transparent transparent rgba(255, 255, 255, 0.16) transparent;
+    filter: drop-shadow(-7px -7px 14px rgba(0, 0, 0, 0.75));
+    transform-origin: 100% 100%;
+    animation: kertas-terangkat 3.6s ease-in-out infinite;
+}
+
+@keyframes kertas-terangkat {
+    0%, 100% { transform: scale(0.72); opacity: 0.55; }
+    50% { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaf.is-top .leaf-front::before { animation: none; transform: scale(0.85); }
+}
+
+/* ================================================================
+   Penyesuaian ponsel untuk bagian di atas
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 34px;
+        padding: 46px 0 36px;
+    }
+
+    .footer-logo { height: 36px; margin-bottom: 16px; }
+
+    .footer-desc { max-width: none; margin-bottom: 18px; }
+
+    .footer-col h4 { margin-bottom: 16px; padding-bottom: 10px; }
+
+    .footer-bottom-inner { flex-direction: column; gap: 10px; text-align: center; }
+
+    /* Rak geser sudah punya jarak sendiri, grid aslinya dinetralkan. */
+    .cards-swipe { margin-inline: -20px; padding-inline: 20px; }
+
+    .leaf.is-top .leaf-front::before { border-width: 0 0 34px 34px; }
 }
