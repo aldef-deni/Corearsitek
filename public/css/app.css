@@ -3280,3 +3280,267 @@ body.is-locked { overflow: hidden; }
 
     .lb-next { right: 10px; }
 }
+
+/* ================================================================
+   Halaman Tentang CoreArsitek
+   ================================================================ */
+
+.about-intro { background: var(--ink); padding: 84px 0 70px; }
+
+.about-lead {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.85;
+}
+
+.about-tagline {
+    position: relative;
+    max-width: 760px;
+    margin: 44px auto 0;
+    padding: 30px 34px;
+    text-align: center;
+    border: 1px solid var(--red-line);
+    border-radius: 14px;
+    background:
+        radial-gradient(600px 220px at 50% 0%, rgba(255, 31, 31, 0.12), transparent 70%),
+        linear-gradient(180deg, var(--ink-3), var(--ink-1));
+    color: #fff;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: clamp(17px, 2.1vw, 23px);
+    line-height: 1.6;
+}
+
+.about-tagline i {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--red);
+    font-size: 18px;
+}
+
+/* ---------- Visi & Misi ---------- */
+
+.vm { background: var(--ink-1); padding: 84px 0; border-top: 1px solid var(--line); }
+
+.vm-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.vm-card {
+    position: relative;
+    padding: 38px 34px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, var(--ink-3), var(--ink-1));
+    transition: border-color var(--t-mid) var(--e-glide), transform var(--t-mid) var(--e-soft),
+                box-shadow var(--t-mid) var(--e-soft);
+}
+
+.vm-card:hover {
+    border-color: var(--red-line);
+    transform: translateY(-4px);
+    box-shadow: 0 24px 50px -30px var(--red-glow);
+}
+
+.vm-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: var(--red-soft);
+    border: 1px solid var(--red-line);
+    color: var(--red);
+    font-size: 20px;
+}
+
+.vm-card h3 {
+    color: #fff;
+    font-size: 15px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.vm-card p { color: var(--text-muted); font-size: 15px; line-height: 1.8; }
+
+.vm-list { list-style: none; counter-reset: misi; display: flex; flex-direction: column; gap: 14px; }
+
+.vm-list li {
+    counter-increment: misi;
+    position: relative;
+    padding-left: 40px;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+}
+
+.vm-list li::before {
+    content: counter(misi, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* ---------- Profil ---------- */
+
+.profile {
+    background:
+        radial-gradient(800px 380px at 12% 0%, rgba(255, 31, 31, 0.09), transparent 66%),
+        var(--ink);
+    padding: 90px 0;
+    border-top: 1px solid var(--line);
+}
+
+.profile-split {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 54px;
+    align-items: start;
+}
+
+.profile-photo {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--red-line);
+    background: linear-gradient(160deg, var(--ink-3), var(--ink));
+    aspect-ratio: 4 / 5;
+    /* Menempel saat isi di sebelahnya digulir; fotonya jadi jangkar visual. */
+    position: sticky;
+    top: 96px;
+}
+
+.profile-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Profil tanpa foto: satu kolom rata tengah, tidak ada kotak kosong. */
+.profile-split-solo { grid-template-columns: minmax(0, 780px); justify-content: center; }
+
+.profile-photo-kosong {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-dim);
+    font-size: 56px;
+}
+
+.profile-tag {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 9px 20px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border-top-right-radius: 12px;
+}
+
+.profile-nama {
+    color: #fff;
+    font-size: clamp(24px, 3.2vw, 36px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.profile-jabatan {
+    color: var(--red-light);
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.profile-kutipan {
+    margin: 26px 0;
+    padding: 18px 0 18px 24px;
+    border-left: 2px solid var(--red);
+    color: #e7e9ec;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.profile-bio { color: var(--text-muted); font-size: 15px; line-height: 1.85; }
+
+.profile-skills { margin-top: 34px; }
+
+.profile-skills h4 {
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.profile-skills ul { list-style: none; display: flex; flex-wrap: wrap; gap: 9px; }
+
+.profile-skills li {
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--ink-1);
+    color: var(--text-muted);
+    font-size: 12.5px;
+    transition: border-color var(--t-mid) var(--e-glide), color var(--t-mid) var(--e-glide);
+}
+
+.profile-skills li:hover { border-color: var(--red-line); color: #fff; }
+
+/* Empat angka sejajar pada halaman Tentang. */
+.about-figures-wide { grid-template-columns: repeat(4, 1fr); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 992px) {
+    .vm-grid { grid-template-columns: 1fr; }
+    .profile-split { grid-template-columns: 1fr; gap: 34px; }
+    .profile-photo { position: static; max-width: 380px; }
+    .about-figures-wide { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .about-intro { padding: 56px 0 46px; }
+
+    .about-lead { font-size: 14.5px; }
+
+    .about-tagline { margin-top: 30px; padding: 24px 20px; }
+
+    .vm { padding: 56px 0; }
+
+    .vm-card { padding: 28px 22px; }
+
+    .vm-icon { width: 46px; height: 46px; font-size: 18px; margin-bottom: 16px; }
+
+    .vm-card p, .vm-list li { font-size: 13.5px; }
+
+    .profile { padding: 56px 0; }
+
+    .profile-photo { max-width: none; }
+
+    .profile-kutipan { font-size: 15px; padding-left: 18px; margin: 20px 0; }
+
+    .profile-bio { font-size: 14px; }
+
+    .profile-skills { margin-top: 26px; }
+
+    .profile-skills li { font-size: 11.5px; padding: 7px 13px; }
+}

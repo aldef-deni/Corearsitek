@@ -28,3 +28,7 @@ Thumbs.db
 
 # Folder kerja Claude Code, tidak pernah masuk repo
 /.claude/
+
+# Berkas unggahan pengguna; hanya contoh bawaan (seed) yang ikut repo
+/public/uploads/*
+!/public/uploads/seed/

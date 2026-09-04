@@ -24,6 +24,9 @@
         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <i class="fa-solid fa-gauge-high"></i> Dashboard
         </a>
+        <a href="{{ route('admin.about.edit') }}" class="{{ request()->routeIs('admin.about.*') || request()->routeIs('admin.clients.*') ? 'active' : '' }}">
+            <i class="fa-regular fa-building"></i> Tentang CoreArsitek
+        </a>
         <a href="{{ route('admin.contents.edit') }}" class="{{ request()->routeIs('admin.contents.*') ? 'active' : '' }}">
             <i class="fa-solid fa-file-lines"></i> Konten Situs
         </a>
@@ -44,9 +47,6 @@
         </a>
         <a href="{{ route('admin.advantages.index') }}" class="{{ request()->routeIs('admin.advantages.*') ? 'active' : '' }}">
             <i class="fa-solid fa-scale-balanced"></i> Untung &amp; Rugi
-        </a>
-        <a href="{{ route('admin.clients.index') }}" class="{{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
-            <i class="fa-solid fa-handshake"></i> Klien
         </a>
         <a href="{{ route('admin.process-steps.index') }}" class="{{ request()->routeIs('admin.process-steps.*') ? 'active' : '' }}">
             <i class="fa-solid fa-diagram-project"></i> Proses Kerja

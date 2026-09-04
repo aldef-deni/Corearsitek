@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdvantageController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
@@ -40,6 +41,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('profil/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.avatar.destroy');
         Route::put('profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
+        // Satu halaman untuk seluruh isi "Tentang CoreArsitek", termasuk logo klien.
+        Route::get('tentang', [AboutController::class, 'edit'])->name('about.edit');
+        Route::put('tentang', [AboutController::class, 'update'])->name('about.update');
+        Route::delete('tentang/foto', [AboutController::class, 'removeProfileImage'])->name('about.image.destroy');
+
         Route::get('contents', [ContentController::class, 'edit'])->name('contents.edit');
         Route::put('contents', [ContentController::class, 'update'])->name('contents.update');
 
@@ -51,7 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])
             ->name('portfolios.images.destroy');
         Route::resource('advantages', AdvantageController::class)->except(['show', 'create', 'edit']);
-        Route::resource('clients', ClientController::class)->except(['show', 'create', 'edit']);
+        Route::resource('clients', ClientController::class)->only(['store', 'update', 'destroy']);
         Route::resource('testimonials', TestimonialController::class)->except(['show', 'create', 'edit']);
         Route::resource('process-steps', ProcessStepController::class)
             ->parameters(['process-steps' => 'processStep'])

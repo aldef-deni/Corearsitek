@@ -9,13 +9,6 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function index()
-    {
-        return view('admin.clients', [
-            'clients' => Client::orderBy('sort_order')->orderBy('id')->get(),
-        ]);
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([

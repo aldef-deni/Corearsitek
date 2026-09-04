@@ -46,8 +46,8 @@
             <span class="stat-value">{{ $advantagesCount }}</span>
             <span class="stat-label">Untung &amp; Rugi</span>
         </a>
-        <a class="stat-card" href="{{ route('admin.clients.index') }}">
-            <i class="fa-solid fa-handshake"></i>
+        <a class="stat-card" href="{{ route('admin.about.edit') }}">
+            <i class="fa-regular fa-building"></i>
             <span class="stat-value">{{ $clientsCount }}</span>
             <span class="stat-label">Klien</span>
         </a>
@@ -81,7 +81,7 @@
             <li><strong>Galeri</strong> — foto lepas tanpa detail proyek, tampil di halaman <em>Galeri</em>.</li>
             <li><strong>Proses Kerja</strong> — tahapan kerja yang tampil berurutan di halaman depan.</li>
             <li><strong>Untung &amp; Rugi</strong> — dua daftar berdampingan di halaman depan: kerugian bila tanpa jasa arsitek, dan alasan memilih CoreArsitek.</li>
-            <li><strong>Klien</strong> — logo klien yang tampil di bagian Klien Kami.</li>
+            <li><strong>Tentang CoreArsitek</strong> — seluruh isi halaman Tentang dalam satu tempat: pengantar, tagline, visi &amp; misi, profil beserta fotonya, dan logo klien.</li>
             <li><strong>Testimoni</strong> — ulasan klien beserta foto, nama, dan keterangannya.</li>
             <li><strong>Profil</strong> — ubah nama, email, telepon, jabatan, bio, foto profil, dan password Anda.</li>
         </ul>

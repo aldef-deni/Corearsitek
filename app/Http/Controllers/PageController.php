@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\Client;
 use App\Models\Gallery;
 use App\Models\Portfolio;
 use App\Models\Service;
@@ -90,6 +91,7 @@ class PageController extends Controller
         return view('pages.about', [
             'contents' => $this->contents(),
             'banners' => $this->banners('about'),
+            'clients' => Client::active()->orderBy('sort_order')->orderBy('id')->get(),
         ]);
     }
 }
