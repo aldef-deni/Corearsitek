@@ -1,7 +1,7 @@
 /* ================================================================
    CoreArsitek — interaksi & animasi kursor
    Pola animasi kursor mengikuti aldeftech.com: ambient glow yang
-   menempel di posisi kursor, ditambah panah + ring dengan easing,
+   menempel di posisi kursor, panah kursor kustom,
    tombol magnetic, dan tilt 3D pada kartu.
    ================================================================ */
 
@@ -109,61 +109,33 @@
         });
     }
 
-    /* ---------------- Panah + ring pengikut kursor ---------------- */
+    /* ---------------- Panah pengikut kursor ---------------- */
 
     var HOT_SELECTOR = 'a, button, .icon-btn, .lang-btn, .service-card, .service-pill, .gallery-item, .mosaic-item, .feature-item, .contact-item, .testimonial-card, .process-step, .about-figure, .slider-dot, input, textarea, select';
 
     function initCursorFollower() {
         if (!finePointer || reduceMotion) return;
 
-        var dot = document.createElement('div');
-        dot.className = 'cursor-arrow';
-        dot.setAttribute('aria-hidden', 'true');
-        dot.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'
+        var arrow = document.createElement('div');
+        arrow.className = 'cursor-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'
             + '<path class="arrow-body" d="M4.5 1.8 L4.5 19.4 L9.1 15.1 L11.9 21.7 L14.9 20.4 L12.2 14 L18 14 Z"/>'
             + '</svg>';
 
-        var ring = document.createElement('div');
-        ring.className = 'cursor-ring';
-        ring.setAttribute('aria-hidden', 'true');
-
-        document.body.appendChild(ring);
-        document.body.appendChild(dot);
+        document.body.appendChild(arrow);
         document.body.classList.add('has-custom-cursor');
 
         var mouseX = window.innerWidth / 2;
         var mouseY = window.innerHeight / 2;
-        var ringX = mouseX;
-        var ringY = mouseY;
         var visible = false;
-        var running = false;
-
-        var place = function (el, x, y) {
-            el.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
-        };
 
         // Panah dijangkarkan pada ujungnya, bukan pada titik tengah elemen.
         var ARROW_TIP_X = 4.9;
         var ARROW_TIP_Y = 2.0;
 
-        var placeArrow = function (x, y) {
-            dot.style.transform = 'translate(' + (x - ARROW_TIP_X) + 'px, ' + (y - ARROW_TIP_Y) + 'px)';
-        };
-
-        // Ring menyusul kursor dengan easing. Loop berhenti begitu ring sudah
-        // menyusul, jadi tidak ada requestAnimationFrame yang jalan terus-menerus.
-        var follow = function () {
-            var dx = mouseX - ringX;
-            var dy = mouseY - ringY;
-            ringX += dx * 0.16;
-            ringY += dy * 0.16;
-            place(ring, ringX, ringY);
-
-            if (Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) {
-                running = false;
-                return;
-            }
-            requestAnimationFrame(follow);
+        var place = function (x, y) {
+            arrow.style.transform = 'translate(' + (x - ARROW_TIP_X) + 'px, ' + (y - ARROW_TIP_Y) + 'px)';
         };
 
         document.addEventListener('mousemove', function (e) {
@@ -172,46 +144,32 @@
 
             if (!visible) {
                 visible = true;
-                ringX = mouseX;
-                ringY = mouseY;
-                place(ring, ringX, ringY);
-                dot.style.opacity = '1';
-                ring.style.opacity = '1';
+                arrow.style.opacity = '1';
             }
 
-            placeArrow(mouseX, mouseY);
-
-            if (!running) {
-                running = true;
-                requestAnimationFrame(follow);
-            }
+            place(mouseX, mouseY);
         }, { passive: true });
 
         document.addEventListener('mouseleave', function () {
             visible = false;
-            dot.style.opacity = '0';
-            ring.style.opacity = '0';
+            arrow.style.opacity = '0';
         });
 
         document.addEventListener('mousedown', function () {
-            ring.classList.add('is-down');
-            dot.classList.add('is-down');
+            arrow.classList.add('is-down');
         });
 
         document.addEventListener('mouseup', function () {
-            ring.classList.remove('is-down');
-            dot.classList.remove('is-down');
+            arrow.classList.remove('is-down');
         });
 
-        // Ring membesar saat kursor berada di atas elemen interaktif
+        // Panah berbalik warna saat kursor berada di atas elemen interaktif
         document.addEventListener('mouseover', function (e) {
             var hot = e.target.closest ? e.target.closest(HOT_SELECTOR) : null;
-            ring.classList.toggle('is-hot', !!hot);
-            dot.classList.toggle('is-hot', !!hot);
+            arrow.classList.toggle('is-hot', !!hot);
         }, { passive: true });
 
-        placeArrow(mouseX, mouseY);
-        place(ring, ringX, ringY);
+        place(mouseX, mouseY);
     }
 
     /* ---------------- Tombol magnetic ---------------- */

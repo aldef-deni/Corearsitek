@@ -64,15 +64,23 @@
                     @if (!empty($slide->subtitle))
                         <p class="hero-subtitle">{{ $slide->subtitle }}</p>
                     @endif
+                    @php
+                        // Tombol kedua dilewati kalau banner ini sudah mengarah ke
+                        // portofolio, supaya tidak muncul dua tombol yang sama.
+                        $tujuan = trim((string) $slide->button_url, '/');
+                        $menujuPortofolio = $tujuan === 'portofolio' || str_contains(strtoupper((string) $slide->button_text), 'PORTOFOLIO');
+                    @endphp
                     <div class="hero-actions">
                         @if (!empty($slide->button_text))
                             <a href="{{ $slide->button_url ?: '#kontak' }}" class="btn btn-red magnetic" data-magnetic="0.12">
                                 <i class="fa-solid fa-arrow-right"></i> {{ $slide->button_text }}
                             </a>
                         @endif
-                        <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1">
-                            <i class="fa-solid fa-images"></i> LIHAT PORTOFOLIO
-                        </a>
+                        @unless ($menujuPortofolio)
+                            <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1">
+                                <i class="fa-solid fa-images"></i> LIHAT PORTOFOLIO
+                            </a>
+                        @endunless
                     </div>
                 </div>
             </article>
