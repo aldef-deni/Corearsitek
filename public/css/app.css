@@ -2832,7 +2832,16 @@ body.has-custom-cursor * { cursor: none !important; }
    ================================================================ */
 
 /* Dilebarkan keluar dari .container supaya benar-benar tanpa celah. */
-.showcase-bleed { width: 100%; margin-bottom: 52px; }
+.showcase-bleed {
+    width: 100%;
+    margin-bottom: 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    /* Sedikit jarak dari tepi layar; tanpa ini lengkung sudut kartu
+       terpotong rata oleh batas viewport. */
+    padding: 3px;
+}
 
 .bleed-hero {
     position: relative;
@@ -2840,6 +2849,9 @@ body.has-custom-cursor * { cursor: none !important; }
     width: 100%;
     aspect-ratio: 21 / 9;
     overflow: hidden;
+    border: 1px solid var(--red-line);
+    border-radius: 10px;
+    transition: border-color var(--t-mid) var(--e-glide);
 }
 
 .bleed-hero img,
@@ -2864,6 +2876,7 @@ body.has-custom-cursor * { cursor: none !important; }
     font-size: 11.5px;
     font-weight: 700;
     letter-spacing: 2px;
+    border-top-left-radius: 9px;
     border-bottom-right-radius: 10px;
 }
 
@@ -2881,7 +2894,7 @@ body.has-custom-cursor * { cursor: none !important; }
 .bleed-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0;
+    gap: 3px;
 }
 
 .bleed-item {
@@ -2889,6 +2902,9 @@ body.has-custom-cursor * { cursor: none !important; }
     display: block;
     aspect-ratio: 4 / 3;
     overflow: hidden;
+    border: 1px solid var(--red-line);
+    border-radius: 10px;
+    transition: border-color var(--t-mid) var(--e-glide);
 }
 
 .bleed-caption {
@@ -2918,6 +2934,8 @@ body.has-custom-cursor * { cursor: none !important; }
 .bleed-hero .bleed-caption strong { font-size: 21px; }
 
 .bleed-hero .bleed-caption small { font-size: 13px; }
+
+.bleed-hero:hover, .bleed-item:hover { border-color: var(--red); }
 
 .bleed-hero:hover .bleed-caption strong,
 .bleed-item:hover .bleed-caption strong { color: var(--red-light); }
@@ -3050,7 +3068,7 @@ body.has-custom-cursor * { cursor: none !important; }
         margin-inline: 0;
         padding-inline: 0;
         scroll-padding-inline: 0;
-        gap: 0;
+        gap: 3px;
     }
 
     .bleed-row.cards-swipe > * { flex: 0 0 72%; }
