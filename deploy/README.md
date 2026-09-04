@@ -84,6 +84,32 @@ sudo php artisan db:seed --class=ProcessStepSeeder --force
 sudo php artisan db:seed --class=TestimonialSeeder --force
 ```
 
+## Batas ukuran unggahan
+
+Rantai batasnya ada tiga lapis dan **harus naik bersamaan**; menaikkan satu
+saja tidak menyelesaikan masalah:
+
+| Lapis | Nilai | Lokasi |
+|---|---|---|
+| nginx `client_max_body_size` | 128m | vhost situs ini saja (situs lain tetap 50m dari nginx.conf) |
+| PHP `post_max_size` | 128M | `/www/server/php/84/etc/php.ini` |
+| PHP `upload_max_filesize` | 50M | idem, batas per berkas |
+| Aplikasi | 15 MB/berkas, 8 berkas, total 115 MB | `App\Support\UploadHelper` |
+
+Kalau batas nginx lebih kecil dari yang dikirim, muncul halaman **413 Request
+Entity Too Large** mentah sebelum Laravel sempat menampilkan pesan apa pun.
+Kalau `post_max_size` PHP lebih kecil dari batas nginx, PHP membuang isi POST
+diam-diam sehingga formulir tampak terkirim padahal datanya kosong — ini lebih
+membingungkan lagi karena tidak ada pesan kesalahan sama sekali.
+
+Batas aplikasi sengaja disisakan di bawah batas server, dan `public/js/admin.js`
+memeriksanya di peramban sebelum formulir dikirim supaya admin mendapat pesan
+yang jelas beserta nama berkasnya.
+
+Menaikkan lagi: sunting `client_max_body_size` di vhost, `post_max_size` di
+php.ini, lalu `MAX_UPLOAD_KB` / `MAX_BATCH` / `MAX_TOTAL_KB` di UploadHelper.
+Setelahnya `sudo nginx -s reload` dan `sudo /etc/init.d/php-fpm-84 reload`.
+
 ## Ekstensi PHP exif
 
 Dipasang manual pada 2026-09-04 karena tidak ikut bawaan aaPanel. Tanpa exif,
