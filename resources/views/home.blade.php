@@ -58,7 +58,7 @@
 @endif
 
 {{-- ================= MOZAIK PORTOFOLIO ================= --}}
-@if ($galleries->count())
+@if ($portfolios->count())
     <section class="showcase">
         <div class="container">
             <div class="section-head reveal">
@@ -68,14 +68,12 @@
             </div>
 
             <div class="mosaic" data-reveal-group="70">
-                @foreach ($galleries as $i => $gallery)
-                    <a href="{{ route('portfolio') }}" class="mosaic-item reveal {{ $i === 0 ? 'mosaic-lead' : '' }}">
-                        <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy">
+                @foreach ($portfolios as $i => $karya)
+                    <a href="{{ route('portfolio.show', $karya) }}" class="mosaic-item reveal {{ $i === 0 ? 'mosaic-lead' : '' }}">
+                        <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">
                         <div class="mosaic-caption">
-                            <h3>{{ $gallery->title }}</h3>
-                            @if ($gallery->description)
-                                <p>{{ $gallery->description }}</p>
-                            @endif
+                            <h3>{{ $karya->title }}</h3>
+                            <p>{{ collect([$karya->categoryLabel(), $karya->location])->filter()->implode(' · ') }}</p>
                         </div>
                         <span class="mosaic-cta"><i class="fa-solid fa-arrow-right"></i></span>
                     </a>

@@ -154,6 +154,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             BannerSeeder::class,
+            PortfolioSeeder::class,
             ProcessStepSeeder::class,
             TestimonialSeeder::class,
         ]);

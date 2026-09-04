@@ -34,6 +34,9 @@
         <a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}">
             <i class="fa-solid fa-gem"></i> Keunggulan
         </a>
+        <a href="{{ route('admin.portfolios.index') }}" class="{{ request()->routeIs('admin.portfolios.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-building-columns"></i> Portofolio
+        </a>
         <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
             <i class="fa-solid fa-images"></i> Galeri
         </a>

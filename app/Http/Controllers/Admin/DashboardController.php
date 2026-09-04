@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Feature;
 use App\Models\Gallery;
+use App\Models\Portfolio;
 use App\Models\ProcessStep;
 use App\Models\Service;
 use App\Models\SiteContent;
@@ -21,6 +22,7 @@ class DashboardController extends Controller
             'servicesCount' => Service::count(),
             'featuresCount' => Feature::count(),
             'galleriesCount' => Gallery::count(),
+            'portfoliosCount' => Portfolio::count(),
             'stepsCount' => ProcessStep::count(),
             'testimonialsCount' => Testimonial::count(),
         ]);

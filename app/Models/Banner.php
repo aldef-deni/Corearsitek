@@ -13,6 +13,7 @@ class Banner extends Model
     public const PAGES = [
         'home' => 'Beranda',
         'portfolio' => 'Portofolio',
+        'gallery' => 'Galeri',
         'services' => 'Layanan',
         'about' => 'Tentang CoreArsitek',
     ];

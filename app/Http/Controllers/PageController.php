@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Banner;
 use App\Models\Gallery;
+use App\Models\Portfolio;
 use App\Models\Service;
 use App\Models\SiteContent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -20,12 +22,58 @@ class PageController extends Controller
         return Banner::active()->forPage($page)->orderBy('sort_order')->orderBy('id')->get();
     }
 
-    public function portfolio()
+    public function portfolio(Request $request)
     {
+        $category = $request->query('kategori');
+
+        $portfolios = Portfolio::with('images')
+            ->active()
+            ->category($category)
+            ->ordered()
+            ->paginate(12)
+            ->withQueryString();
+
+        // Jumlah per kategori dipakai untuk angka di samping tab penyaring.
+        $counts = Portfolio::active()
+            ->selectRaw('category, count(*) as total')
+            ->groupBy('category')
+            ->pluck('total', 'category');
+
         return view('pages.portfolio', [
             'contents' => $this->contents(),
             'banners' => $this->banners('portfolio'),
-            'galleries' => Gallery::orderBy('sort_order')->get(),
+            'portfolios' => $portfolios,
+            'featured' => Portfolio::active()->featured()->ordered()->take(8)->get(),
+            'category' => $category,
+            'counts' => $counts,
+            'total' => $counts->sum(),
+        ]);
+    }
+
+    public function portfolioDetail(Portfolio $portfolio)
+    {
+        abort_unless($portfolio->is_active, 404);
+
+        $portfolio->load('images');
+
+        return view('pages.portfolio-detail', [
+            'contents' => $this->contents(),
+            'portfolio' => $portfolio,
+            'related' => Portfolio::active()
+                ->where('category', $portfolio->category)
+                ->whereKeyNot($portfolio->id)
+                ->ordered()
+                ->take(3)
+                ->get(),
+        ]);
+    }
+
+    public function gallery()
+    {
+        return view('pages.gallery', [
+            'contents' => $this->contents(),
+            'banners' => $this->banners('gallery'),
+            'galleries' => Gallery::orderBy('sort_order')->orderBy('id')->get(),
         ]);
     }
 

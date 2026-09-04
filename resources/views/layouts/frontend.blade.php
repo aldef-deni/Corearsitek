@@ -56,8 +56,9 @@
 
         <nav class="nav-links">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
-            <a href="{{ route('portfolio') }}" class="{{ request()->routeIs('portfolio') ? 'active' : '' }}">Portofolio</a>
+            <a href="{{ route('portfolio') }}" class="{{ request()->routeIs('portfolio*') ? 'active' : '' }}">Portofolio</a>
             <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Layanan</a>
+            <a href="{{ route('gallery') }}" class="{{ request()->routeIs('gallery') ? 'active' : '' }}">Galeri</a>
             <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Tentang CoreArsitek</a>
             <a href="{{ route('home') }}#kontak">Kontak</a>
         </nav>
@@ -87,6 +88,7 @@
                 <li><a href="{{ route('home') }}">Beranda</a></li>
                 <li><a href="{{ route('services') }}">Layanan</a></li>
                 <li><a href="{{ route('portfolio') }}">Portofolio</a></li>
+                <li><a href="{{ route('gallery') }}">Galeri</a></li>
                 <li><a href="{{ route('about') }}">Tentang CoreArsitek</a></li>
                 <li><a href="{{ route('home') }}#kontak">Kontak</a></li>
             </ul>

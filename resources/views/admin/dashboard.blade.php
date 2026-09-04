@@ -26,6 +26,11 @@
             <span class="stat-value">{{ $featuresCount }}</span>
             <span class="stat-label">Keunggulan</span>
         </a>
+        <a class="stat-card" href="{{ route('admin.portfolios.index') }}">
+            <i class="fa-solid fa-building-columns"></i>
+            <span class="stat-value">{{ $portfoliosCount }}</span>
+            <span class="stat-label">Karya Portofolio</span>
+        </a>
         <a class="stat-card" href="{{ route('admin.galleries.index') }}">
             <i class="fa-solid fa-images"></i>
             <span class="stat-value">{{ $galleriesCount }}</span>
@@ -48,6 +53,7 @@
         <div class="quick-actions">
             <a class="btn btn-red" href="{{ route('admin.banners.index') }}"><i class="fa-solid fa-panorama"></i> Kelola Banner Hero</a>
             <a class="btn btn-outline-red" href="{{ route('admin.contents.edit') }}"><i class="fa-solid fa-pen"></i> Ubah Konten Situs</a>
+            <a class="btn btn-outline-red" href="{{ route('admin.portfolios.create') }}"><i class="fa-solid fa-plus"></i> Tambah Karya Portofolio</a>
             <a class="btn btn-outline-red" href="{{ route('admin.galleries.index') }}"><i class="fa-solid fa-upload"></i> Tambah Foto Galeri</a>
             <a class="btn btn-outline-red" href="{{ route('admin.services.index') }}"><i class="fa-solid fa-hammer"></i> Kelola Layanan</a>
             <a class="btn btn-outline-red" href="{{ route('home') }}" target="_blank"><i class="fa-solid fa-globe"></i> Lihat Situs</a>
@@ -61,7 +67,8 @@
             <li><strong>Konten Situs</strong> — ubah logo, judul hero cadangan, angka statistik, teks tentang kami, dan info kontak.</li>
             <li><strong>Layanan</strong> — tambah/edit 6 kartu layanan (ikon, judul, deskripsi).</li>
             <li><strong>Keunggulan</strong> — kelola 24 fitur pada bagian "Apa yang Anda Dapatkan?".</li>
-            <li><strong>Galeri</strong> — unggah foto portofolio beserta judul dan deskripsinya. Delapan foto teratas juga tampil di halaman depan.</li>
+            <li><strong>Portofolio</strong> — karya lengkap beserta kategori, gaya, klien, lokasi, luas bangunan, dimensi lahan, dan banyak foto per karya. Tampil di halaman <em>Portofolio</em>, dan lima karya teratas ikut tampil di Beranda. Centang <em>Unggulan</em> agar sebuah karya juga masuk deretan karya pilihan.</li>
+            <li><strong>Galeri</strong> — foto lepas tanpa detail proyek, tampil di halaman <em>Galeri</em>.</li>
             <li><strong>Proses Kerja</strong> — tahapan kerja yang tampil berurutan di halaman depan.</li>
             <li><strong>Testimoni</strong> — ulasan klien beserta foto, nama, dan keterangannya.</li>
             <li><strong>Profil</strong> — ubah nama, email, telepon, jabatan, bio, foto profil, dan password Anda.</li>

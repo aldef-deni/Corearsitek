@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ProcessStepController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 // ---------- Halaman depan (company profile) ----------
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/portofolio', [PageController::class, 'portfolio'])->name('portfolio');
+Route::get('/portofolio/{portfolio:slug}', [PageController::class, 'portfolioDetail'])->name('portfolio.show');
+Route::get('/galeri', [PageController::class, 'gallery'])->name('gallery');
 Route::get('/layanan', [PageController::class, 'services'])->name('services');
 Route::get('/tentang', [PageController::class, 'about'])->name('about');
 
@@ -42,6 +45,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('services', ServiceController::class)->except(['show', 'create', 'edit']);
         Route::resource('features', FeatureController::class)->except(['show', 'create', 'edit']);
         Route::resource('galleries', GalleryController::class)->except(['show', 'create', 'edit']);
+        Route::resource('portfolios', PortfolioController::class)->except(['show']);
+        Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])
+            ->name('portfolios.images.destroy');
         Route::resource('testimonials', TestimonialController::class)->except(['show', 'create', 'edit']);
         Route::resource('process-steps', ProcessStepController::class)
             ->parameters(['process-steps' => 'processStep'])

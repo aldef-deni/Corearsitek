@@ -3,7 +3,16 @@
 @section('title', 'Galeri')
 
 @section('content')
-    <h1 class="page-title">Galeri / Portofolio</h1>
+    <h1 class="page-title">
+        Galeri
+        <small>Foto di sini tampil pada halaman Galeri di situs. Untuk karya lengkap dengan spesifikasi proyek, pakai menu Portofolio.</small>
+    </h1>
+
+    <div class="toolbar">
+        <a href="{{ route('gallery') }}" target="_blank" class="btn btn-outline-red">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Lihat Halaman Galeri
+        </a>
+    </div>
 
     <div class="card">
         <h2>Tambah Foto</h2>
