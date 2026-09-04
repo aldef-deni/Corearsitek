@@ -100,6 +100,6 @@
             @endforeach
         </div>
 
-        <button type="submit" class="btn btn-gold"><i class="fa-solid fa-floppy-disk"></i> Simpan Semua Konten</button>
+        <button type="submit" class="btn btn-red"><i class="fa-solid fa-floppy-disk"></i> Simpan Semua Konten</button>
     </form>
 @endsection

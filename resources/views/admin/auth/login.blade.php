@@ -38,7 +38,7 @@
         <label class="checkbox">
             <input type="checkbox" name="remember"> Ingat saya
         </label>
-        <button type="submit" class="btn btn-gold btn-block">MASUK</button>
+        <button type="submit" class="btn btn-red btn-block">MASUK</button>
     </form>
 
     <p class="login-back"><a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Kembali ke situs</a></p>

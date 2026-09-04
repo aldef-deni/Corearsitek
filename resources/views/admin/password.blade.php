@@ -27,7 +27,7 @@
                 <input type="password" name="password_confirmation" id="password_confirmation" required autocomplete="new-password">
             </div>
 
-            <button type="submit" class="btn btn-gold"><i class="fa-solid fa-key"></i> Simpan Password Baru</button>
+            <button type="submit" class="btn btn-red"><i class="fa-solid fa-key"></i> Simpan Password Baru</button>
         </form>
     </div>
 @endsection

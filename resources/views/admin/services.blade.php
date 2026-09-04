@@ -25,7 +25,7 @@
                 <label>Urutan</label>
                 <input type="number" name="sort_order" value="0">
             </div>
-            <button type="submit" class="btn btn-gold"><i class="fa-solid fa-plus"></i> Tambah</button>
+            <button type="submit" class="btn btn-red"><i class="fa-solid fa-plus"></i> Tambah</button>
         </form>
     </div>
 

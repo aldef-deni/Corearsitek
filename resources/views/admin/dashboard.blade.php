@@ -31,10 +31,10 @@
     <div class="card">
         <h2>Aksi Cepat</h2>
         <div class="quick-actions">
-            <a class="btn btn-gold" href="{{ route('admin.contents.edit') }}"><i class="fa-solid fa-pen"></i> Ubah Gambar Hero &amp; Konten</a>
-            <a class="btn btn-outline-gold" href="{{ route('admin.galleries.index') }}"><i class="fa-solid fa-upload"></i> Tambah Foto Galeri</a>
-            <a class="btn btn-outline-gold" href="{{ route('admin.services.index') }}"><i class="fa-solid fa-hammer"></i> Kelola Layanan</a>
-            <a class="btn btn-outline-gold" href="{{ route('home') }}" target="_blank"><i class="fa-solid fa-globe"></i> Lihat Situs</a>
+            <a class="btn btn-red" href="{{ route('admin.contents.edit') }}"><i class="fa-solid fa-pen"></i> Ubah Gambar Hero &amp; Konten</a>
+            <a class="btn btn-outline-red" href="{{ route('admin.galleries.index') }}"><i class="fa-solid fa-upload"></i> Tambah Foto Galeri</a>
+            <a class="btn btn-outline-red" href="{{ route('admin.services.index') }}"><i class="fa-solid fa-hammer"></i> Kelola Layanan</a>
+            <a class="btn btn-outline-red" href="{{ route('home') }}" target="_blank"><i class="fa-solid fa-globe"></i> Lihat Situs</a>
         </div>
     </div>
 
