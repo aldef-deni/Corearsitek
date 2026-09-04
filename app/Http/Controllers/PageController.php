@@ -43,7 +43,6 @@ class PageController extends Controller
             'contents' => $this->contents(),
             'banners' => $this->banners('portfolio'),
             'portfolios' => $portfolios,
-            'featured' => Portfolio::active()->featured()->ordered()->take(8)->get(),
             'category' => $category,
             'counts' => $counts,
             'total' => $counts->sum(),

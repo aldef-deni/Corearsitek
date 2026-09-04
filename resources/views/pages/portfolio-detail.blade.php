@@ -131,10 +131,12 @@
             <div class="portfolio-grid" data-reveal-group="70">
                 @foreach ($related as $item)
                     <article class="portfolio-card reveal">
-                        <a href="{{ route('portfolio.show', $item) }}" class="portfolio-cover">
-                            <img src="{{ asset($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy">
-                            <span class="portfolio-badge">{{ $item->categoryLabel() }}</span>
-                        </a>
+                        <div class="pc-media">
+                            <a href="{{ route('portfolio.show', $item) }}" class="pc-main">
+                                <img src="{{ asset($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy">
+                                <span class="portfolio-badge">{{ $item->categoryLabel() }}</span>
+                            </a>
+                        </div>
                         <div class="portfolio-body">
                             <h3><a href="{{ route('portfolio.show', $item) }}">{{ $item->title }}</a></h3>
                             @if ($item->location)

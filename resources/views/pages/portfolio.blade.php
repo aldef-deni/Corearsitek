@@ -18,26 +18,6 @@
     'siteName' => $contents['site_name'] ?? 'CoreArsitek',
 ])
 
-{{-- ================= KARYA PILIHAN ================= --}}
-@if ($featured->count())
-    <section class="featured-strip">
-        <div class="container">
-            <div class="section-head reveal">
-                <span class="eyebrow">KARYA PILIHAN</span>
-                <h2 class="section-title">DESAIN TERBAIK</h2>
-            </div>
-            <div class="featured-row" data-reveal-group="60">
-                @foreach ($featured as $item)
-                    <a href="{{ route('portfolio.show', $item) }}" class="featured-item reveal">
-                        <img src="{{ asset($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy">
-                        <span class="featured-name">{{ $item->client ?: $item->title }}</span>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-@endif
-
 {{-- ================= DAFTAR KARYA ================= --}}
 <section class="portfolio-list">
     <div class="container">
@@ -67,21 +47,23 @@
 
             <div class="portfolio-grid" data-reveal-group="60">
                 @foreach ($portfolios as $item)
+                    @php $pendamping = $item->images->take(2); @endphp
                     <article class="portfolio-card reveal">
-                        <a href="{{ route('portfolio.show', $item) }}" class="portfolio-cover">
-                            <img src="{{ asset($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy">
-                            <span class="portfolio-badge">{{ $item->categoryLabel() }}</span>
-                        </a>
+                        <div class="pc-media">
+                            <a href="{{ route('portfolio.show', $item) }}" class="pc-main">
+                                <img src="{{ asset($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy">
+                                <span class="portfolio-badge">{{ $item->categoryLabel() }}</span>
+                            </a>
 
-                        @if ($item->images->count())
-                            <div class="portfolio-thumbs">
-                                @foreach ($item->images->take(3) as $foto)
-                                    <a href="{{ route('portfolio.show', $item) }}">
-                                        <img src="{{ asset($foto->image) }}" alt="{{ $item->title }}" loading="lazy">
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
+                            @foreach ($pendamping as $foto)
+                                {{-- Bila hanya ada satu foto pendamping, ia melebar penuh
+                                     agar tidak menyisakan ruang kosong di sampingnya. --}}
+                                <a href="{{ route('portfolio.show', $item) }}"
+                                   class="pc-sub {{ $pendamping->count() === 1 ? 'pc-sub-wide' : '' }}">
+                                    <img src="{{ asset($foto->image) }}" alt="{{ $item->title }}" loading="lazy">
+                                </a>
+                            @endforeach
+                        </div>
 
                         <div class="portfolio-body">
                             <h3><a href="{{ route('portfolio.show', $item) }}">{{ $item->title }}</a></h3>
