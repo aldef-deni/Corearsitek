@@ -8,25 +8,29 @@
 <section class="page-banner" style="background-image: url('{{ asset($contents['hero_image'] ?? '') }}');">
     <div class="hero-overlay"></div>
     <div class="container banner-content">
-        <h1>LAYANAN KAMI</h1>
-        <p>Jasa desain arsitektur untuk hunian mewah</p>
+        <h1 class="reveal">LAYANAN KAMI</h1>
+        <p class="reveal" data-reveal-delay="120">Jasa desain arsitektur untuk hunian mewah</p>
     </div>
 </section>
 
 <section class="services">
     <div class="container">
-        <div class="stats-card">
-            <div class="stats-number">{{ $contents['stats_number'] ?? '2707' }}</div>
-            <div class="stats-label">{{ $contents['stats_label'] ?? 'Desain Finish s.d. 04-09-2026' }}</div>
+        @php
+            $statsNumber = $contents['stats_number'] ?? '2707';
+            $statsCountable = ctype_digit(trim($statsNumber));
+        @endphp
+        <div class="stats-card reveal-scale" data-tilt="3">
+            <div class="stats-number" @if ($statsCountable) data-counter="{{ (int) trim($statsNumber) }}" @endif>{{ $statsNumber }}</div>
+            <div class="stats-label">{{ $contents['stats_label'] ?? 'Desain Finish' }}</div>
             <div class="stats-actions">
-                <a href="{{ route('portfolio') }}" class="btn btn-outline-red"><i class="fa-solid fa-house"></i> DESAIN TERBAIK</a>
-                <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" class="btn btn-red"><i class="fa-brands fa-whatsapp"></i> KONTAK KAMI</a>
+                <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1"><i class="fa-solid fa-house"></i> DESAIN TERBAIK</a>
+                <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12"><i class="fa-brands fa-whatsapp"></i> KONTAK KAMI</a>
             </div>
         </div>
 
-        <div class="services-grid">
+        <div class="services-grid" data-reveal-group="80">
             @foreach ($services as $service)
-                <div class="service-card">
+                <div class="service-card reveal" data-tilt="4">
                     <i class="fa-solid {{ $service->icon }}"></i>
                     <h3>{!! nl2br(e($service->title)) !!}</h3>
                     <p>{{ $service->subtitle }}</p>
@@ -38,9 +42,9 @@
 
 <section class="contact">
     <div class="container">
-        <h2 class="section-title">SIAP MEMULAI PROYEK ANDA?</h2>
-        <div class="contact-cta">
-            <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" class="btn btn-red">
+        <h2 class="section-title reveal">SIAP MEMULAI PROYEK ANDA?</h2>
+        <div class="contact-cta reveal">
+            <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
                 <i class="fa-brands fa-whatsapp"></i> KONSULTASI GRATIS VIA WHATSAPP
             </a>
         </div>

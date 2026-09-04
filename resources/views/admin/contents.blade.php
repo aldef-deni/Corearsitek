@@ -10,6 +10,31 @@
         @method('PUT')
 
         <div class="card">
+            <h2>Identitas & Logo</h2>
+            @foreach ($contents as $item)
+                @if (in_array($item->key, ['logo_image', 'og_image'], true))
+                    <div class="field">
+                        <label>{{ $item->label }}</label>
+                        <img src="{{ asset($item->value) }}" alt="{{ $item->label }}" class="thumb thumb-lg">
+                        <input type="file" name="contents[{{ $item->id }}][image]" accept="image/*">
+                        <small class="hint">
+                            @if ($item->key === 'logo_image')
+                                Logo tampil di navbar, hero, dan footer. Gunakan PNG transparan yang dirancang untuk latar gelap.
+                            @else
+                                Gambar pratinjau saat tautan dibagikan ke WhatsApp/Facebook. Ukuran ideal 1200x630 px.
+                            @endif
+                        </small>
+                    </div>
+                @elseif ($item->key === 'site_name')
+                    <div class="field">
+                        <label>{{ $item->label }}</label>
+                        <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                    </div>
+                @endif
+            @endforeach
+        </div>
+
+        <div class="card">
             <h2>Hero</h2>
             @foreach ($contents as $item)
                 @if ($item->key === 'hero_image')
@@ -87,7 +112,7 @@
         <div class="card">
             <h2>Footer</h2>
             @foreach ($contents as $item)
-                @if (in_array($item->key, ['site_name', 'footer_text', 'footer_copyright'], true))
+                @if (in_array($item->key, ['footer_text', 'footer_copyright'], true))
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         @if ($item->type === 'textarea')

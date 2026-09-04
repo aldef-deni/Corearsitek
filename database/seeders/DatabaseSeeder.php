@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         $contents = [
             // Identitas
             ['site_name', 'Nama Situs', 'text', 'COREARSITEK'],
+            ['logo_image', 'Logo Situs', 'image', 'images/logo.png'],
+            ['og_image', 'Gambar Share Sosial (OG)', 'image', 'images/og-image.jpg'],
             // Hero
             ['hero_title', 'Judul Hero', 'text', 'JASA DESAIN RUMAH MEWAH'],
             ['hero_subtitle', 'Subjudul Hero', 'text', 'Hunian Aman, Nyaman dan Elegan'],

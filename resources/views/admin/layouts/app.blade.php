@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — {{ config('app.name') }}</title>
+    <meta name="theme-color" content="#060607">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 <body>
 <aside class="sidebar">
     <div class="sidebar-brand">
-        <span class="brand-emblem"><i class="fa-solid fa-crown"></i></span>
-        <span>COREARSITEK<br>ADMIN</span>
+        <a href="{{ route('admin.dashboard') }}" aria-label="CoreArsitek Admin">
+            <img src="{{ asset('images/logo.png') }}" alt="CoreArsitek" class="sidebar-logo">
+        </a>
     </div>
     <nav class="sidebar-nav">
         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">

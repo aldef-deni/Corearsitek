@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
+    <meta name="theme-color" content="#060607">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 <body class="login-body">
 <div class="login-card">
     <div class="login-brand">
-        <span class="brand-emblem"><i class="fa-solid fa-crown"></i></span>
-        <h1>COREARSITEK ADMIN</h1>
+        <img src="{{ asset('images/logo.png') }}" alt="CoreArsitek" class="login-logo">
+        <h1>ADMIN PANEL</h1>
         <p>Masuk untuk mengelola situs</p>
     </div>
 
