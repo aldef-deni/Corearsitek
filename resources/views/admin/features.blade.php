@@ -45,11 +45,20 @@
                 </div>
                 <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
             </form>
-            <form method="POST" action="{{ route('admin.features.destroy', $feature) }}" onsubmit="return confirm('Hapus keunggulan ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
-            </form>
+            <div class="card-row-actions">
+                {{-- Menyalin baris ini beserta isinya, tinggal ubah seperlunya. --}}
+                <form method="POST" action="{{ route('admin.features.duplicate', $feature) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost" title="Duplikasi baris ini">
+                        <i class="fa-regular fa-clone"></i> Duplikasi
+                    </button>
+                </form>
+                <form method="POST" action="{{ route('admin.features.destroy', $feature) }}" onsubmit="return confirm('Hapus keunggulan ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </div>
         </div>
     @endforeach
 @endsection

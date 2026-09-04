@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 abstract class Controller
 {
@@ -23,5 +24,29 @@ abstract class Controller
         $fragmen = 'baris-' . $awalan . ($baris ? '-' . $baris->getKey() : '');
 
         return back()->withFragment($fragmen)->with('success', $pesan);
+    }
+
+    /**
+     * Salin sebuah baris dan letakkan tepat di bawah aslinya.
+     *
+     * Namanya diberi akhiran "(salinan)" supaya jelas mana yang baru, dan
+     * baris lain yang urutannya bertabrakan digeser turun agar salinannya
+     * benar-benar muncul berdampingan dengan sumbernya.
+     *
+     * @param  string  $kolomNama  Kolom yang memuat nama, mis. "label" atau "title".
+     */
+    protected function duplikatBaris(Model $baris, string $kolomNama): Model
+    {
+        $salinan = $baris->replicate();
+        $salinan->{$kolomNama} = Str::limit((string) $baris->{$kolomNama}, 240, '') . ' (salinan)';
+        $salinan->sort_order = (int) $baris->sort_order + 1;
+        $salinan->save();
+
+        $baris->newQuery()
+            ->whereKeyNot($salinan->getKey())
+            ->where('sort_order', '>=', $salinan->sort_order)
+            ->increment('sort_order');
+
+        return $salinan;
     }
 }

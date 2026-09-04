@@ -41,6 +41,17 @@ class FeatureController extends Controller
         return $this->kembaliKeBaris('fitur', $feature, 'Keunggulan berhasil diperbarui.');
     }
 
+    /**
+     * Salin satu keunggulan agar penambahan berikutnya tinggal menyunting
+     * label dan ikonnya.
+     */
+    public function duplicate(Feature $feature)
+    {
+        $salinan = $this->duplikatBaris($feature, 'label');
+
+        return $this->kembaliKeBaris('fitur', $salinan, 'Keunggulan diduplikasi. Ubah label dan ikonnya seperlunya.');
+    }
+
     public function destroy(Feature $feature)
     {
         $feature->delete();

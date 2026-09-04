@@ -43,6 +43,16 @@ class ServiceController extends Controller
         return $this->kembaliKeBaris('layanan', $service, 'Layanan berhasil diperbarui.');
     }
 
+    /**
+     * Salin satu layanan beserta seluruh isinya, tinggal disunting.
+     */
+    public function duplicate(Service $service)
+    {
+        $salinan = $this->duplikatBaris($service, 'title');
+
+        return $this->kembaliKeBaris('layanan', $salinan, 'Layanan diduplikasi. Ubah judul dan keterangannya seperlunya.');
+    }
+
     public function destroy(Service $service)
     {
         $service->delete();
