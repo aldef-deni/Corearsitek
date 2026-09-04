@@ -410,11 +410,10 @@
         }
 
         /**
-         * Susunan halaman buku. Halaman penutup berlogo harus mendarat di
-         * sisi BELAKANG lembar terakhir supaya tampil di sebelah kiri saat
-         * buku ditutup — dan sisi belakang selalu berindeks ganjil. Karena
-         * itu, bila jumlah fotonya genap disisipkan satu halaman kosong
-         * lebih dulu agar indeks penutupnya jatuh ganjil.
+         * Susunan halaman buku: hanya sampul (mode satu halaman) dan foto.
+         * Penutup tidak ikut jadi lembar melainkan lapisan yang menutup
+         * seluruh bidang buku, supaya tidak menyisakan halaman kosong di
+         * sebelahnya saat buku sudah habis.
          */
         function susunHalaman() {
             var h = [];
@@ -422,10 +421,6 @@
             if (!ganda) h.push({ jenis: 'sampul' });
 
             foto.forEach(function (_, i) { h.push({ jenis: 'foto', indeks: i }); });
-
-            if (ganda && h.length % 2 === 0) h.push({ jenis: 'kosong' });
-
-            h.push({ jenis: 'penutup' });
 
             return h;
         }
@@ -439,7 +434,12 @@
             if (halaman.jenis === 'foto') {
                 var sumber = foto[halaman.indeks];
                 var img = sumber.querySelector('img');
-                if (img) muka.appendChild(img);
+                if (img) {
+                    // Tanpa ini, menyeret foto di desktop memicu drag bawaan
+                    // browser dan rangkaian pointer event kita ikut dibatalkan.
+                    img.draggable = false;
+                    muka.appendChild(img);
+                }
 
                 var teks = sumber.querySelector('figcaption');
                 if (teks) muka.appendChild(teks);
@@ -453,13 +453,6 @@
                 muka.classList.add('leaf-plate', 'leaf-cover');
                 var isiSampul = klonTemplate(tplSampul);
                 if (isiSampul) muka.appendChild(isiSampul);
-                return;
-            }
-
-            if (halaman.jenis === 'penutup') {
-                muka.classList.add('leaf-plate', 'leaf-end');
-                var isiPenutup = klonTemplate(tplPenutup);
-                if (isiPenutup) muka.appendChild(isiPenutup);
                 return;
             }
 
@@ -512,6 +505,12 @@
                 lembar.push(lem);
             }
 
+            var penutup = document.createElement('div');
+            penutup.className = 'book-end-overlay';
+            var isiPenutup = klonTemplate(tplPenutup);
+            if (isiPenutup) penutup.appendChild(isiPenutup);
+            spread.appendChild(penutup);
+
             buku.appendChild(spread);
 
             var bar = document.createElement('div');
@@ -555,7 +554,13 @@
                 if (e.target.closest('.book-btn') || e.target.closest('a')) return;
 
                 jarakTerakhir = 0;
-                seret = { x0: e.clientX, y0: e.clientY, lem: null, maju: true, jauh: 0, kemajuan: 0 };
+                seret = { x0: e.clientX, y0: e.clientY, lem: null, maju: true, jauh: 0, kemajuan: 0, id: e.pointerId };
+
+                // Tanpa penangkapan pointer, begitu kursor keluar dari bidang
+                // buku aliran pointermove-nya putus di tengah seretan.
+                if (spread.setPointerCapture) {
+                    try { spread.setPointerCapture(e.pointerId); } catch (err) { /* diabaikan */ }
+                }
             }
 
             function gerakSeret(e) {
@@ -611,8 +616,13 @@
 
             spread.addEventListener('pointerdown', mulaiSeret);
             spread.addEventListener('pointermove', gerakSeret);
+            spread.addEventListener('pointerup', selesaiSeret);
+            spread.addEventListener('pointercancel', selesaiSeret);
             window.addEventListener('pointerup', selesaiSeret);
-            window.addEventListener('pointercancel', selesaiSeret);
+
+            // Drag bawaan browser pada gambar akan membatalkan pointer event,
+            // sehingga di desktop halaman tidak pernah bisa diseret.
+            spread.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
             // Klik hanya berlaku kalau memang bukan akhir dari seretan.
             spread.addEventListener('click', function (e) {

@@ -2023,6 +2023,11 @@ body.has-custom-cursor * { cursor: none !important; }
     height: 100%;
     object-fit: cover;
     display: block;
+    /* Mematikan drag bawaan browser; kalau tidak, menyeret foto di desktop
+       membatalkan rangkaian pointer event yang dipakai membalik halaman. */
+    -webkit-user-drag: none;
+    user-select: none;
+    pointer-events: none;
 }
 
 .leaf-back { transform: rotateY(180deg); }
@@ -2590,18 +2595,20 @@ body.has-custom-cursor * { cursor: none !important; }
     right: 0;
     bottom: 0;
     z-index: 4;
-    width: 62px;
-    height: 62px;
+    width: 112px;
+    height: 112px;
     pointer-events: none;
     border-bottom-right-radius: 12px;
-    /* Perhentian tajam pada 47% membentuk segitiga di sudut: sisi terang
-       adalah punggung kertas yang terangkat, sisanya dibiarkan tembus. */
+    /* Perhentian tajam pada 50% membentuk segitiga di sudut. Sisi paling
+       terang adalah punggung kertas yang tertekuk ke atas, lalu meredup
+       ke arah lipatannya. */
     background: linear-gradient(315deg,
-        rgba(255, 255, 255, 0.34) 0%,
-        rgba(214, 214, 224, 0.20) 30%,
-        rgba(150, 150, 162, 0.12) 47%,
-        transparent 47.5%);
-    filter: drop-shadow(-8px -8px 15px rgba(0, 0, 0, 0.8));
+        rgba(255, 255, 255, 0.52) 0%,
+        rgba(238, 238, 246, 0.34) 18%,
+        rgba(176, 176, 190, 0.20) 36%,
+        rgba(96, 96, 108, 0.12) 50%,
+        transparent 50.5%);
+    filter: drop-shadow(-14px -14px 22px rgba(0, 0, 0, 0.9));
     transform-origin: 100% 100%;
     animation: kertas-terangkat 3.4s ease-in-out infinite;
 }
@@ -2612,9 +2619,11 @@ body.has-custom-cursor * { cursor: none !important; }
 /* Sudut ikut hilang saat halamannya sedang diseret. */
 .leaf.is-dragging .leaf-front::before { opacity: 0; }
 
+/* Mengecil-membesar sambil sedikit bergeser menjauh dari sudut, supaya
+   terbaca sebagai lembar yang tertekuk naik, bukan sekadar berkedip. */
 @keyframes kertas-terangkat {
-    0%, 100% { transform: scale(0.62); opacity: 0.5; }
-    50% { transform: scale(1); opacity: 1; }
+    0%, 100% { transform: scale(0.5) translate(2px, 2px); opacity: 0.5; }
+    50% { transform: scale(1) translate(-3px, -3px); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2643,7 +2652,7 @@ body.has-custom-cursor * { cursor: none !important; }
     /* Rak geser sudah punya jarak sendiri, grid aslinya dinetralkan. */
     .cards-swipe { margin-inline: -20px; padding-inline: 20px; }
 
-    .leaf.is-top .leaf-front::before { width: 46px; height: 46px; }
+    .leaf.is-top .leaf-front::before { width: 78px; height: 78px; }
 }
 
 /* ================================================================
@@ -2696,4 +2705,50 @@ body.has-custom-cursor * { cursor: none !important; }
     .leaf-plate { padding: 5% 7%; }
 
     .book-bar { margin-top: 10px; }
+}
+
+/* ================================================================
+   Lapisan penutup buku
+
+   Menutup seluruh bidang buku, bukan menempati satu lembar. Dengan begitu
+   halaman terakhir tidak menyisakan lembar kosong di sebelahnya, dan
+   logonya terbaca di tengah bentangan.
+   ================================================================ */
+
+.book-end-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(150deg, #2c0e11 0%, #150809 45%, var(--ink) 100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 520ms var(--e-glide), visibility 0s linear 520ms;
+}
+
+.book.is-akhir .book-end-overlay {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 520ms var(--e-glide) 260ms, visibility 0s;
+}
+
+.book-end-overlay .book-logo {
+    width: min(340px, 46%);
+    height: auto;
+    margin-bottom: 0;
+    animation: denyut-logo 2.8s ease-in-out infinite;
+}
+
+/* Lipatan punggung tidak relevan lagi saat buku sudah ditutup. */
+.book.is-akhir .book-spread::after { opacity: 0; }
+
+@media (max-width: 768px) {
+    .book-end-overlay .book-logo { width: min(240px, 66%); }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+    .book-end-overlay .book-logo { width: min(200px, 40%); }
 }
