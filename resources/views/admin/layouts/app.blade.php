@@ -29,6 +29,9 @@
         <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
             <i class="fa-solid fa-images"></i> Galeri
         </a>
+        <a href="{{ route('admin.password.edit') }}" class="{{ request()->routeIs('admin.password.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-key"></i> Ubah Password
+        </a>
     </nav>
     <div class="sidebar-footer">
         <a href="{{ route('home') }}" target="_blank"><i class="fa-solid fa-globe"></i> Lihat Situs</a>

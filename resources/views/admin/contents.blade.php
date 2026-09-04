@@ -69,6 +69,22 @@
         </div>
 
         <div class="card">
+            <h2>SEO</h2>
+            @foreach ($contents as $item)
+                @if (in_array($item->key, ['meta_description', 'meta_keywords'], true))
+                    <div class="field">
+                        <label>{{ $item->label }}</label>
+                        @if ($item->type === 'textarea')
+                            <textarea name="contents[{{ $item->id }}][value]" rows="3">{{ $item->value }}</textarea>
+                        @else
+                            <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        @endif
+                    </div>
+                @endif
+            @endforeach
+        </div>
+
+        <div class="card">
             <h2>Footer</h2>
             @foreach ($contents as $item)
                 @if (in_array($item->key, ['site_name', 'footer_text', 'footer_copyright'], true))

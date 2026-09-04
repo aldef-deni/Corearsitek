@@ -41,7 +41,6 @@
         <button type="submit" class="btn btn-gold btn-block">MASUK</button>
     </form>
 
-    <p class="login-hint">Akun default: <code>admin@corearsitek.com</code> / <code>admin123</code></p>
     <p class="login-back"><a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Kembali ke situs</a></p>
 </div>
 </body>

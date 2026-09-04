@@ -25,6 +25,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('password', [AuthController::class, 'showChangePassword'])->name('password.edit');
+        Route::put('password', [AuthController::class, 'updatePassword'])->name('password.update');
+
         Route::get('contents', [ContentController::class, 'edit'])->name('contents.edit');
         Route::put('contents', [ContentController::class, 'update'])->name('contents.update');
 

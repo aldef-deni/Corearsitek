@@ -97,4 +97,52 @@ class AdminTest extends TestCase
 
         $this->assertGuest();
     }
+
+    public function test_admin_can_change_password(): void
+    {
+        $user = $this->adminUser();
+
+        $this->actingAs($user)->put(route('admin.password.update'), [
+            'current_password' => 'secret123',
+            'password' => 'newsecret456',
+            'password_confirmation' => 'newsecret456',
+        ])->assertRedirect();
+
+        $this->assertTrue(Hash::check('newsecret456', $user->fresh()->password));
+    }
+
+    public function test_change_password_rejects_wrong_current_password(): void
+    {
+        $user = $this->adminUser();
+
+        $this->actingAs($user)->put(route('admin.password.update'), [
+            'current_password' => 'salah',
+            'password' => 'newsecret456',
+            'password_confirmation' => 'newsecret456',
+        ])->assertSessionHasErrors('current_password');
+    }
+
+    public function test_change_password_page_is_protected(): void
+    {
+        $this->get(route('admin.password.edit'))->assertRedirect(route('admin.login'));
+    }
+
+    public function test_pages_have_seo_meta_tags(): void
+    {
+        SiteContent::create(['key' => 'site_name', 'label' => 'Nama Situs', 'type' => 'text', 'value' => 'COREARSITEK']);
+        SiteContent::create(['key' => 'meta_description', 'label' => 'Meta Description', 'type' => 'textarea', 'value' => 'Biro jasa desain arsitektur untuk hunian mewah.']);
+        SiteContent::create(['key' => 'meta_keywords', 'label' => 'Meta Keywords', 'type' => 'text', 'value' => 'jasa desain rumah, arsitek']);
+
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('name="description" content="Biro jasa desain arsitektur untuk hunian mewah."', false)
+            ->assertSee('property="og:type" content="website"', false)
+            ->assertSee('name="twitter:card" content="summary_large_image"', false)
+            ->assertSee('rel="canonical"', false)
+            ->assertSee('application/ld+json', false);
+
+        $this->get(route('portfolio'))
+            ->assertSee('Portofolio — COREARSITEK', false)
+            ->assertSee('content="Jelajahi portofolio proyek desain rumah mewah', false);
+    }
 }

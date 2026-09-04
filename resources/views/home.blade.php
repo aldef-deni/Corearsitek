@@ -1,5 +1,24 @@
 @extends('layouts.frontend')
 
+@section('structured_data')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "Organization",
+    "name": "{{ $contents['site_name'] ?? 'CoreArsitek' }}",
+    "url": "{{ url('/') }}",
+    "logo": "{{ asset($contents['hero_image'] ?? '') }}",
+    "description": "{{ $contents['meta_description'] ?? '' }}",
+    "contactPoint": {
+        "@@type": "ContactPoint",
+        "telephone": "{{ $contents['contact_phone'] ?? '' }}",
+        "email": "{{ $contents['contact_email'] ?? '' }}",
+        "contactType": "customer service"
+    }
+}
+</script>
+@endsection
+
 @section('content')
 
 {{-- ================= HERO ================= --}}

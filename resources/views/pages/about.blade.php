@@ -1,6 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title', 'Tentang CoreArsitek — ' . ($contents['site_name'] ?? 'CoreArsitek'))
+@section('meta_description', 'Tentang ' . ($contents['site_name'] ?? 'CoreArsitek') . ' — biro jasa desain arsitektur untuk hunian mewah. Hunian aman, nyaman, dan elegan dengan desain detail dari denah 2D hingga render 3D.')
 
 @section('content')
 

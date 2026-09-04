@@ -47,6 +47,9 @@ class DatabaseSeeder extends Seeder
             // Footer
             ['footer_text', 'Teks Footer', 'textarea', 'CoreArsitek — jasa desain arsitektur untuk hunian mewah. Hunian aman, nyaman, dan elegan.'],
             ['footer_copyright', 'Copyright Footer', 'text', '© 2026 CoreArsitek. All rights reserved.'],
+            // SEO
+            ['meta_description', 'Meta Description (SEO)', 'textarea', 'CoreArsitek — biro jasa desain arsitektur untuk hunian mewah. Jasa desain rumah, villa, interior, renovasi, dan bangunan lain. Hunian aman, nyaman, dan elegan.'],
+            ['meta_keywords', 'Meta Keywords (SEO)', 'text', 'jasa desain rumah, desain villa, desain interior, arsitek rumah mewah, CoreArsitek'],
         ];
 
         foreach ($contents as [$key, $label, $type, $value]) {

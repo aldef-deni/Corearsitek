@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', $contents['site_name'] ?? 'CoreArsitek')</title>
+
+    {{-- SEO --}}
+    <meta name="description" content="@yield('meta_description', $contents['meta_description'] ?? '')">
+    <meta name="keywords" content="{{ $contents['meta_keywords'] ?? '' }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:site_name" content="{{ $contents['site_name'] ?? 'CoreArsitek' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@yield('title', $contents['site_name'] ?? 'CoreArsitek')">
+    <meta property="og:description" content="@yield('meta_description', $contents['meta_description'] ?? '')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset($contents['hero_image'] ?? '') }}">
+    <meta property="og:locale" content="id_ID">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', $contents['site_name'] ?? 'CoreArsitek')">
+    <meta name="twitter:description" content="@yield('meta_description', $contents['meta_description'] ?? '')">
+    <meta name="twitter:image" content="{{ asset($contents['hero_image'] ?? '') }}">
+
+    @yield('structured_data')
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>

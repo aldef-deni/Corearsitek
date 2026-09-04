@@ -1,6 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title', 'Portofolio — ' . ($contents['site_name'] ?? 'CoreArsitek'))
+@section('meta_description', 'Jelajahi portofolio proyek desain rumah mewah, villa, interior, dan renovasi karya ' . ($contents['site_name'] ?? 'CoreArsitek') . '.')
 
 @section('content')
 
