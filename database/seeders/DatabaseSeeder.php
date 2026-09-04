@@ -9,20 +9,39 @@ use App\Models\SiteContent;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
         // ---------- Akun admin ----------
-        User::updateOrCreate(
-            ['email' => 'admin@corearsitek.com'],
-            [
+        // Repositori ini publik, jadi password admin tidak boleh ditulis di sini.
+        // Ambil dari ADMIN_PASSWORD di .env; kalau kosong, buat acak dan tampilkan
+        // sekali saja saat akun pertama dibuat.
+        $adminEmail = env('ADMIN_EMAIL', 'admin@corearsitek.com');
+        $admin = User::where('email', $adminEmail)->first();
+
+        if ($admin) {
+            // Jangan pernah timpa password akun yang sudah dipakai.
+            $admin->forceFill(['is_admin' => true])->save();
+        } else {
+            $password = env('ADMIN_PASSWORD') ?: Str::password(20);
+
+            User::create([
                 'name' => 'Administrator',
-                'password' => Hash::make('admin123'),
+                'email' => $adminEmail,
+                'password' => Hash::make($password),
                 'is_admin' => true,
-            ]
-        );
+            ]);
+
+            $this->command?->warn("Akun admin dibuat: {$adminEmail}");
+
+            if (! env('ADMIN_PASSWORD')) {
+                $this->command?->warn("Password acak: {$password}");
+                $this->command?->warn('Simpan sekarang — password ini tidak ditampilkan lagi.');
+            }
+        }
 
         // ---------- Konten situs ----------
         $contents = [

@@ -1,69 +1,90 @@
 # Deploy CoreArsitek ke corearsitek.aldeftech.com
 
-Target: VM GCP **rumahchiara** (`asia-southeast2-b`, IP publik `34.50.78.9`).
-DNS `corearsitek.aldeftech.com` sudah mengarah ke IP tersebut.
+Server: VM GCP **rumahchiara** (`aldef-tech`, zona `asia-southeast2-b`, IP `34.50.78.9`),
+Ubuntu 26.04, dikelola **aaPanel**.
 
-## Sekali di awal
+Karena servernya pakai aaPanel, nginx/PHP/MySQL diurus panel — bukan
+`/etc/nginx/sites-available` dan bukan certbot manual.
 
-```bash
-# 1. Ambil kode
-sudo mkdir -p /var/www && sudo chown "$USER":"$USER" /var/www
-git clone https://github.com/aldef-deni/Corearsitek.git /var/www/corearsitek
-cd /var/www/corearsitek
+| Komponen | Lokasi / versi |
+|---|---|
+| Folder aplikasi | `/www/wwwroot/corearsitek.aldeftech.com` |
+| Docroot nginx | `/www/wwwroot/corearsitek.aldeftech.com/public` |
+| vhost | `/www/server/panel/vhost/nginx/corearsitek.aldeftech.com.conf` |
+| Rewrite rule | `/www/server/panel/vhost/rewrite/corearsitek.aldeftech.com.conf` |
+| Sertifikat SSL | `/www/server/panel/vhost/cert/corearsitek.aldeftech.com/` (dikelola aaPanel) |
+| PHP | 8.4 (`include enable-php-84.conf`) |
+| Database | MySQL 8.0, `sql_corearsitek_aldeftech_com` |
+| User sistem | `www` |
 
-# 2. Siapkan .env lalu isi kredensialnya
-cp .env.production.example .env
-nano .env          # isi DB_USERNAME, DB_PASSWORD, MAIL_*
-
-# 3. Kalau pakai MySQL, buat dulu databasenya
-sudo mysql -e "CREATE DATABASE IF NOT EXISTS corearsitek CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-
-# 4. Jalankan deploy (composer, key:generate, migrate, seed, cache, izin berkas)
-bash deploy/deploy.sh
-
-# 5. Pasang vhost nginx
-sudo cp deploy/nginx-corearsitek.conf /etc/nginx/sites-available/corearsitek.aldeftech.com
-sudo ln -sfn /etc/nginx/sites-available/corearsitek.aldeftech.com \
-             /etc/nginx/sites-enabled/corearsitek.aldeftech.com
-sudo nginx -t && sudo systemctl reload nginx
-
-# 6. Pasang sertifikat HTTPS
-sudo certbot --nginx -d corearsitek.aldeftech.com
-```
-
-Sesuaikan `fastcgi_pass` di vhost dengan versi PHP-FPM yang terpasang:
+## Masuk ke server
 
 ```bash
-ls /run/php/           # mis. php8.3-fpm.sock
+gcloud compute ssh rumahchiara --zone=asia-southeast2-b
 ```
 
-## Deploy berikutnya
+## Deploy rutin
 
 ```bash
-cd /var/www/corearsitek && bash deploy/deploy.sh
+cd /www/wwwroot/corearsitek.aldeftech.com
+sudo bash deploy/deploy.sh
 ```
 
-Skrip menarik perubahan dari branch `main`, memasang dependensi, menjalankan
-migrasi, membangun ulang cache, lalu memuat ulang PHP-FPM. `.env` yang sudah ada
-tidak pernah ditimpa, dan seeder hanya jalan saat tabel konten masih kosong —
-jadi konten yang sudah diubah lewat dashboard admin tetap aman.
+Skrip menarik perubahan dari `main`, memasang dependensi, menjalankan migrasi,
+membangun ulang cache, memperbaiki izin berkas, lalu memuat ulang PHP-FPM.
+`.env` yang sudah ada tidak pernah ditimpa, dan seeder hanya jalan saat tabel
+konten masih kosong — konten yang sudah diubah lewat dashboard admin tetap aman.
 
-## Login admin pertama
+## Catatan pemasangan awal (sudah dikerjakan)
 
-Seeder membuat akun bawaan:
+Disimpan sebagai rujukan kalau perlu memasang ulang dari nol.
 
-- Email: `admin@corearsitek.com`
-- Password: `admin123`
+1. Repo di-`git init` langsung di folder situs yang sudah dibuat aaPanel, lalu
+   `git reset --hard origin/main`. Berkas bawaan panel yang dipertahankan:
+   `.user.ini`, `.well-known/`, `404.html`, `502.html`. `index.html` dihapus
+   supaya tidak menutupi Laravel.
+2. `.env` disalin dari `.env.production.example`, kredensial database diisi,
+   lalu `php artisan key:generate`.
+3. Docroot vhost diubah satu baris — ini satu-satunya suntingan pada berkas
+   yang dikelola aaPanel:
 
-**Segera ganti password** lewat `/admin/password` setelah login pertama.
+   ```nginx
+   # dari
+   root /www/wwwroot/corearsitek.aldeftech.com;
+   # menjadi
+   root /www/wwwroot/corearsitek.aldeftech.com/public;
+   ```
+
+   Cadangan sebelum diubah ada di
+   `/www/server/panel/vhost/nginx/corearsitek.aldeftech.com.conf.bak-prelaravel`.
+
+   Rewrite rule bawaan panel (`try_files $uri $uri/ /index.php$is_args$query_string`)
+   kebetulan sudah cocok untuk Laravel, jadi tidak diubah.
+
+4. `sudo nginx -t && sudo nginx -s reload`.
+
+**Jangan** menimpa vhost itu dengan berkas dari repo — konfigurasi SSL, HTTP/3,
+dan error page bawaan aaPanel ada di dalamnya. Kalau perlu ubah, sunting satu
+baris yang bersangkutan saja, atau lewat UI aaPanel.
+
+`.user.ini` diproteksi immutable oleh panel, jadi `chown -R` akan gagal di berkas
+itu. Skrip deploy sudah mengabaikannya.
+
+## Akun admin
+
+Seeder **tidak lagi** memuat password bawaan (repo ini publik). Saat akun admin
+pertama dibuat:
+
+- kalau `ADMIN_PASSWORD` diisi di `.env`, password itu yang dipakai;
+- kalau kosong, seeder membuat password acak dan menampilkannya sekali di
+  terminal — catat saat itu juga.
+
+Ganti password kapan saja lewat `/admin/password` setelah login.
 
 ## Kebutuhan di server
 
-- PHP 8.2+ beserta ekstensi `mbstring`, `xml`, `curl`, `zip`, `gd`,
-  dan `pdo_mysql` (atau `pdo_sqlite`)
-- Composer 2
-- nginx + PHP-FPM
-- certbot (untuk HTTPS)
+PHP 8.2+ dengan `mbstring`, `xml`, `curl`, `zip`, `gd`, `intl`, `pdo_mysql`;
+Composer 2; nginx + PHP-FPM; MySQL 8.
 
 Tidak perlu Node.js: seluruh CSS dan JS frontend berupa berkas statis di
 `public/css` dan `public/js`, bukan hasil build Vite.

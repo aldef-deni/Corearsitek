@@ -2,10 +2,10 @@
 # ================================================================
 # CoreArsitek — skrip deploy untuk corearsitek.aldeftech.com
 #
-# Pemakaian di server (sebagai user yang punya sudo):
-#   sudo mkdir -p /var/www && sudo chown $USER:$USER /var/www
-#   git clone https://github.com/aldef-deni/Corearsitek.git /var/www/corearsitek
-#   cd /var/www/corearsitek && bash deploy/deploy.sh
+# Server rumahchiara memakai aaPanel; lihat deploy/README.md untuk detailnya.
+#
+# Pemakaian di server:
+#   cd /www/wwwroot/corearsitek.aldeftech.com && sudo bash deploy/deploy.sh
 #
 # Aman dijalankan berulang: dipakai juga untuk deploy berikutnya
 # (tarik perubahan terbaru lalu jalankan lagi skrip ini).
@@ -15,8 +15,8 @@
 
 set -euo pipefail
 
-APP_DIR="${APP_DIR:-/var/www/corearsitek}"
-WEB_USER="${WEB_USER:-www-data}"
+APP_DIR="${APP_DIR:-/www/wwwroot/corearsitek.aldeftech.com}"
+WEB_USER="${WEB_USER:-www}"
 BRANCH="${BRANCH:-main}"
 
 say() { printf '\n\033[1;31m==>\033[0m %s\n' "$1"; }
@@ -91,7 +91,8 @@ php artisan storage:link || true
 mkdir -p public/uploads storage/framework/{cache,sessions,views} storage/logs bootstrap/cache
 
 if id -u "$WEB_USER" >/dev/null 2>&1; then
-    sudo chown -R "$WEB_USER":"$WEB_USER" storage bootstrap/cache public/uploads
+    # 2>/dev/null: .user.ini milik aaPanel diproteksi immutable, lewati saja.
+    sudo chown -R "$WEB_USER":"$WEB_USER" storage bootstrap/cache public/uploads 2>/dev/null || true
     sudo find storage bootstrap/cache -type d -exec chmod 775 {} \;
     sudo find storage bootstrap/cache -type f -exec chmod 664 {} \;
 fi
