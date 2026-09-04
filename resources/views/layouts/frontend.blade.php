@@ -60,7 +60,7 @@
             <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Layanan</a>
             <a href="{{ route('gallery') }}" class="{{ request()->routeIs('gallery') ? 'active' : '' }}">Galeri</a>
             <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Tentang CoreArsitek</a>
-            <a href="{{ route('home') }}#kontak">Kontak</a>
+            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Kontak</a>
         </nav>
 
         <div class="nav-actions">
@@ -95,6 +95,7 @@
                     <li><a href="{{ route('services') }}">Layanan</a></li>
                     <li><a href="{{ route('gallery') }}">Galeri</a></li>
                     <li><a href="{{ route('about') }}">Tentang CoreArsitek</a></li>
+                    <li><a href="{{ route('contact') }}">Kontak</a></li>
                 </ul>
             </nav>
 

@@ -6,6 +6,16 @@
     <h1 class="page-title">Dashboard</h1>
 
     <div class="stat-grid">
+        <a class="stat-card {{ $submissionsUnread ? 'stat-card-alert' : '' }}" href="{{ route('admin.submissions.index') }}">
+            <i class="fa-solid fa-inbox"></i>
+            <span class="stat-value">{{ $submissionsCount }}</span>
+            <span class="stat-label">
+                Data Pengajuan
+                @if ($submissionsUnread)
+                    <em>{{ $submissionsUnread }} belum dibaca</em>
+                @endif
+            </span>
+        </a>
         <a class="stat-card" href="{{ route('admin.banners.index') }}">
             <i class="fa-solid fa-panorama"></i>
             <span class="stat-value">{{ $bannersCount }}</span>

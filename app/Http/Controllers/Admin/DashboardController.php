@@ -12,6 +12,7 @@ use App\Models\Portfolio;
 use App\Models\ProcessStep;
 use App\Models\Service;
 use App\Models\SiteContent;
+use App\Models\Submission;
 use App\Models\Testimonial;
 
 class DashboardController extends Controller
@@ -19,6 +20,8 @@ class DashboardController extends Controller
     public function index()
     {
         return view('admin.dashboard', [
+            'submissionsCount' => Submission::count(),
+            'submissionsUnread' => Submission::unread()->count(),
             'bannersCount' => Banner::count(),
             'contentsCount' => SiteContent::count(),
             'servicesCount' => Service::count(),

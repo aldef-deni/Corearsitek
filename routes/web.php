@@ -13,9 +13,11 @@ use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ProcessStepController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SubmissionController as AdminSubmissionController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 
 // ---------- Halaman depan (company profile) ----------
@@ -25,6 +27,13 @@ Route::get('/portofolio/{portfolio:slug}', [PageController::class, 'portfolioDet
 Route::get('/galeri', [PageController::class, 'gallery'])->name('gallery');
 Route::get('/layanan', [PageController::class, 'services'])->name('services');
 Route::get('/tentang', [PageController::class, 'about'])->name('about');
+Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
+
+// Pengajuan pembuatan desain dari halaman Kontak. Dibatasi agar satu pengirim
+// tidak bisa membanjiri kotak masuk.
+Route::post('/kontak', [SubmissionController::class, 'store'])
+    ->middleware('throttle:5,10')
+    ->name('contact.store');
 
 // ---------- Admin ----------
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -59,6 +68,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('advantages', AdvantageController::class)->except(['show', 'create', 'edit']);
         Route::post('clients/{client}/duplikat', [ClientController::class, 'duplicate'])->name('clients.duplicate');
         Route::resource('clients', ClientController::class)->only(['store', 'update', 'destroy']);
+        // Pengajuan calon klien: hanya dibaca dan ditindaklanjuti, tidak dibuat manual.
+        Route::get('pengajuan', [AdminSubmissionController::class, 'index'])->name('submissions.index');
+        Route::get('pengajuan/{submission}', [AdminSubmissionController::class, 'show'])->name('submissions.show');
+        Route::put('pengajuan/{submission}', [AdminSubmissionController::class, 'update'])->name('submissions.update');
+        Route::post('pengajuan/{submission}/dibaca', [AdminSubmissionController::class, 'toggleRead'])
+            ->name('submissions.read');
+        Route::delete('pengajuan/{submission}', [AdminSubmissionController::class, 'destroy'])
+            ->name('submissions.destroy');
+
         Route::resource('testimonials', TestimonialController::class)->except(['show', 'create', 'edit']);
         Route::resource('process-steps', ProcessStepController::class)
             ->parameters(['process-steps' => 'processStep'])

@@ -86,6 +86,15 @@ class PageController extends Controller
         ]);
     }
 
+    public function contact()
+    {
+        return view('pages.contact', [
+            'contents' => $this->contents(),
+            'banners' => $this->banners('contact'),
+            'services' => Service::orderBy('sort_order')->get(),
+        ]);
+    }
+
     public function about()
     {
         return view('pages.about', [

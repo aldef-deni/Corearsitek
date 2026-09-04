@@ -16,6 +16,7 @@ class Banner extends Model
         'gallery' => 'Galeri',
         'services' => 'Layanan',
         'about' => 'Tentang CoreArsitek',
+        'contact' => 'Kontak',
     ];
 
     protected $fillable = [

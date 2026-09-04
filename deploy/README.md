@@ -138,6 +138,46 @@ sudo /etc/init.d/php-fpm-84 reload
 Cek hasilnya dengan `php -m | grep exif`. PHP 8.4 dipakai bersama seluruh situs
 di VM ini, jadi lakukan `reload` (bukan `restart`) supaya situs lain tidak putus.
 
+## Email pemberitahuan pengajuan
+
+Formulir pengajuan di halaman `/kontak` menyimpan datanya ke tabel `submissions`
+(menu **Data Pengajuan** di dashboard) lalu mengirim pemberitahuan email.
+
+Selama `.env` masih berisi `MAIL_MAILER=log`, **emailnya tidak dikirim ke mana pun**
+— hanya ditulis ke `storage/logs/laravel.log`. Pengajuannya tetap masuk dashboard,
+dan pada halaman detailnya akan tampak keterangan status pengiriman.
+
+Untuk benar-benar mengirim lewat Gmail:
+
+1. Aktifkan verifikasi dua langkah pada akun pengirim.
+2. Buat App Password 16 karakter di <https://myaccount.google.com/apppasswords>.
+3. Sunting `/www/wwwroot/corearsitek.aldeftech.com/.env`:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_SCHEME=tls
+MAIL_USERNAME=corearsitek@gmail.com
+MAIL_PASSWORD="app-password-16-karakter"
+MAIL_FROM_ADDRESS="corearsitek@gmail.com"
+MAIL_FROM_NAME="CoreArsitek"
+```
+
+4. Muat ulang cache konfigurasi: `sudo -u www php artisan config:cache`.
+
+`MAIL_FROM_ADDRESS` harus sama dengan `MAIL_USERNAME`, kalau berbeda Gmail menolak
+pengirimannya. Alamat **penerima** pengajuan tidak diatur di `.env`, melainkan di
+dashboard: **Konten Situs → Halaman Kontak & Pengajuan → Email Penerima Pengajuan**
+(bawaannya `corearsitek@gmail.com`).
+
+Uji cepat dari server:
+
+```bash
+cd /www/wwwroot/corearsitek.aldeftech.com
+sudo -u www php artisan tinker --execute="Mail::raw('uji kirim', fn(\$m) => \$m->to('corearsitek@gmail.com')->subject('Uji CoreArsitek'));"
+```
+
 ## Akun admin
 
 Seeder **tidak lagi** memuat password bawaan (repo ini publik). Saat akun admin

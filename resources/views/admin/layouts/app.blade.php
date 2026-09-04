@@ -51,6 +51,12 @@
         <a href="{{ route('admin.process-steps.index') }}" class="{{ request()->routeIs('admin.process-steps.*') ? 'active' : '' }}">
             <i class="fa-solid fa-diagram-project"></i> Proses Kerja
         </a>
+        <a href="{{ route('admin.submissions.index') }}" class="{{ request()->routeIs('admin.submissions.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-inbox"></i> Data Pengajuan
+            @if ($pengajuanBaru = \App\Models\Submission::unread()->count())
+                <span class="nav-badge">{{ $pengajuanBaru > 99 ? '99+' : $pengajuanBaru }}</span>
+            @endif
+        </a>
         <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
             <i class="fa-solid fa-quote-left"></i> Testimoni
         </a>

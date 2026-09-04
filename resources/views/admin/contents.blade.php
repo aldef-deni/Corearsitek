@@ -84,10 +84,35 @@
         <div class="card">
             <h2>Kontak</h2>
             @foreach ($contents as $item)
-                @if (in_array($item->key, ['contact_address', 'contact_phone', 'contact_email', 'whatsapp_number'], true))
+                @if (in_array($item->key, ['contact_address', 'contact_phone', 'contact_email', 'whatsapp_number', 'contact_hours', 'contact_maps_url'], true))
                     <div class="field">
-                        <label>{{ $item->label }}@if ($item->key === 'whatsapp_number') <small>(format internasional, tanpa +)</small>@endif</label>
+                        <label>
+                            {{ $item->label }}
+                            @if ($item->key === 'whatsapp_number') <small>(format internasional, tanpa +)</small>@endif
+                            @if ($item->key === 'contact_maps_url') <small>(kosongkan kalau belum ada)</small>@endif
+                        </label>
                         <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                    </div>
+                @endif
+            @endforeach
+        </div>
+
+        <div class="card">
+            <h2>Halaman Kontak &amp; Pengajuan</h2>
+            @foreach ($contents as $item)
+                @if (in_array($item->key, ['contact_title', 'contact_intro', 'submission_email'], true))
+                    <div class="field">
+                        <label>
+                            {{ $item->label }}
+                            @if ($item->key === 'submission_email')
+                                <small>(tujuan pemberitahuan setiap pengajuan baru)</small>
+                            @endif
+                        </label>
+                        @if ($item->type === 'textarea')
+                            <textarea name="contents[{{ $item->id }}][value]" rows="4">{{ $item->value }}</textarea>
+                        @else
+                            <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        @endif
                     </div>
                 @endif
             @endforeach
