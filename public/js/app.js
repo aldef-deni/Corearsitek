@@ -1,7 +1,7 @@
 /* ================================================================
    CoreArsitek — interaksi & animasi kursor
    Pola animasi kursor mengikuti aldeftech.com: ambient glow yang
-   menempel di posisi kursor, ditambah dot + ring dengan easing,
+   menempel di posisi kursor, ditambah panah + ring dengan easing,
    tombol magnetic, dan tilt 3D pada kartu.
    ================================================================ */
 
@@ -109,16 +109,19 @@
         });
     }
 
-    /* ---------------- Dot + ring pengikut kursor ---------------- */
+    /* ---------------- Panah + ring pengikut kursor ---------------- */
 
-    var HOT_SELECTOR = 'a, button, .icon-btn, .lang-btn, .service-card, .gallery-item, .feature-item, .contact-item, input, textarea, select';
+    var HOT_SELECTOR = 'a, button, .icon-btn, .lang-btn, .service-card, .service-pill, .gallery-item, .mosaic-item, .feature-item, .contact-item, .testimonial-card, .process-step, .about-figure, .slider-dot, input, textarea, select';
 
     function initCursorFollower() {
         if (!finePointer || reduceMotion) return;
 
         var dot = document.createElement('div');
-        dot.className = 'cursor-dot';
+        dot.className = 'cursor-arrow';
         dot.setAttribute('aria-hidden', 'true');
+        dot.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'
+            + '<path class="arrow-body" d="M4.5 1.8 L4.5 19.4 L9.1 15.1 L11.9 21.7 L14.9 20.4 L12.2 14 L18 14 Z"/>'
+            + '</svg>';
 
         var ring = document.createElement('div');
         ring.className = 'cursor-ring';
@@ -137,6 +140,14 @@
 
         var place = function (el, x, y) {
             el.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
+        };
+
+        // Panah dijangkarkan pada ujungnya, bukan pada titik tengah elemen.
+        var ARROW_TIP_X = 4.9;
+        var ARROW_TIP_Y = 2.0;
+
+        var placeArrow = function (x, y) {
+            dot.style.transform = 'translate(' + (x - ARROW_TIP_X) + 'px, ' + (y - ARROW_TIP_Y) + 'px)';
         };
 
         // Ring menyusul kursor dengan easing. Loop berhenti begitu ring sudah
@@ -168,7 +179,7 @@
                 ring.style.opacity = '1';
             }
 
-            place(dot, mouseX, mouseY);
+            placeArrow(mouseX, mouseY);
 
             if (!running) {
                 running = true;
@@ -184,10 +195,12 @@
 
         document.addEventListener('mousedown', function () {
             ring.classList.add('is-down');
+            dot.classList.add('is-down');
         });
 
         document.addEventListener('mouseup', function () {
             ring.classList.remove('is-down');
+            dot.classList.remove('is-down');
         });
 
         // Ring membesar saat kursor berada di atas elemen interaktif
@@ -197,7 +210,7 @@
             dot.classList.toggle('is-hot', !!hot);
         }, { passive: true });
 
-        place(dot, mouseX, mouseY);
+        placeArrow(mouseX, mouseY);
         place(ring, ringX, ringY);
     }
 
@@ -317,11 +330,101 @@
         nodes.forEach(function (el) { observer.observe(el); });
     }
 
+    /* ---------------- Slider banner hero ---------------- */
+
+    function initHeroSlider() {
+        document.querySelectorAll('[data-slider]').forEach(function (root) {
+            var slides = Array.prototype.slice.call(root.querySelectorAll('[data-slide]'));
+            if (slides.length < 2) return;
+
+            var dots = Array.prototype.slice.call(root.querySelectorAll('[data-slider-dot]'));
+            var prev = root.querySelector('[data-slider-prev]');
+            var next = root.querySelector('[data-slider-next]');
+            var interval = parseInt(root.dataset.interval, 10) || 6500;
+
+            var current = 0;
+            var timer = null;
+
+            var show = function (index) {
+                current = (index + slides.length) % slides.length;
+
+                slides.forEach(function (slide, i) {
+                    slide.classList.toggle('is-active', i === current);
+                });
+
+                dots.forEach(function (dot, i) {
+                    dot.classList.toggle('is-active', i === current);
+                });
+            };
+
+            var start = function () {
+                if (reduceMotion) return;
+                stop();
+                timer = setInterval(function () { show(current + 1); }, interval);
+            };
+
+            var stop = function () {
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+            };
+
+            // Interaksi manual menunda putaran otomatis, tidak mematikannya.
+            var goTo = function (index) {
+                show(index);
+                start();
+            };
+
+            if (prev) prev.addEventListener('click', function () { goTo(current - 1); });
+            if (next) next.addEventListener('click', function () { goTo(current + 1); });
+
+            dots.forEach(function (dot, i) {
+                dot.addEventListener('click', function () { goTo(i); });
+            });
+
+            root.addEventListener('mouseenter', stop);
+            root.addEventListener('mouseleave', start);
+
+            // Hentikan saat tab tidak terlihat supaya tidak berputar sia-sia.
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) {
+                    stop();
+                } else {
+                    start();
+                }
+            });
+
+            // Geser dengan sentuhan di perangkat mobile.
+            var touchX = null;
+            root.addEventListener('touchstart', function (e) {
+                touchX = e.changedTouches[0].clientX;
+            }, { passive: true });
+
+            root.addEventListener('touchend', function (e) {
+                if (touchX === null) return;
+                var delta = e.changedTouches[0].clientX - touchX;
+                if (Math.abs(delta) > 50) goTo(current + (delta < 0 ? 1 : -1));
+                touchX = null;
+            }, { passive: true });
+
+            // Panah kiri/kanan saat slider sedang difokuskan.
+            root.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft') goTo(current - 1);
+                if (e.key === 'ArrowRight') goTo(current + 1);
+            });
+
+            show(0);
+            start();
+        });
+    }
+
     /* ---------------- Bootstrap ---------------- */
 
     function init() {
         initNavToggle();
         initNavbarScroll();
+        initHeroSlider();
         initBackToTop();
         initStaggerGroups();
         initReveal();

@@ -26,5 +26,5 @@ Thumbs.db
 # Metadata alat pihak ketiga
 /.freebuff
 
-# Setelan Claude Code milik masing-masing pengguna
-/.claude/settings.local.json
+# Folder kerja Claude Code, tidak pernah masuk repo
+/.claude/

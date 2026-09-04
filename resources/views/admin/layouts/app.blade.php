@@ -25,6 +25,9 @@
         <a href="{{ route('admin.contents.edit') }}" class="{{ request()->routeIs('admin.contents.*') ? 'active' : '' }}">
             <i class="fa-solid fa-file-lines"></i> Konten Situs
         </a>
+        <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-panorama"></i> Banner
+        </a>
         <a href="{{ route('admin.services.index') }}" class="{{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
             <i class="fa-solid fa-hammer"></i> Layanan
         </a>
@@ -34,8 +37,14 @@
         <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
             <i class="fa-solid fa-images"></i> Galeri
         </a>
-        <a href="{{ route('admin.password.edit') }}" class="{{ request()->routeIs('admin.password.*') ? 'active' : '' }}">
-            <i class="fa-solid fa-key"></i> Ubah Password
+        <a href="{{ route('admin.process-steps.index') }}" class="{{ request()->routeIs('admin.process-steps.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-diagram-project"></i> Proses Kerja
+        </a>
+        <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-quote-left"></i> Testimoni
+        </a>
+        <a href="{{ route('admin.profile.edit') }}" class="{{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+            <i class="fa-regular fa-id-badge"></i> Profil
         </a>
     </nav>
     <div class="sidebar-footer">
@@ -49,10 +58,17 @@
 
 <main class="admin-main">
     <header class="topbar">
-        <div class="topbar-user">
-            <i class="fa-regular fa-circle-user"></i>
-            <span>{{ Auth::user()->name }} ({{ Auth::user()->email }})</span>
-        </div>
+        <a class="topbar-user" href="{{ route('admin.profile.edit') }}" title="Buka profil">
+            @if (Auth::user()->avatar)
+                <img src="{{ asset(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="topbar-avatar">
+            @else
+                <span class="topbar-avatar topbar-avatar-initials">{{ \Illuminate\Support\Str::of(Auth::user()->name)->explode(' ')->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('') }}</span>
+            @endif
+            <span class="topbar-name">
+                {{ Auth::user()->name }}
+                <small>{{ Auth::user()->position ?: 'Administrator' }}</small>
+            </span>
+        </a>
     </header>
 
     <div class="admin-content">
