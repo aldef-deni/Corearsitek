@@ -3,6 +3,10 @@
 @section('title', 'Galeri — ' . ($contents['site_name'] ?? 'CoreArsitek'))
 @section('meta_description', 'Galeri foto karya dan kegiatan ' . ($contents['site_name'] ?? 'CoreArsitek') . '.')
 
+@php
+    $logo = $contents['logo_image'] ?? 'images/logo.png';
+@endphp
+
 @section('content')
 
 @include('partials.banner', [
@@ -21,6 +25,21 @@
             <h2 class="section-title">GALERI FOTO</h2>
             <p class="section-lead">Kumpulan foto karya dan kegiatan kami. Ketuk foto untuk melihat ukuran penuh.</p>
         </div>
+
+        @if ($galleries->count() > 1)
+            {{-- Dua cara membuka foto, bisa dibandingkan langsung. --}}
+            <div class="gv-switch reveal" data-gallery-view>
+                <span class="gv-label">Cara membuka foto</span>
+                <div class="gv-opsi">
+                    <button type="button" data-view="buku" aria-pressed="true">
+                        <i class="fa-solid fa-book-open"></i> Flipbook
+                    </button>
+                    <button type="button" data-view="modal" aria-pressed="false">
+                        <i class="fa-solid fa-expand"></i> Modal
+                    </button>
+                </div>
+            </div>
+        @endif
     </div>
 
     @if ($galleries->isEmpty())
@@ -29,7 +48,9 @@
         </div>
     @else
         {{-- Di luar .container supaya deretannya menempel ke tepi layar. --}}
-        <div class="gallery-bleed" data-lightbox-group>
+        <div class="gallery-bleed" data-lightbox-group data-gallery-book
+             data-book-logo="{{ asset($logo) }}"
+             data-book-name="{{ $contents['site_name'] ?? 'CoreArsitek' }}">
             @foreach ($galleries as $gallery)
                 <button type="button" class="gb-item"
                         data-lightbox-item

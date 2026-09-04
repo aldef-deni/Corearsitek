@@ -388,13 +388,18 @@
 
     var BUKU_DUA_HALAMAN = '(min-width: 900px), (orientation: landscape) and (min-width: 560px)';
 
-    function initFlipbook() {
-        var root = document.querySelector('[data-flipbook]');
-        if (!root) return;
+    /**
+     * Merakit satu buku dari sebuah wadah [data-flipbook]. Dipakai dua kali:
+     * langsung di halaman detail portofolio, dan di dalam lapisan penuh layar
+     * pada halaman Galeri. Mengembalikan kendali seperlunya, atau null kalau
+     * isinya belum cukup untuk dijadikan buku.
+     */
+    function bangunFlipbook(root) {
+        if (!root) return null;
 
         var daftar = root.querySelector('[data-flip-list]');
         var foto = Array.prototype.slice.call(root.querySelectorAll('[data-flip-photo]'));
-        if (!daftar || foto.length < 2) return;
+        if (!daftar || foto.length < 2) return null;
 
         var tplSampul = root.querySelector('[data-flip-cover]');
         var tplPenutup = root.querySelector('[data-flip-end]');
@@ -698,6 +703,28 @@
         if (lebar.addEventListener) {
             lebar.addEventListener('change', sesuaikan);
         }
+
+        /**
+         * Buka buku pada foto ke-k. Dalam mode dua halaman satu lembar memuat
+         * dua foto, jadi foto genap ada di muka depan lembar k/2 dan foto ganjil
+         * di muka belakang lembar sebelumnya — keduanya terlihat pada posisi
+         * yang sama, yaitu pembulatan ke atas dari k/2.
+         */
+        function keFoto(k) {
+            ke(ganda ? Math.ceil(k / 2) : k + 1);
+        }
+
+        return {
+            keFoto: keFoto,
+            lepas: function () {
+                if (lebar.removeEventListener) lebar.removeEventListener('change', sesuaikan);
+                bongkar();
+            }
+        };
+    }
+
+    function initFlipbook() {
+        bangunFlipbook(document.querySelector('[data-flipbook]'));
     }
 
     /* ---------------- Deretan kartu yang digeser di ponsel ----------------
@@ -796,6 +823,178 @@
     /* ---------------- Modal foto ----------------
        Satu modal dipakai bersama seluruh foto dalam satu kelompok, jadi
        bisa berpindah maju-mundur tanpa menutupnya lebih dulu. */
+
+    /* ---------------- Galeri: pilih cara membuka foto ----------------
+       Dua tampilan disediakan berdampingan supaya bisa dibandingkan
+       langsung: buku yang dibalik halaman demi halaman, atau modal foto
+       tunggal. Pilihannya diingat di peramban masing-masing pengunjung. */
+
+    var GALERI_TAMPILAN = 'corearsitek:galeri-tampilan';
+
+    function modeGaleri() {
+        try {
+            return localStorage.getItem(GALERI_TAMPILAN) === 'modal' ? 'modal' : 'buku';
+        } catch (e) {
+            // Mode penyamaran atau penyimpanan diblokir: pakai bawaan saja.
+            return 'buku';
+        }
+    }
+
+    function simpanModeGaleri(nilai) {
+        try { localStorage.setItem(GALERI_TAMPILAN, nilai); } catch (e) { /* diabaikan */ }
+    }
+
+    function initGalleryViewSwitch() {
+        var saklar = document.querySelector('[data-gallery-view]');
+        if (!saklar) return;
+
+        var tombol = Array.prototype.slice.call(saklar.querySelectorAll('[data-view]'));
+
+        function tandai() {
+            var aktif = modeGaleri();
+            tombol.forEach(function (t) {
+                var ini = t.dataset.view === aktif;
+                t.classList.toggle('is-active', ini);
+                t.setAttribute('aria-pressed', ini ? 'true' : 'false');
+            });
+        }
+
+        tombol.forEach(function (t) {
+            t.addEventListener('click', function () {
+                simpanModeGaleri(t.dataset.view);
+                tandai();
+            });
+        });
+
+        tandai();
+    }
+
+    /* ---------------- Galeri: buku penuh layar ----------------
+       Foto galeri dipinjamkan ke sebuah [data-flipbook] di dalam lapisan
+       penuh layar, lalu dirakit memakai mesin buku yang sama dengan halaman
+       detail portofolio. Lapisannya dibongkar habis saat ditutup supaya
+       tidak ada sisa lembar yang menumpuk. */
+
+    function initGalleryBook() {
+        var kelompok = document.querySelector('[data-gallery-book]');
+        if (!kelompok) return;
+
+        var tombolFoto = Array.prototype.slice.call(kelompok.querySelectorAll('[data-lightbox-item]'));
+        if (tombolFoto.length < 2) return;
+
+        var logo = kelompok.dataset.bookLogo || '';
+        var nama = kelompok.dataset.bookName || 'CoreArsitek';
+
+        var lapisan = null;
+        var buku = null;
+        var pemicu = null;
+
+        function halamanFoto() {
+            return tombolFoto.map(function (t) {
+                var ket = t.dataset.desc
+                    ? '<figcaption>' + t.dataset.title + ' &middot; ' + t.dataset.desc + '</figcaption>'
+                    : (t.dataset.title ? '<figcaption>' + t.dataset.title + '</figcaption>' : '');
+
+                return '<figure data-flip-photo>'
+                    + '<img src="' + t.dataset.src + '" alt="' + (t.dataset.title || '') + '">'
+                    + ket
+                    + '</figure>';
+            }).join('');
+        }
+
+        function rakit() {
+            lapisan = document.createElement('div');
+            lapisan.className = 'gbook';
+            lapisan.setAttribute('role', 'dialog');
+            lapisan.setAttribute('aria-modal', 'true');
+            lapisan.setAttribute('aria-label', 'Galeri dalam bentuk buku');
+            lapisan.hidden = true;
+
+            lapisan.innerHTML =
+                '<div class="gbook-backdrop" data-gb-close></div>'
+                + '<button type="button" class="gbook-close" data-gb-close aria-label="Tutup buku">'
+                + '<i class="fa-solid fa-xmark"></i></button>'
+                + '<div class="gbook-shell">'
+                + '<div data-flipbook>'
+                + '<template data-flip-cover>'
+                + (logo ? '<img src="' + logo + '" alt="' + nama + '" class="book-logo">' : '')
+                + '<h2 class="book-cover-title">GALERI</h2>'
+                + '<p class="book-cover-note">' + tombolFoto.length + ' foto &middot; geser atau ketuk untuk membalik halaman</p>'
+                + '</template>'
+                + '<template data-flip-end>'
+                + (logo ? '<img src="' + logo + '" alt="' + nama + '" class="book-logo book-logo-pulse">' : '')
+                + '</template>'
+                + '<div data-flip-list>' + halamanFoto() + '</div>'
+                + '</div>'
+                + '</div>';
+
+            document.body.appendChild(lapisan);
+
+            lapisan.querySelectorAll('[data-gb-close]').forEach(function (el) {
+                el.addEventListener('click', tutup);
+            });
+        }
+
+        function buka(i, dariTombol) {
+            if (!lapisan) rakit();
+
+            pemicu = dariTombol || null;
+            lapisan.hidden = false;
+            document.body.classList.add('is-locked');
+
+            // Bukunya dirakit ulang tiap kali dibuka: lebar layar bisa berubah
+            // di antara dua kali buka, dan jumlah lembarnya ikut berubah.
+            if (buku) buku.lepas();
+            buku = bangunFlipbook(lapisan.querySelector('[data-flipbook]'));
+
+            requestAnimationFrame(function () {
+                lapisan.classList.add('is-open');
+                if (buku) buku.keFoto(i);
+                var tutupBtn = lapisan.querySelector('.gbook-close');
+                if (tutupBtn) tutupBtn.focus();
+            });
+        }
+
+        function tutup() {
+            if (!lapisan || lapisan.hidden) return;
+
+            lapisan.classList.remove('is-open');
+            document.body.classList.remove('is-locked');
+
+            var sudah = false;
+            var selesai = function () {
+                if (sudah) return;
+                sudah = true;
+                lapisan.hidden = true;
+                if (pemicu) pemicu.focus();
+            };
+
+            if (reduceMotion) {
+                selesai();
+                return;
+            }
+
+            // Sama seperti modal: transitionend saja tidak cukup kalau
+            // transisinya dimatikan, jadi selalu ada penghitung pengaman.
+            var pengaman = setTimeout(selesai, 400);
+            lapisan.addEventListener('transitionend', function () {
+                clearTimeout(pengaman);
+                selesai();
+            }, { once: true });
+        }
+
+        tombolFoto.forEach(function (t, i) {
+            t.addEventListener('click', function () {
+                if (modeGaleri() !== 'buku') return;
+                buka(i, t);
+            });
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (!lapisan || lapisan.hidden) return;
+            if (e.key === 'Escape') { e.preventDefault(); tutup(); }
+        });
+    }
 
     function initLightbox() {
         var kelompok = document.querySelector('[data-lightbox-group]');
@@ -923,8 +1122,15 @@
             }, { once: true });
         }
 
+        // Di halaman Galeri ada dua tampilan; modal mengalah kalau yang
+        // sedang dipilih adalah buku.
+        var bisaBuku = kelompok.hasAttribute('data-gallery-book');
+
         tombolFoto.forEach(function (t, i) {
-            t.addEventListener('click', function () { buka(i, t); });
+            t.addEventListener('click', function () {
+                if (bisaBuku && modeGaleri() === 'buku') return;
+                buka(i, t);
+            });
         });
 
         document.addEventListener('keydown', function (e) {
@@ -943,6 +1149,8 @@
         initHeroSlider();
         initFlipbook();
         initCardsSwipe();
+        initGalleryViewSwitch();
+        initGalleryBook();
         initLightbox();
         initBackToTop();
         initStaggerGroups();
