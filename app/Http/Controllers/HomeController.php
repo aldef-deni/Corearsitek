@@ -18,7 +18,7 @@ class HomeController extends Controller
 
         return view('home', [
             'contents' => $contents,
-            'banners' => Banner::active()->orderBy('sort_order')->orderBy('id')->get(),
+            'banners' => Banner::active()->forPage('home')->orderBy('sort_order')->orderBy('id')->get(),
             'services' => Service::orderBy('sort_order')->get(),
             'features' => Feature::orderBy('sort_order')->get(),
             'galleries' => Gallery::orderBy('sort_order')->take(5)->get(),

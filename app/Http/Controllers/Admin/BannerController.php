@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Support\UploadHelper;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BannerController extends Controller
 {
     public function index()
     {
-        $banners = Banner::orderBy('sort_order')->orderBy('id')->get();
+        // Dikelompokkan per halaman supaya jelas banner mana milik halaman mana.
+        $banners = Banner::orderBy('sort_order')->orderBy('id')->get()->groupBy('page');
 
         return view('admin.banners', compact('banners'));
     }
@@ -19,6 +21,7 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'page' => ['required', 'string', Rule::in(array_keys(Banner::PAGES))],
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'badge_text' => ['nullable', 'string', 'max:255'],
@@ -39,6 +42,7 @@ class BannerController extends Controller
     public function update(Request $request, Banner $banner)
     {
         $data = $request->validate([
+            'page' => ['required', 'string', Rule::in(array_keys(Banner::PAGES))],
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'badge_text' => ['nullable', 'string', 'max:255'],

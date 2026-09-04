@@ -57,7 +57,7 @@
     <div class="card">
         <h2>Panduan Singkat</h2>
         <ul class="guide-list">
-            <li><strong>Banner</strong> — kelola slider di bagian paling atas halaman depan: gambar, judul, subjudul, badge, dan tombol. Bisa lebih dari satu, urutannya diatur lewat kolom Urutan.</li>
+            <li><strong>Banner</strong> — tiap halaman punya bannernya sendiri: Beranda, Portofolio, Layanan, dan Tentang. Pilih halamannya lewat kolom <em>Tampil di Halaman</em>. Satu halaman boleh diisi lebih dari satu banner; kalau begitu tampilannya otomatis jadi slider dengan urutan sesuai kolom Urutan.</li>
             <li><strong>Konten Situs</strong> — ubah logo, judul hero cadangan, angka statistik, teks tentang kami, dan info kontak.</li>
             <li><strong>Layanan</strong> — tambah/edit 6 kartu layanan (ikon, judul, deskripsi).</li>
             <li><strong>Keunggulan</strong> — kelola 24 fitur pada bagian "Apa yang Anda Dapatkan?".</li>

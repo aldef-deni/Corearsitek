@@ -6,7 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Banner extends Model
 {
+    /**
+     * Halaman yang bisa punya banner sendiri.
+     * Kunci disimpan di kolom `page`, nilainya dipakai sebagai label di dashboard.
+     */
+    public const PAGES = [
+        'home' => 'Beranda',
+        'portfolio' => 'Portofolio',
+        'services' => 'Layanan',
+        'about' => 'Tentang CoreArsitek',
+    ];
+
     protected $fillable = [
+        'page',
         'title',
         'subtitle',
         'badge_text',
@@ -24,5 +36,15 @@ class Banner extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeForPage($query, string $page)
+    {
+        return $query->where('page', $page);
+    }
+
+    public function pageLabel(): string
+    {
+        return self::PAGES[$this->page] ?? $this->page;
     }
 }

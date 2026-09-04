@@ -5,13 +5,14 @@
 
 @section('content')
 
-<section class="page-banner" style="background-image: url('{{ asset($contents['hero_image'] ?? '') }}');">
-    <div class="hero-overlay"></div>
-    <div class="container banner-content">
-        <h1 class="reveal">{{ $contents['about_title'] ?? 'TENTANG COREARSITEK' }}</h1>
-        <p class="reveal" data-reveal-delay="120">Hunian aman, nyaman, dan elegan</p>
-    </div>
-</section>
+@include('partials.banner', [
+    'slides' => $banners,
+    'variant' => 'page',
+    'fallbackImage' => $contents['hero_image'] ?? '',
+    'fallbackTitle' => $contents['about_title'] ?? 'TENTANG COREARSITEK',
+    'fallbackSubtitle' => 'Hunian aman, nyaman, dan elegan',
+    'siteName' => $contents['site_name'] ?? 'CoreArsitek',
+])
 
 <section class="about">
     <div class="container">

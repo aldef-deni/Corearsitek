@@ -585,3 +585,26 @@ img { max-width: 100%; display: block; }
 }
 
 .form-note { display: block; margin: 4px 0 16px; color: var(--text-dim); }
+
+/* ---------- Judul kelompok pada daftar banner ---------- */
+.group-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+    margin: 30px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+}
+
+.group-title i { color: var(--red); font-size: 14px; }
+
+.group-count {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0;
+}

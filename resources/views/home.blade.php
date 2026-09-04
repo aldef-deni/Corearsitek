@@ -23,76 +23,22 @@
 @php
     $wa = 'https://wa.me/' . preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '');
 
-    // Kalau admin belum menambah banner, pakai gambar hero dari Konten Situs
-    // supaya halaman depan tidak pernah kosong.
-    $slides = $banners->count() ? $banners : collect([(object) [
-        'image' => $contents['hero_image'] ?? '',
-        'title' => $contents['hero_title'] ?? '',
-        'subtitle' => $contents['hero_subtitle'] ?? '',
-        'badge_text' => $contents['award_badge'] ?? '',
-        'button_text' => 'KONSULTASI GRATIS',
-        'button_url' => '#kontak',
-    ]]);
 
     $statsNumber = $contents['stats_number'] ?? '2707';
 @endphp
 
 @section('content')
 
-{{-- ================= HERO SLIDER ================= --}}
-<section id="beranda" class="hero-slider" data-slider data-interval="6500">
-    <div class="slides">
-        @foreach ($slides as $i => $slide)
-            @php
-                // Banner tanpa teks tidak butuh overlay gelap; itu hanya
-                // meredupkan fotonya tanpa alasan.
-                $adaTeks = $slide->title || $slide->subtitle || $slide->button_text;
-            @endphp
-            <article class="slide {{ $i === 0 ? 'is-active' : '' }} {{ $adaTeks ? '' : 'slide-plain' }}" data-slide>
-                <img src="{{ asset($slide->image) }}" alt="{{ $slide->title ?: ($contents['site_name'] ?? 'CoreArsitek') }}"
-                     class="slide-img" {{ $i === 0 ? '' : 'loading=lazy' }}>
-                <div class="hero-overlay"></div>
-
-                @if (!empty($slide->badge_text))
-                    <div class="hero-badge">
-                        <i class="fa-solid fa-award"></i>
-                        <span>{!! nl2br(e($slide->badge_text)) !!}</span>
-                    </div>
-                @endif
-
-                <div class="container hero-content">
-                    @if (!empty($slide->title))
-                        <h1 class="hero-title">{{ $slide->title }}</h1>
-                    @endif
-                    @if (!empty($slide->subtitle))
-                        <p class="hero-subtitle">{{ $slide->subtitle }}</p>
-                    @endif
-                    {{-- Hanya tombol yang diisi admin lewat menu Banner. Tidak ada
-                         tombol bawaan, supaya banner bisa dibiarkan polos. --}}
-                    @if (!empty($slide->button_text))
-                        <div class="hero-actions">
-                            <a href="{{ $slide->button_url ?: '#kontak' }}" class="btn btn-red magnetic" data-magnetic="0.12">
-                                <i class="fa-solid fa-arrow-right"></i> {{ $slide->button_text }}
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            </article>
-        @endforeach
-    </div>
-
-    @if ($slides->count() > 1)
-        <button class="slider-nav slider-prev" data-slider-prev aria-label="Banner sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="slider-nav slider-next" data-slider-next aria-label="Banner berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
-        <div class="slider-dots" data-slider-dots>
-            @foreach ($slides as $i => $slide)
-                <button class="slider-dot {{ $i === 0 ? 'is-active' : '' }}" data-slider-dot="{{ $i }}" aria-label="Banner {{ $i + 1 }}"></button>
-            @endforeach
-        </div>
-    @endif
-
-    <a href="#layanan" class="scroll-hint" aria-label="Gulir ke bawah"><i class="fa-solid fa-chevron-down"></i></a>
-</section>
+{{-- ================= BANNER BERANDA ================= --}}
+@include('partials.banner', [
+    'slides' => $banners,
+    'variant' => 'hero',
+    'fallbackImage' => $contents['hero_image'] ?? '',
+    'fallbackTitle' => $contents['hero_title'] ?? '',
+    'fallbackSubtitle' => $contents['hero_subtitle'] ?? '',
+    'fallbackBadge' => $contents['award_badge'] ?? '',
+    'siteName' => $contents['site_name'] ?? 'CoreArsitek',
+])
 
 {{-- ================= PITA LAYANAN ================= --}}
 @if ($services->count())

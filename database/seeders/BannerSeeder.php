@@ -18,6 +18,7 @@ class BannerSeeder extends Seeder
 
         foreach ($banners as [$title, $subtitle, $badge, $image, $btnText, $btnUrl, $sort]) {
             Banner::updateOrCreate(['title' => $title], [
+                'page' => 'home',
                 'subtitle' => $subtitle,
                 'badge_text' => $badge,
                 'image' => $image,
