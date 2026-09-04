@@ -95,10 +95,6 @@
 </footer>
 
 <div class="floating-actions">
-    <a class="fab" href="{{ route('portfolio') }}" title="Portofolio"><i class="fa-solid fa-table-cells-large"></i></a>
-    <a class="fab" href="{{ route('home') }}#kontak" title="Kontak"><i class="fa-solid fa-magnifying-glass"></i></a>
-    <a class="fab" href="{{ route('portfolio') }}" title="Video"><i class="fa-solid fa-play"></i></a>
-    <a class="fab" href="#" onclick="sharePage(event)" title="Bagikan"><i class="fa-solid fa-share-nodes"></i></a>
     <a class="fab fab-wa" href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
 </div>
 
