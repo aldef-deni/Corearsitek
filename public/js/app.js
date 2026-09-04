@@ -396,46 +396,81 @@
         var foto = Array.prototype.slice.call(root.querySelectorAll('[data-flip-photo]'));
         if (!daftar || foto.length < 2) return;
 
+        var tplSampul = root.querySelector('[data-flip-cover]');
+        var tplPenutup = root.querySelector('[data-flip-end]');
         var lebar = window.matchMedia(BUKU_DUA_HALAMAN);
-        var judul = root.dataset.flipbookTitle || '';
 
         var buku = null;
         var lembar = [];
         var posisi = 0;
         var ganda = null;
 
-        function buatSisi(kelas, isi) {
-            var el = document.createElement('div');
-            el.className = 'book-side ' + kelas;
-            el.innerHTML = isi;
-            return el;
+        function klonTemplate(tpl) {
+            return tpl ? tpl.content.cloneNode(true) : null;
         }
 
-        /** Pindahkan gambar aslinya ke muka lembar, bukan menyalin, supaya
-            tidak diunduh dua kali. */
-        function isiMuka(muka, indeks) {
-            var sumber = foto[indeks];
+        /**
+         * Susunan halaman buku. Halaman penutup berlogo harus mendarat di
+         * sisi BELAKANG lembar terakhir supaya tampil di sebelah kiri saat
+         * buku ditutup — dan sisi belakang selalu berindeks ganjil. Karena
+         * itu, bila jumlah fotonya genap disisipkan satu halaman kosong
+         * lebih dulu agar indeks penutupnya jatuh ganjil.
+         */
+        function susunHalaman() {
+            var h = [];
 
-            if (!sumber) {
+            if (!ganda) h.push({ jenis: 'sampul' });
+
+            foto.forEach(function (_, i) { h.push({ jenis: 'foto', indeks: i }); });
+
+            if (ganda && h.length % 2 === 0) h.push({ jenis: 'kosong' });
+
+            h.push({ jenis: 'penutup' });
+
+            return h;
+        }
+
+        function isiMuka(muka, halaman) {
+            if (!halaman) {
                 muka.classList.add('leaf-kosong');
                 return;
             }
 
-            var img = sumber.querySelector('img');
-            if (img) muka.appendChild(img);
+            if (halaman.jenis === 'foto') {
+                var sumber = foto[halaman.indeks];
+                var img = sumber.querySelector('img');
+                if (img) muka.appendChild(img);
 
-            var teks = sumber.querySelector('figcaption');
-            if (teks) muka.appendChild(teks);
+                var teks = sumber.querySelector('figcaption');
+                if (teks) muka.appendChild(teks);
 
-            muka.insertAdjacentHTML('beforeend', '<span class="leaf-no">' + (indeks + 1) + '</span>');
+                muka.insertAdjacentHTML('beforeend',
+                    '<span class="leaf-no">' + (halaman.indeks + 1) + '</span>');
+                return;
+            }
+
+            if (halaman.jenis === 'sampul') {
+                muka.classList.add('leaf-plate', 'leaf-cover');
+                var isiSampul = klonTemplate(tplSampul);
+                if (isiSampul) muka.appendChild(isiSampul);
+                return;
+            }
+
+            if (halaman.jenis === 'penutup') {
+                muka.classList.add('leaf-plate', 'leaf-end');
+                var isiPenutup = klonTemplate(tplPenutup);
+                if (isiPenutup) muka.appendChild(isiPenutup);
+                return;
+            }
+
+            muka.classList.add('leaf-kosong');
         }
 
         function rakit() {
             ganda = lebar.matches;
 
-            // Mode dua halaman memuat dua foto per lembar; mode satu halaman
-            // satu foto per lembar dengan punggung kosong.
-            var jumlah = ganda ? Math.ceil(foto.length / 2) : foto.length;
+            var halaman = susunHalaman();
+            var jumlah = ganda ? Math.ceil(halaman.length / 2) : halaman.length;
 
             buku = document.createElement('div');
             buku.className = 'book' + (ganda ? '' : ' is-single');
@@ -444,9 +479,18 @@
             spread.className = 'book-spread';
 
             if (ganda) {
-                spread.appendChild(buatSisi('book-left', '<span class="book-plate">' + judul + '</span>'));
+                // Sampul jadi panel kiri yang diam, terlihat saat buku tertutup.
+                var kiri = document.createElement('div');
+                kiri.className = 'book-side book-left leaf-plate leaf-cover';
+                var isiSampul = klonTemplate(tplSampul);
+                if (isiSampul) kiri.appendChild(isiSampul);
+                spread.appendChild(kiri);
             }
-            spread.appendChild(buatSisi('book-right', '<span class="book-plate">Selesai</span>'));
+
+            // Panel kanan dibiarkan polos sebagai dasar penutup buku.
+            var kanan = document.createElement('div');
+            kanan.className = 'book-side book-right';
+            spread.appendChild(kanan);
 
             lembar = [];
 
@@ -456,12 +500,12 @@
 
                 var depan = document.createElement('div');
                 depan.className = 'leaf-face leaf-front';
-                isiMuka(depan, ganda ? i * 2 : i);
+                isiMuka(depan, ganda ? halaman[i * 2] : halaman[i]);
                 lem.appendChild(depan);
 
                 var belakang = document.createElement('div');
                 belakang.className = 'leaf-face leaf-back';
-                ganda ? isiMuka(belakang, i * 2 + 1) : belakang.classList.add('leaf-kosong');
+                isiMuka(belakang, ganda ? halaman[i * 2 + 1] : null);
                 lem.appendChild(belakang);
 
                 spread.appendChild(lem);
@@ -541,19 +585,18 @@
         function bongkar() {
             if (!buku) return;
 
-            lembar.forEach(function (lem, i) {
-                ['front', 'back'].forEach(function (sisi, n) {
-                    var muka = lem.querySelector('.leaf-' + sisi);
-                    var indeks = ganda ? i * 2 + n : (n === 0 ? i : -1);
-                    var sumber = foto[indeks];
-                    if (!sumber || !muka) return;
+            buku.querySelectorAll('.leaf-face').forEach(function (muka) {
+                var img = muka.querySelector('img');
+                var no = muka.querySelector('.leaf-no');
+                if (!img || !no) return;
 
-                    var img = muka.querySelector('img');
-                    if (img) sumber.insertBefore(img, sumber.firstChild);
+                var sumber = foto[parseInt(no.textContent, 10) - 1];
+                if (!sumber) return;
 
-                    var teks = muka.querySelector('figcaption');
-                    if (teks) sumber.appendChild(teks);
-                });
+                sumber.insertBefore(img, sumber.firstChild);
+
+                var teks = muka.querySelector('figcaption');
+                if (teks) sumber.appendChild(teks);
             });
 
             buku.remove();

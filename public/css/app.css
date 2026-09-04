@@ -1698,6 +1698,8 @@ body.has-custom-cursor * { cursor: none !important; }
 
 .work-body { background: var(--ink); padding: 40px 0 90px; }
 
+.work-cta { text-align: center; padding: 26px 0 8px; }
+
 .work-main { display: flex; flex-direction: column; gap: 20px; }
 
 .work-split {
@@ -1886,16 +1888,91 @@ body.has-custom-cursor * { cursor: none !important; }
 
 .book-left { border-right: 1px solid var(--line); border-radius: 12px 0 0 12px; }
 
-.book-right { border-radius: 0 12px 12px 0; }
+.book-right { border-radius: 0 12px 12px 0; background: linear-gradient(200deg, var(--ink-3), var(--ink)); }
 
-.book-plate {
-    color: var(--text-dim);
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+/* ---------- Halaman sampul & penutup ---------- */
+
+.leaf-plate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    max-width: 80%;
-    line-height: 1.6;
+    padding: 8% 9%;
+    background: linear-gradient(160deg, var(--ink-3), var(--ink));
+}
+
+/* Selektornya sengaja dibuat cukup kuat: aturan foto .leaf-face img
+   memakai height 100% dan object-fit cover, yang kalau menang akan
+   membuat logo membengkak dan terpotong. */
+.book-logo,
+.leaf-face .book-logo {
+    width: min(230px, 62%);
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 22px;
+    filter: drop-shadow(0 0 26px rgba(255, 31, 31, 0.25));
+}
+
+.book-cover-title {
+    color: #fff;
+    font-size: clamp(15px, 1.5vw, 20px);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    line-height: 1.45;
+    max-width: 88%;
+}
+
+.book-cover-title::after {
+    content: '';
+    display: block;
+    width: 52px;
+    height: 2px;
+    margin: 16px auto 0;
+    background: linear-gradient(90deg, var(--red-dark), var(--red-bright));
+}
+
+.book-cover-specs {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 330px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 7px 16px;
+    text-align: left;
+}
+
+.book-cover-specs dt {
+    color: var(--text-dim);
+    font-size: 11.5px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.book-cover-specs dd { color: #e7e9ec; font-size: 12.5px; text-align: right; }
+
+/* Logo penutup berdenyut pelan sebagai tanda buku sudah habis. */
+.leaf-end .book-logo,
+.leaf-face.leaf-end .book-logo {
+    width: min(300px, 74%);
+    height: auto;
+    margin-bottom: 0;
+    animation: denyut-logo 2.8s ease-in-out infinite;
+}
+
+@keyframes denyut-logo {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 22px rgba(255, 31, 31, 0.22));
+    }
+    50% {
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 46px rgba(255, 31, 31, 0.55));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaf-end .book-logo { animation: none; }
 }
 
 /* ---------- Lembar ---------- */
@@ -2194,4 +2271,23 @@ body.has-custom-cursor * { cursor: none !important; }
     .hero-title { letter-spacing: 2px; }
 
     .filter-tab { font-size: 11.5px; padding: 8px 12px; }
+}
+
+@media (max-width: 768px) {
+    /* Sampul di mode satu halaman: logo dan spesifikasi dirapatkan. */
+    .book-logo, .leaf-face .book-logo { width: min(190px, 58%); margin-bottom: 16px; }
+
+    .leaf-end .book-logo, .leaf-face.leaf-end .book-logo { width: min(220px, 66%); }
+
+    .book-cover-title { font-size: 15px; letter-spacing: 1px; }
+
+    .book-cover-specs { gap: 5px 12px; margin-top: 16px; }
+
+    .book-cover-specs dt { font-size: 10.5px; }
+
+    .book-cover-specs dd { font-size: 11.5px; }
+
+    .work-cta { padding: 20px 0 4px; }
+
+    .work-cta .btn { width: 100%; justify-content: center; }
 }

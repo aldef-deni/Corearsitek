@@ -17,6 +17,14 @@
 </script>
 @endsection
 
+@php
+    $logo = $contents['logo_image'] ?? 'images/logo.png';
+    $wa = 'https://wa.me/' . preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '');
+
+    // Angka spesifikasi dirapikan: "485.00" jadi "485", "27.65" jadi "27,65".
+    $angka = fn ($v) => rtrim(rtrim(number_format((float) $v, 2, ',', '.'), '0'), ',');
+@endphp
+
 @section('content')
 
 <section class="work-hero">
@@ -47,44 +55,16 @@
 
 <section class="work-book">
     <div class="container">
-            {{-- Daftar foto ini juga jadi sumber flipbook. JavaScript merakitnya
-                 jadi buku pada layar lebar; tanpa JS daftarnya tetap tampil utuh. --}}
-            <div class="work-photos" data-flipbook data-flipbook-title="{{ $portfolio->title }}">
-                <div data-flip-list>
-                    <figure class="work-cover reveal-scale" data-flip-photo>
-                        <img src="{{ asset($portfolio->cover_image) }}" alt="{{ $portfolio->title }}">
-                    </figure>
+        {{-- Daftar foto ini sekaligus jadi sumber flipbook. JavaScript merakitnya
+             jadi buku; tanpa JS daftarnya tetap tampil utuh. --}}
+        <div class="work-photos" data-flipbook>
 
-                    @foreach ($portfolio->images as $foto)
-                        <figure class="work-photo reveal" data-flip-photo>
-                            <img src="{{ asset($foto->image) }}" alt="{{ $foto->caption ?: $portfolio->title }}" loading="lazy">
-                            @if ($foto->caption)
-                                <figcaption>{{ $foto->caption }}</figcaption>
-                            @endif
-                        </figure>
-                    @endforeach
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="work-body">
-    <div class="container work-split">
-        <div class="work-main">
-            @if ($portfolio->description)
-                <div class="work-card reveal">
-                    <h2>Tentang Karya Ini</h2>
-                    <p class="work-desc">{{ $portfolio->description }}</p>
-                </div>
-            @endif
-        </div>
-
-        <aside class="work-aside">
-            <div class="work-card reveal">
-                <h2>Spesifikasi</h2>
-                <dl class="work-specs">
-                    <dt>Kategori</dt>
-                    <dd>{{ $portfolio->categoryLabel() }}</dd>
+            {{-- Halaman sampul, dipasang di lembar kiri saat buku masih tertutup. --}}
+            <template data-flip-cover>
+                <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}" class="book-logo">
+                <h2 class="book-cover-title">{{ $portfolio->title }}</h2>
+                <dl class="book-cover-specs">
+                    <dt>Kategori</dt><dd>{{ $portfolio->categoryLabel() }}</dd>
 
                     @if ($portfolio->style)
                         <dt>Gaya</dt><dd>{{ $portfolio->style }}</dd>
@@ -98,21 +78,46 @@
                     @if ($portfolio->floors)
                         <dt>Lantai</dt><dd>{{ $portfolio->floors }}</dd>
                     @endif
-                    @foreach ($portfolio->specs() as $spec)
-                        @if (! str_contains($spec, 'lantai'))
-                            <dt>{{ str_starts_with($spec, 'LB') ? 'Luas Bangunan' : 'Dimensi Lahan' }}</dt>
-                            <dd>{{ str_replace('LB ', '', $spec) }}</dd>
-                        @endif
-                    @endforeach
+                    @if ($portfolio->building_area)
+                        <dt>Luas Bangunan</dt><dd>{{ $angka($portfolio->building_area) }} m&sup2;</dd>
+                    @endif
+                    @if ($portfolio->land_width && $portfolio->land_length)
+                        <dt>Dimensi Lahan</dt>
+                        <dd>{{ $angka($portfolio->land_width) }} m &times; {{ $angka($portfolio->land_length) }} m</dd>
+                    @endif
+                    @if ($portfolio->project_date)
+                        <dt>Tanggal</dt><dd>{{ $portfolio->project_date->translatedFormat('d F Y') }}</dd>
+                    @endif
                 </dl>
+            </template>
 
-                <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}"
-                   target="_blank" rel="noopener" class="btn btn-red btn-block magnetic" data-magnetic="0.1">
-                    <i class="fa-brands fa-whatsapp"></i> KONSULTASI DESAIN SERUPA
-                </a>
+            {{-- Halaman penutup di akhir buku. --}}
+            <template data-flip-end>
+                <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}"
+                     class="book-logo book-logo-pulse">
+            </template>
+
+            <div data-flip-list>
+                <figure class="work-cover reveal-scale" data-flip-photo>
+                    <img src="{{ asset($portfolio->cover_image) }}" alt="{{ $portfolio->title }}">
+                </figure>
+
+                @foreach ($portfolio->images as $foto)
+                    <figure class="work-photo reveal" data-flip-photo>
+                        <img src="{{ asset($foto->image) }}" alt="{{ $foto->caption ?: $portfolio->title }}" loading="lazy">
+                        @if ($foto->caption)
+                            <figcaption>{{ $foto->caption }}</figcaption>
+                        @endif
+                    </figure>
+                @endforeach
             </div>
+        </div>
 
-        </aside>
+        <div class="work-cta reveal">
+            <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
+                <i class="fa-brands fa-whatsapp"></i> KONSULTASI DESAIN SERUPA
+            </a>
+        </div>
     </div>
 </section>
 
