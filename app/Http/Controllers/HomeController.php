@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advantage;
 use App\Models\Banner;
+use App\Models\Client;
 use App\Models\Feature;
 use App\Models\Portfolio;
 use App\Models\ProcessStep;
@@ -24,6 +26,9 @@ class HomeController extends Controller
             'portfolios' => Portfolio::active()->ordered()->take(5)->get(),
             'steps' => ProcessStep::orderBy('sort_order')->orderBy('id')->get(),
             'testimonials' => Testimonial::active()->orderBy('sort_order')->orderBy('id')->get(),
+            'kerugian' => Advantage::ofType('rugi')->orderBy('sort_order')->orderBy('id')->get(),
+            'keunggulan' => Advantage::ofType('untung')->orderBy('sort_order')->orderBy('id')->get(),
+            'clients' => Client::active()->orderBy('sort_order')->orderBy('id')->get(),
         ]);
     }
 }

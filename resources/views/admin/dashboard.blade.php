@@ -41,6 +41,16 @@
             <span class="stat-value">{{ $stepsCount }}</span>
             <span class="stat-label">Proses Kerja</span>
         </a>
+        <a class="stat-card" href="{{ route('admin.advantages.index') }}">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <span class="stat-value">{{ $advantagesCount }}</span>
+            <span class="stat-label">Untung &amp; Rugi</span>
+        </a>
+        <a class="stat-card" href="{{ route('admin.clients.index') }}">
+            <i class="fa-solid fa-handshake"></i>
+            <span class="stat-value">{{ $clientsCount }}</span>
+            <span class="stat-label">Klien</span>
+        </a>
         <a class="stat-card" href="{{ route('admin.testimonials.index') }}">
             <i class="fa-solid fa-quote-left"></i>
             <span class="stat-value">{{ $testimonialsCount }}</span>
@@ -70,6 +80,8 @@
             <li><strong>Portofolio</strong> — karya lengkap beserta kategori, gaya, klien, lokasi, luas bangunan, dimensi lahan, dan banyak foto per karya. Tampil di halaman <em>Portofolio</em>, dan lima karya teratas ikut tampil di Beranda. Centang <em>Unggulan</em> agar sebuah karya juga masuk deretan karya pilihan.</li>
             <li><strong>Galeri</strong> — foto lepas tanpa detail proyek, tampil di halaman <em>Galeri</em>.</li>
             <li><strong>Proses Kerja</strong> — tahapan kerja yang tampil berurutan di halaman depan.</li>
+            <li><strong>Untung &amp; Rugi</strong> — dua daftar berdampingan di halaman depan: kerugian bila tanpa jasa arsitek, dan alasan memilih CoreArsitek.</li>
+            <li><strong>Klien</strong> — logo klien yang tampil di bagian Klien Kami.</li>
             <li><strong>Testimoni</strong> — ulasan klien beserta foto, nama, dan keterangannya.</li>
             <li><strong>Profil</strong> — ubah nama, email, telepon, jabatan, bio, foto profil, dan password Anda.</li>
         </ul>

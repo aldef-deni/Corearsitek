@@ -2752,3 +2752,328 @@ body.has-custom-cursor * { cursor: none !important; }
 @media (orientation: landscape) and (max-height: 560px) {
     .book-end-overlay .book-logo { width: min(200px, 40%); }
 }
+
+/* ================================================================
+   1. Header transparan
+
+   Menempel di atas banner tanpa latar, lalu memadat begitu digulir.
+   Ditulis setelah aturan .navbar sebelumnya supaya menimpanya.
+   ================================================================ */
+
+.navbar {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: transparent;
+}
+
+/* Peredup tipis di balik menu agar tetap terbaca di atas foto terang. */
+.navbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(6, 6, 7, 0.72), rgba(6, 6, 7, 0.22) 62%, transparent);
+    transition: opacity var(--t-mid) var(--e-glide);
+}
+
+.navbar.is-scrolled {
+    background: rgba(6, 6, 7, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: var(--red-line);
+}
+
+.navbar.is-scrolled::before { opacity: 0; }
+
+/* ================================================================
+   2. Kartu jasa: ikon di atas, label dua baris, garis merah
+   ================================================================ */
+
+.service-pill {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 26px 18px;
+    text-align: center;
+    border: 1px solid var(--red-line);
+    background: linear-gradient(180deg, #101013, var(--ink));
+}
+
+.service-pill i:first-child { font-size: 30px; margin-bottom: 2px; }
+
+.pill-text { display: flex; flex-direction: column; gap: 3px; line-height: 1.3; }
+
+.pill-text small {
+    color: var(--text-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.pill-text strong {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+}
+
+.service-pill:hover {
+    border-color: var(--red);
+    box-shadow: 0 18px 40px -22px var(--red-glow), inset 0 0 0 1px rgba(255, 31, 31, 0.18);
+}
+
+.service-pill:hover .pill-text small { color: var(--red-light); }
+
+/* ================================================================
+   3. Portofolio menempel ke tepi layar
+   ================================================================ */
+
+/* Dilebarkan keluar dari .container supaya benar-benar tanpa celah. */
+.showcase-bleed { width: 100%; margin-bottom: 52px; }
+
+.bleed-hero {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+}
+
+.bleed-hero img,
+.bleed-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--t-slow) var(--e-soft), filter var(--t-slow) var(--e-glide);
+}
+
+.bleed-hero:hover img, .bleed-item:hover img { transform: scale(1.04); }
+
+.bleed-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    padding: 9px 18px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-bottom-right-radius: 10px;
+}
+
+.bleed-tag::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    right: 18px;
+    bottom: 4px;
+    height: 2px;
+    background: var(--red);
+}
+
+/* Deretan bawah: empat gambar rapat tanpa jarak sedikit pun. */
+.bleed-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+.bleed-item {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.bleed-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 34px 20px 16px;
+    background: linear-gradient(180deg, transparent, rgba(6, 6, 7, 0.92));
+}
+
+.bleed-caption strong {
+    color: #fff;
+    font-size: 13.5px;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+}
+
+.bleed-caption small { color: var(--text-muted); font-size: 11.5px; }
+
+.bleed-hero .bleed-caption { padding: 60px 40px 28px; }
+
+.bleed-hero .bleed-caption strong { font-size: 21px; }
+
+.bleed-hero .bleed-caption small { font-size: 13px; }
+
+.bleed-hero:hover .bleed-caption strong,
+.bleed-item:hover .bleed-caption strong { color: var(--red-light); }
+
+/* ================================================================
+   4. Untung & rugi
+   ================================================================ */
+
+.ledger-block { padding: 76px 0; }
+
+.ledger-loss { background: var(--ink); border-top: 1px solid var(--line); }
+
+.ledger-gain {
+    background:
+        radial-gradient(700px 320px at 50% 0%, rgba(255, 31, 31, 0.1), transparent 68%),
+        var(--ink-1);
+    border-top: 1px solid var(--line);
+}
+
+.ledger-block .section-title { margin-bottom: 44px; }
+
+.ledger-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 48px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.ledger-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+}
+
+.ledger-list i {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.ledger-loss i { background: rgba(255, 31, 31, 0.14); color: var(--red); }
+
+.ledger-gain i { background: rgba(47, 190, 110, 0.14); color: #35c97a; }
+
+.ledger-gain .section-cta { margin-top: 42px; }
+
+/* ================================================================
+   5. Klien
+   ================================================================ */
+
+.clients { background: var(--ink); padding: 90px 0; border-top: 1px solid var(--line); }
+
+.client-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 14px;
+}
+
+.client-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 12px;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    /* Logo klien umumnya dibuat untuk latar terang, jadi kartunya diputihkan. */
+    background: #f4f5f7;
+    transition: border-color var(--t-mid) var(--e-glide), transform var(--t-mid) var(--e-soft),
+                box-shadow var(--t-mid) var(--e-soft);
+}
+
+.client-item img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    /* Logo klien dibiarkan berwarna penuh: itu yang membuatnya terbaca
+       sebagai bukti nyata, bukan sekadar hiasan. */
+    transition: transform var(--t-mid) var(--e-soft);
+}
+
+.client-item:hover img { transform: scale(1.05); }
+
+.client-item:hover {
+    border-color: var(--red-line);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px -22px var(--red-glow);
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+
+@media (max-width: 992px) {
+    .bleed-row { grid-template-columns: repeat(2, 1fr); }
+    .client-grid { grid-template-columns: repeat(4, 1fr); }
+    .ledger-list { gap: 12px 32px; }
+}
+
+@media (max-width: 768px) {
+    .service-pill { padding: 20px 14px; gap: 9px; }
+
+    .service-pill i:first-child { font-size: 26px; }
+
+    .pill-text small { font-size: 10.5px; letter-spacing: 1.6px; }
+
+    .pill-text strong { font-size: 13px; }
+
+    .bleed-hero { aspect-ratio: 16 / 10; }
+
+    .bleed-hero .bleed-caption { padding: 46px 20px 18px; }
+
+    .bleed-hero .bleed-caption strong { font-size: 16px; }
+
+    /* Deretan bawah digeser mendatar, tetap tanpa celah dan tanpa jarak tepi. */
+    .bleed-row.cards-swipe {
+        margin-inline: 0;
+        padding-inline: 0;
+        scroll-padding-inline: 0;
+        gap: 0;
+    }
+
+    .bleed-row.cards-swipe > * { flex: 0 0 72%; }
+
+    .showcase-bleed { margin-bottom: 34px; }
+
+    .ledger-block { padding: 54px 0; }
+
+    .ledger-block .section-title { margin-bottom: 28px; }
+
+    .ledger-list { grid-template-columns: 1fr; gap: 11px; }
+
+    .ledger-list li { font-size: 13.5px; }
+
+    .clients { padding: 62px 0; }
+
+    .client-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    .ledger-gain .section-cta { margin-top: 30px; }
+
+    .ledger-gain .section-cta .btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 400px) {
+    .client-grid { grid-template-columns: repeat(2, 1fr); }
+}

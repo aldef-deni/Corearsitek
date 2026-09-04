@@ -46,10 +46,20 @@
         <div class="container">
             <div class="service-pills" data-reveal-group="50">
                 @foreach ($services as $service)
+                    @php
+                        // "JASA DESAIN RUMAH" dipecah jadi dua baris seperti
+                        // rujukan: label di atas, jenis layanan di bawah.
+                        $judul = trim($service->title);
+                        $atas = \Illuminate\Support\Str::startsWith(strtoupper($judul), 'JASA DESAIN')
+                            ? 'JASA DESAIN' : '';
+                        $bawah = $atas ? trim(mb_substr($judul, mb_strlen($atas))) : $judul;
+                    @endphp
                     <a href="{{ route('services') }}" class="service-pill reveal">
                         <i class="fa-solid {{ $service->icon }}"></i>
-                        <span>{{ $service->title }}</span>
-                        <i class="fa-solid fa-arrow-right pill-arrow"></i>
+                        <span class="pill-text">
+                            @if ($atas)<small>{{ $atas }}</small>@endif
+                            <strong>{{ $bawah }}</strong>
+                        </span>
                     </a>
                 @endforeach
             </div>
@@ -57,8 +67,13 @@
     </section>
 @endif
 
-{{-- ================= MOZAIK PORTOFOLIO ================= --}}
+{{-- ================= PORTOFOLIO ================= --}}
 @if ($portfolios->count())
+    @php
+        $utama = $portfolios->first();
+        $sisa = $portfolios->slice(1)->values();
+    @endphp
+
     <section class="showcase">
         <div class="container">
             <div class="section-head reveal">
@@ -66,20 +81,35 @@
                 <h2 class="section-title">DESAIN PILIHAN</h2>
                 <p class="section-lead">Sebagian karya yang sudah kami selesaikan — dari hunian klasik hingga villa tropis.</p>
             </div>
+        </div>
 
-            <div class="mosaic" data-swipe data-swipe-nodots data-reveal-group="70">
-                @foreach ($portfolios as $i => $karya)
-                    <a href="{{ route('portfolio.show', $karya) }}" class="mosaic-item reveal {{ $i === 0 ? 'mosaic-lead' : '' }}">
-                        <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">
-                        <div class="mosaic-caption">
-                            <h3>{{ $karya->title }}</h3>
-                            <p>{{ collect([$karya->categoryLabel(), $karya->location])->filter()->implode(' · ') }}</p>
-                        </div>
-                        <span class="mosaic-cta"><i class="fa-solid fa-arrow-right"></i></span>
-                    </a>
-                @endforeach
-            </div>
+        {{-- Sengaja di luar .container: gambarnya menempel ke tepi layar. --}}
+        <div class="showcase-bleed">
+            <a href="{{ route('portfolio.show', $utama) }}" class="bleed-hero reveal">
+                <img src="{{ asset($utama->cover_image) }}" alt="{{ $utama->title }}">
+                <span class="bleed-tag">DESAIN POPULER</span>
+                <span class="bleed-caption">
+                    <strong>{{ $utama->title }}</strong>
+                    <small>{{ collect([$utama->categoryLabel(), $utama->location])->filter()->implode(' · ') }}</small>
+                </span>
+            </a>
 
+            @if ($sisa->count())
+                <div class="bleed-row" data-swipe data-swipe-nodots>
+                    @foreach ($sisa as $karya)
+                        <a href="{{ route('portfolio.show', $karya) }}" class="bleed-item">
+                            <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">
+                            <span class="bleed-caption">
+                                <strong>{{ $karya->title }}</strong>
+                                <small>{{ collect([$karya->categoryLabel(), $karya->location])->filter()->implode(' · ') }}</small>
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <div class="container">
             <div class="section-cta reveal">
                 <a href="{{ route('portfolio') }}" class="btn btn-red btn-flash magnetic" data-magnetic="0.1">
                     <i class="fa-solid fa-images"></i> LIHAT SEMUA PORTOFOLIO
@@ -106,6 +136,44 @@
                 @endforeach
             </div>
         </div>
+    </section>
+@endif
+
+{{-- ================= UNTUNG & RUGI ================= --}}
+@if ($kerugian->count() || $keunggulan->count())
+    <section class="ledger">
+        @if ($kerugian->count())
+            <div class="ledger-block ledger-loss">
+                <div class="container">
+                    <h2 class="section-title reveal">APA KERUGIAN TANPA JASA ARSITEK?</h2>
+                    <ul class="ledger-list" data-reveal-group="30">
+                        @foreach ($kerugian as $poin)
+                            <li class="reveal"><i class="fa-solid fa-xmark"></i> {{ $poin->text }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
+        @if ($keunggulan->count())
+            <div class="ledger-block ledger-gain">
+                <div class="container">
+                    <h2 class="section-title reveal">MENGAPA COREARSITEK?</h2>
+                    <ul class="ledger-list" data-reveal-group="30">
+                        @foreach ($keunggulan as $poin)
+                            <li class="reveal"><i class="fa-solid fa-check"></i> {{ $poin->text }}</li>
+                        @endforeach
+                    </ul>
+
+                    <div class="section-cta reveal">
+                        <a href="{{ $wa }}" target="_blank" rel="noopener"
+                           class="btn btn-red btn-flash magnetic" data-magnetic="0.12">
+                            <i class="fa-brands fa-whatsapp"></i> KONSULTASI
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </section>
 @endif
 
@@ -198,6 +266,33 @@
         </div>
     </div>
 </section>
+
+{{-- ================= KLIEN ================= --}}
+@if ($clients->count())
+    <section class="clients">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">DIPERCAYA OLEH</span>
+                <h2 class="section-title">KLIEN KAMI</h2>
+            </div>
+
+            <div class="client-grid" data-reveal-group="30">
+                @foreach ($clients as $klien)
+                    @if ($klien->url)
+                        <a class="client-item reveal" href="{{ $klien->url }}" target="_blank" rel="noopener"
+                           title="{{ $klien->name }}">
+                            <img src="{{ asset($klien->logo) }}" alt="{{ $klien->name }}" loading="lazy">
+                        </a>
+                    @else
+                        <div class="client-item reveal" title="{{ $klien->name }}">
+                            <img src="{{ asset($klien->logo) }}" alt="{{ $klien->name }}" loading="lazy">
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endif
 
 {{-- ================= KONTAK ================= --}}
 <section id="kontak" class="contact">

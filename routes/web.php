@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdvantageController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FeatureController;
@@ -48,6 +50,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('portfolios', PortfolioController::class)->except(['show']);
         Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])
             ->name('portfolios.images.destroy');
+        Route::resource('advantages', AdvantageController::class)->except(['show', 'create', 'edit']);
+        Route::resource('clients', ClientController::class)->except(['show', 'create', 'edit']);
         Route::resource('testimonials', TestimonialController::class)->except(['show', 'create', 'edit']);
         Route::resource('process-steps', ProcessStepController::class)
             ->parameters(['process-steps' => 'processStep'])

@@ -42,6 +42,12 @@
         <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
             <i class="fa-solid fa-images"></i> Galeri
         </a>
+        <a href="{{ route('admin.advantages.index') }}" class="{{ request()->routeIs('admin.advantages.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-scale-balanced"></i> Untung &amp; Rugi
+        </a>
+        <a href="{{ route('admin.clients.index') }}" class="{{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-handshake"></i> Klien
+        </a>
         <a href="{{ route('admin.process-steps.index') }}" class="{{ request()->routeIs('admin.process-steps.*') ? 'active' : '' }}">
             <i class="fa-solid fa-diagram-project"></i> Proses Kerja
         </a>

@@ -741,3 +741,7 @@ img { max-width: 100%; display: block; }
 
     .filter-tab { flex: 0 0 auto; }
 }
+
+.card-row-logo { width: 150px; height: 90px; background: #f4f5f7; display: flex; align-items: center; justify-content: center; padding: 10px; }
+
+.card-row-logo img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
