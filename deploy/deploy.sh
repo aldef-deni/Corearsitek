@@ -51,10 +51,19 @@ if ! grep -qE '^APP_KEY=base64:' .env; then
 fi
 
 # ---------------- 4. Database ----------------
-DB_CONN="$(php -r 'echo trim(parse_ini_file(".env")["DB_CONNECTION"] ?? "");' 2>/dev/null || echo '')"
+# Baca satu nilai dari .env: ambil baris pertama yang cocok, buang komentar
+# di belakang nilai dan tanda kutip pembungkusnya.
+env_get() {
+    sed -n "s/^[[:space:]]*$1=//p" .env \
+        | head -n 1 \
+        | sed -e 's/[[:space:]]\{1,\}#.*$//' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+              -e 's/^"\(.*\)"$/\1/' -e "s/^'\(.*\)'$/\1/"
+}
+
+DB_CONN="$(env_get DB_CONNECTION)"
 
 if [ "$DB_CONN" = "sqlite" ]; then
-    DB_PATH="$(php -r 'echo trim(parse_ini_file(".env")["DB_DATABASE"] ?? "");' 2>/dev/null || echo '')"
+    DB_PATH="$(env_get DB_DATABASE)"
     [ -n "$DB_PATH" ] || DB_PATH="$APP_DIR/database/database.sqlite"
     if [ ! -f "$DB_PATH" ]; then
         say "Membuat berkas SQLite di $DB_PATH"
