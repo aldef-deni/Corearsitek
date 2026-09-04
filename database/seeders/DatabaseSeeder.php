@@ -3,12 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Feature;
-use App\Models\Banner;
 use App\Models\Gallery;
-use App\Models\ProcessStep;
 use App\Models\Service;
 use App\Models\SiteContent;
-use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -155,55 +152,10 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // ---------- Banner hero (bisa diubah admin) ----------
-        $banners = [
-            ['JASA DESAIN RUMAH MEWAH', 'Hunian Aman, Nyaman dan Elegan', 'LUXURY LIFESTYLE AWARDS WINNER 2023', 'uploads/seed/hero.svg', 'KONSULTASI GRATIS', '#kontak', 1],
-            ['DESAIN VILLA EKSKLUSIF', 'Ketenangan tropis dalam garis yang tegas', 'PORTOFOLIO PILIHAN', 'uploads/seed/gallery-2.svg', 'LIHAT PORTOFOLIO', '/portofolio', 2],
-            ['INTERIOR YANG BERKARAKTER', 'Detail rapi, material berkelas', 'INTERIOR STUDIO', 'uploads/seed/gallery-3.svg', 'LIHAT LAYANAN', '/layanan', 3],
-        ];
-
-        foreach ($banners as [$title, $subtitle, $badge, $image, $btnText, $btnUrl, $sort]) {
-            Banner::updateOrCreate(['title' => $title], [
-                'subtitle' => $subtitle,
-                'badge_text' => $badge,
-                'image' => $image,
-                'button_text' => $btnText,
-                'button_url' => $btnUrl,
-                'is_active' => true,
-                'sort_order' => $sort,
-            ]);
-        }
-
-        // ---------- Proses kerja ----------
-        $steps = [
-            ['fa-comments', 'Hubungi Kami', 'Konsultasikan kebutuhan Anda via WhatsApp, telepon, atau email. Konsultasi awal gratis.', 1],
-            ['fa-file-invoice', 'Proposal', 'Tim kami menyusun proposal lingkup kerja beserta biaya desain yang transparan.', 2],
-            ['fa-compass-drafting', 'Desain', 'Setelah proposal disetujui, proses desain dimulai — denah 2D, model 3D, hingga render.', 3],
-            ['fa-box-open', 'Penyerahan', 'Seluruh gambar kerja dan file desain dikirim lengkap, cetak A3 dan softcopy.', 4],
-        ];
-
-        foreach ($steps as [$icon, $title, $description, $sort]) {
-            ProcessStep::updateOrCreate(['title' => $title], [
-                'icon' => $icon,
-                'description' => $description,
-                'sort_order' => $sort,
-            ]);
-        }
-
-        // ---------- Testimoni ----------
-        $testimonials = [
-            ['Bapak Andi Prasetya', 'Pemilik Rumah, Jakarta Selatan', 'Prosesnya rapi dari awal. Revisi ditanggapi cepat dan hasil rendernya sangat mendekati bangunan jadinya.', 1],
-            ['Ibu Marlina Wijaya', 'Pemilik Villa, Bali', 'Desainnya paham betul iklim tropis. Sirkulasi udara dan cahaya alaminya terasa sekali setelah dibangun.', 2],
-            ['Bapak Reza Kurniawan', 'Pengembang, Surabaya', 'Gambar teknisnya lengkap dan detail, kontraktor di lapangan tidak banyak bertanya lagi. Sangat membantu.', 3],
-        ];
-
-        foreach ($testimonials as [$name, $role, $quote, $sort]) {
-            Testimonial::updateOrCreate(['name' => $name], [
-                'role' => $role,
-                'quote' => $quote,
-                'is_active' => true,
-                'sort_order' => $sort,
-            ]);
-        }
+        $this->call([
+            BannerSeeder::class,
+            ProcessStepSeeder::class,
+            TestimonialSeeder::class,
+        ]);
     }
 }
