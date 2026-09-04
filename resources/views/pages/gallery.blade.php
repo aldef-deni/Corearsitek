@@ -19,27 +19,36 @@
         <div class="section-head reveal">
             <span class="eyebrow">DOKUMENTASI</span>
             <h2 class="section-title">GALERI FOTO</h2>
-            <p class="section-lead">Kumpulan foto karya dan kegiatan kami.</p>
+            <p class="section-lead">Kumpulan foto karya dan kegiatan kami. Ketuk foto untuk melihat ukuran penuh.</p>
         </div>
-
-        @if ($galleries->isEmpty())
-            <p class="empty-state">Belum ada foto galeri. Tambahkan melalui dashboard admin pada menu Galeri.</p>
-        @else
-            <div class="gallery-grid" data-reveal-group="70">
-                @foreach ($galleries as $gallery)
-                    <figure class="gallery-item reveal">
-                        <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy">
-                        <figcaption>
-                            <h3>{{ $gallery->title }}</h3>
-                            @if ($gallery->description)
-                                <p>{{ $gallery->description }}</p>
-                            @endif
-                        </figcaption>
-                    </figure>
-                @endforeach
-            </div>
-        @endif
     </div>
+
+    @if ($galleries->isEmpty())
+        <div class="container">
+            <p class="empty-state">Belum ada foto galeri. Tambahkan melalui dashboard admin pada menu Galeri.</p>
+        </div>
+    @else
+        {{-- Di luar .container supaya deretannya menempel ke tepi layar. --}}
+        <div class="gallery-bleed" data-lightbox-group>
+            @foreach ($galleries as $gallery)
+                <button type="button" class="gb-item"
+                        data-lightbox-item
+                        data-src="{{ asset($gallery->image) }}"
+                        data-title="{{ $gallery->title }}"
+                        data-desc="{{ $gallery->description }}"
+                        aria-label="Perbesar foto {{ $gallery->title }}">
+                    <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy">
+                    <span class="gb-cap">
+                        <strong>{{ $gallery->title }}</strong>
+                        @if ($gallery->description)
+                            <small>{{ $gallery->description }}</small>
+                        @endif
+                    </span>
+                    <span class="gb-zoom" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
+                </button>
+            @endforeach
+        </div>
+    @endif
 </section>
 
 <section class="contact">
