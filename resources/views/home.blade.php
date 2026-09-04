@@ -35,7 +35,6 @@
     ]]);
 
     $statsNumber = $contents['stats_number'] ?? '2707';
-    $statsCountable = ctype_digit(trim($statsNumber));
 @endphp
 
 @section('content')
@@ -44,7 +43,12 @@
 <section id="beranda" class="hero-slider" data-slider data-interval="6500">
     <div class="slides">
         @foreach ($slides as $i => $slide)
-            <article class="slide {{ $i === 0 ? 'is-active' : '' }}" data-slide>
+            @php
+                // Banner tanpa teks tidak butuh overlay gelap; itu hanya
+                // meredupkan fotonya tanpa alasan.
+                $adaTeks = $slide->title || $slide->subtitle || $slide->button_text;
+            @endphp
+            <article class="slide {{ $i === 0 ? 'is-active' : '' }} {{ $adaTeks ? '' : 'slide-plain' }}" data-slide>
                 <img src="{{ asset($slide->image) }}" alt="{{ $slide->title ?: ($contents['site_name'] ?? 'CoreArsitek') }}"
                      class="slide-img" {{ $i === 0 ? '' : 'loading=lazy' }}>
                 <div class="hero-overlay"></div>
@@ -63,24 +67,15 @@
                     @if (!empty($slide->subtitle))
                         <p class="hero-subtitle">{{ $slide->subtitle }}</p>
                     @endif
-                    @php
-                        // Tombol kedua dilewati kalau banner ini sudah mengarah ke
-                        // portofolio, supaya tidak muncul dua tombol yang sama.
-                        $tujuan = trim((string) $slide->button_url, '/');
-                        $menujuPortofolio = $tujuan === 'portofolio' || str_contains(strtoupper((string) $slide->button_text), 'PORTOFOLIO');
-                    @endphp
-                    <div class="hero-actions">
-                        @if (!empty($slide->button_text))
+                    {{-- Hanya tombol yang diisi admin lewat menu Banner. Tidak ada
+                         tombol bawaan, supaya banner bisa dibiarkan polos. --}}
+                    @if (!empty($slide->button_text))
+                        <div class="hero-actions">
                             <a href="{{ $slide->button_url ?: '#kontak' }}" class="btn btn-red magnetic" data-magnetic="0.12">
                                 <i class="fa-solid fa-arrow-right"></i> {{ $slide->button_text }}
                             </a>
-                        @endif
-                        @unless ($menujuPortofolio)
-                            <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1">
-                                <i class="fa-solid fa-images"></i> LIHAT PORTOFOLIO
-                            </a>
-                        @endunless
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </article>
         @endforeach
@@ -97,20 +92,6 @@
     @endif
 
     <a href="#layanan" class="scroll-hint" aria-label="Gulir ke bawah"><i class="fa-solid fa-chevron-down"></i></a>
-</section>
-
-{{-- ================= STATISTIK & CTA ================= --}}
-<section class="stats-band">
-    <div class="container">
-        <div class="stats-card reveal-scale" data-tilt="3">
-            <div class="stats-number" @if ($statsCountable) data-counter="{{ (int) trim($statsNumber) }}" @endif>{{ $statsNumber }}</div>
-            <div class="stats-label">{{ $contents['stats_label'] ?? 'Desain Finish' }}</div>
-            <div class="stats-actions">
-                <a href="{{ route('portfolio') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1"><i class="fa-solid fa-house"></i> DESAIN TERBAIK</a>
-                <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12"><i class="fa-brands fa-whatsapp"></i> KONTAK KAMI</a>
-            </div>
-        </div>
-    </div>
 </section>
 
 {{-- ================= PITA LAYANAN ================= --}}
