@@ -23,23 +23,8 @@
         <div class="section-head reveal">
             <span class="eyebrow">DOKUMENTASI</span>
             <h2 class="section-title">GALERI FOTO</h2>
-            <p class="section-lead">Kumpulan foto karya dan kegiatan kami. Ketuk foto untuk melihat ukuran penuh.</p>
+            <p class="section-lead">Kumpulan foto karya dan kegiatan kami. Ketuk foto mana pun untuk membukanya sebagai buku yang bisa dibalik.</p>
         </div>
-
-        @if ($galleries->count() > 1)
-            {{-- Dua cara membuka foto, bisa dibandingkan langsung. --}}
-            <div class="gv-switch reveal" data-gallery-view>
-                <span class="gv-label">Cara membuka foto</span>
-                <div class="gv-opsi">
-                    <button type="button" data-view="buku" aria-pressed="true">
-                        <i class="fa-solid fa-book-open"></i> Flipbook
-                    </button>
-                    <button type="button" data-view="modal" aria-pressed="false">
-                        <i class="fa-solid fa-expand"></i> Modal
-                    </button>
-                </div>
-            </div>
-        @endif
     </div>
 
     @if ($galleries->isEmpty())
@@ -48,16 +33,16 @@
         </div>
     @else
         {{-- Di luar .container supaya deretannya menempel ke tepi layar. --}}
-        <div class="gallery-bleed" data-lightbox-group data-gallery-book
+        <div class="gallery-bleed" data-gallery-book
              data-book-logo="{{ asset($logo) }}"
              data-book-name="{{ $contents['site_name'] ?? 'CoreArsitek' }}">
             @foreach ($galleries as $gallery)
                 <button type="button" class="gb-item"
-                        data-lightbox-item
+                        data-gbook-item
                         data-src="{{ asset($gallery->image) }}"
                         data-title="{{ $gallery->title }}"
                         data-desc="{{ $gallery->description }}"
-                        aria-label="Perbesar foto {{ $gallery->title }}">
+                        aria-label="Buka foto {{ $gallery->title }} dalam buku galeri">
                     <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy">
                     <span class="gb-cap">
                         <strong>{{ $gallery->title }}</strong>

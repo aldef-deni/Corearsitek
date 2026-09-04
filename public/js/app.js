@@ -824,51 +824,6 @@
        Satu modal dipakai bersama seluruh foto dalam satu kelompok, jadi
        bisa berpindah maju-mundur tanpa menutupnya lebih dulu. */
 
-    /* ---------------- Galeri: pilih cara membuka foto ----------------
-       Dua tampilan disediakan berdampingan supaya bisa dibandingkan
-       langsung: buku yang dibalik halaman demi halaman, atau modal foto
-       tunggal. Pilihannya diingat di peramban masing-masing pengunjung. */
-
-    var GALERI_TAMPILAN = 'corearsitek:galeri-tampilan';
-
-    function modeGaleri() {
-        try {
-            return localStorage.getItem(GALERI_TAMPILAN) === 'modal' ? 'modal' : 'buku';
-        } catch (e) {
-            // Mode penyamaran atau penyimpanan diblokir: pakai bawaan saja.
-            return 'buku';
-        }
-    }
-
-    function simpanModeGaleri(nilai) {
-        try { localStorage.setItem(GALERI_TAMPILAN, nilai); } catch (e) { /* diabaikan */ }
-    }
-
-    function initGalleryViewSwitch() {
-        var saklar = document.querySelector('[data-gallery-view]');
-        if (!saklar) return;
-
-        var tombol = Array.prototype.slice.call(saklar.querySelectorAll('[data-view]'));
-
-        function tandai() {
-            var aktif = modeGaleri();
-            tombol.forEach(function (t) {
-                var ini = t.dataset.view === aktif;
-                t.classList.toggle('is-active', ini);
-                t.setAttribute('aria-pressed', ini ? 'true' : 'false');
-            });
-        }
-
-        tombol.forEach(function (t) {
-            t.addEventListener('click', function () {
-                simpanModeGaleri(t.dataset.view);
-                tandai();
-            });
-        });
-
-        tandai();
-    }
-
     /* ---------------- Galeri: buku penuh layar ----------------
        Foto galeri dipinjamkan ke sebuah [data-flipbook] di dalam lapisan
        penuh layar, lalu dirakit memakai mesin buku yang sama dengan halaman
@@ -879,7 +834,7 @@
         var kelompok = document.querySelector('[data-gallery-book]');
         if (!kelompok) return;
 
-        var tombolFoto = Array.prototype.slice.call(kelompok.querySelectorAll('[data-lightbox-item]'));
+        var tombolFoto = Array.prototype.slice.call(kelompok.querySelectorAll('[data-gbook-item]'));
         if (tombolFoto.length < 2) return;
 
         var logo = kelompok.dataset.bookLogo || '';
@@ -939,6 +894,7 @@
             if (!lapisan) rakit();
 
             pemicu = dariTombol || null;
+            lapisan.classList.remove('is-closing');
             lapisan.hidden = false;
             document.body.classList.add('is-locked');
 
@@ -947,18 +903,19 @@
             if (buku) buku.lepas();
             buku = bangunFlipbook(lapisan.querySelector('[data-flipbook]'));
 
-            requestAnimationFrame(function () {
-                lapisan.classList.add('is-open');
-                if (buku) buku.keFoto(i);
-                var tutupBtn = lapisan.querySelector('.gbook-close');
-                if (tutupBtn) tutupBtn.focus();
-            });
+            // Halaman awal disetel langsung, bukan di dalam requestAnimationFrame:
+            // frame berikutnya tidak dijamin datang tepat waktu, dan kalau
+            // terlewat bukunya terbuka di halaman pertama, bukan foto yang diketuk.
+            if (buku) buku.keFoto(i);
+
+            var tutupBtn = lapisan.querySelector('.gbook-close');
+            if (tutupBtn) tutupBtn.focus();
         }
 
         function tutup() {
             if (!lapisan || lapisan.hidden) return;
 
-            lapisan.classList.remove('is-open');
+            lapisan.classList.add('is-closing');
             document.body.classList.remove('is-locked');
 
             var sudah = false;
@@ -966,6 +923,7 @@
                 if (sudah) return;
                 sudah = true;
                 lapisan.hidden = true;
+                lapisan.classList.remove('is-closing');
                 if (pemicu) pemicu.focus();
             };
 
@@ -984,160 +942,12 @@
         }
 
         tombolFoto.forEach(function (t, i) {
-            t.addEventListener('click', function () {
-                if (modeGaleri() !== 'buku') return;
-                buka(i, t);
-            });
+            t.addEventListener('click', function () { buka(i, t); });
         });
 
         document.addEventListener('keydown', function (e) {
             if (!lapisan || lapisan.hidden) return;
             if (e.key === 'Escape') { e.preventDefault(); tutup(); }
-        });
-    }
-
-    function initLightbox() {
-        var kelompok = document.querySelector('[data-lightbox-group]');
-        if (!kelompok) return;
-
-        var tombolFoto = Array.prototype.slice.call(kelompok.querySelectorAll('[data-lightbox-item]'));
-        if (!tombolFoto.length) return;
-
-        var modal = null;
-        var gambar = null;
-        var judul = null;
-        var ket = null;
-        var hitung = null;
-        var indeks = 0;
-        var pemicu = null;
-
-        function rakit() {
-            modal = document.createElement('div');
-            modal.className = 'lightbox';
-            modal.setAttribute('role', 'dialog');
-            modal.setAttribute('aria-modal', 'true');
-            modal.setAttribute('aria-label', 'Pratinjau foto');
-            modal.hidden = true;
-
-            modal.innerHTML =
-                '<div class="lb-backdrop" data-lb-close></div>'
-                + '<button type="button" class="lb-btn lb-close" data-lb-close aria-label="Tutup">'
-                + '<i class="fa-solid fa-xmark"></i></button>'
-                + '<button type="button" class="lb-btn lb-prev" data-lb-prev aria-label="Foto sebelumnya">'
-                + '<i class="fa-solid fa-chevron-left"></i></button>'
-                + '<button type="button" class="lb-btn lb-next" data-lb-next aria-label="Foto berikutnya">'
-                + '<i class="fa-solid fa-chevron-right"></i></button>'
-                + '<figure class="lb-figure">'
-                + '<img alt="">'
-                + '<figcaption><strong></strong><span></span></figcaption>'
-                + '</figure>'
-                + '<div class="lb-count"></div>';
-
-            document.body.appendChild(modal);
-
-            gambar = modal.querySelector('img');
-            judul = modal.querySelector('figcaption strong');
-            ket = modal.querySelector('figcaption span');
-            hitung = modal.querySelector('.lb-count');
-
-            modal.querySelectorAll('[data-lb-close]').forEach(function (el) {
-                el.addEventListener('click', tutup);
-            });
-            modal.querySelector('[data-lb-prev]').addEventListener('click', function () { ke(indeks - 1); });
-            modal.querySelector('[data-lb-next]').addEventListener('click', function () { ke(indeks + 1); });
-
-            // Geser mendatar untuk berpindah foto.
-            var x0 = null;
-            modal.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
-            modal.addEventListener('touchend', function (e) {
-                if (x0 === null) return;
-                var beda = e.changedTouches[0].clientX - x0;
-                if (Math.abs(beda) > 45) ke(indeks + (beda < 0 ? 1 : -1));
-                x0 = null;
-            }, { passive: true });
-        }
-
-        function tampilkan() {
-            var t = tombolFoto[indeks];
-            gambar.src = t.dataset.src;
-            gambar.alt = t.dataset.title || '';
-            judul.textContent = t.dataset.title || '';
-            ket.textContent = t.dataset.desc || '';
-            ket.hidden = !t.dataset.desc;
-            hitung.textContent = (indeks + 1) + ' / ' + tombolFoto.length;
-
-            // Satu foto saja tidak perlu tombol maju-mundur.
-            var banyak = tombolFoto.length > 1;
-            modal.querySelector('[data-lb-prev]').hidden = !banyak;
-            modal.querySelector('[data-lb-next]').hidden = !banyak;
-            hitung.hidden = !banyak;
-        }
-
-        function ke(target) {
-            indeks = (target + tombolFoto.length) % tombolFoto.length;
-            tampilkan();
-        }
-
-        function buka(i, dariTombol) {
-            if (!modal) rakit();
-
-            pemicu = dariTombol || null;
-            indeks = i;
-            tampilkan();
-
-            modal.hidden = false;
-            // Halaman di belakang modal tidak ikut tergulir.
-            document.body.classList.add('is-locked');
-            requestAnimationFrame(function () { modal.classList.add('is-open'); });
-            modal.querySelector('.lb-close').focus();
-        }
-
-        function tutup() {
-            if (!modal || modal.hidden) return;
-
-            modal.classList.remove('is-open');
-            document.body.classList.remove('is-locked');
-
-            var sudah = false;
-            var selesai = function () {
-                if (sudah) return;
-                sudah = true;
-                modal.hidden = true;
-                // Fokus dikembalikan ke foto yang tadi diketuk.
-                if (pemicu) pemicu.focus();
-            };
-
-            if (reduceMotion) {
-                selesai();
-                return;
-            }
-
-            // transitionend saja tidak cukup: bila transisinya tidak pernah
-            // berjalan — misalnya dimatikan lewat CSS — modal akan tetap
-            // menutupi halaman. Penghitung waktu memastikan ia selalu tertutup.
-            var pengaman = setTimeout(selesai, 400);
-            modal.addEventListener('transitionend', function () {
-                clearTimeout(pengaman);
-                selesai();
-            }, { once: true });
-        }
-
-        // Di halaman Galeri ada dua tampilan; modal mengalah kalau yang
-        // sedang dipilih adalah buku.
-        var bisaBuku = kelompok.hasAttribute('data-gallery-book');
-
-        tombolFoto.forEach(function (t, i) {
-            t.addEventListener('click', function () {
-                if (bisaBuku && modeGaleri() === 'buku') return;
-                buka(i, t);
-            });
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (!modal || modal.hidden) return;
-            if (e.key === 'Escape') { e.preventDefault(); tutup(); }
-            if (e.key === 'ArrowRight') { e.preventDefault(); ke(indeks + 1); }
-            if (e.key === 'ArrowLeft') { e.preventDefault(); ke(indeks - 1); }
         });
     }
 
@@ -1149,9 +959,7 @@
         initHeroSlider();
         initFlipbook();
         initCardsSwipe();
-        initGalleryViewSwitch();
         initGalleryBook();
-        initLightbox();
         initBackToTop();
         initStaggerGroups();
         initReveal();
