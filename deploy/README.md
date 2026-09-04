@@ -70,6 +70,20 @@ baris yang bersangkutan saja, atau lewat UI aaPanel.
 `.user.ini` diproteksi immutable oleh panel, jadi `chown -R` akan gagal di berkas
 itu. Skrip deploy sudah mengabaikannya.
 
+## Seeder
+
+Jangan jalankan `php artisan db:seed` polos di server. `DatabaseSeeder` memakai
+`updateOrCreate` untuk konten situs, sehingga teks, gambar, dan info kontak akan
+kembali ke nilai bawaan dan perubahan yang dibuat lewat dashboard hilang.
+
+Untuk mengisi tabel baru, panggil kelas seeder-nya saja:
+
+```bash
+sudo php artisan db:seed --class=BannerSeeder --force
+sudo php artisan db:seed --class=ProcessStepSeeder --force
+sudo php artisan db:seed --class=TestimonialSeeder --force
+```
+
 ## Akun admin
 
 Seeder **tidak lagi** memuat password bawaan (repo ini publik). Saat akun admin
