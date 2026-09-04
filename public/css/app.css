@@ -288,46 +288,53 @@ body.has-custom-cursor * { cursor: none !important; }
 
 .hero-slider {
     position: relative;
-    min-height: 92vh;
+    width: 100%;
     background: var(--ink);
     overflow: hidden;
 }
 
-.slides { position: relative; min-height: 92vh; }
+/* Banner tampil selebar layar penuh pada rasio 16:9, jadi gambar yang
+   diunggah admin (disarankan 1920x1080) terlihat utuh tanpa terpotong.
+   min-height menjaga teks tetap muat di layar sempit, max-height mencegah
+   hero jadi terlalu tinggi di monitor ultrawide. */
+.slides {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 560px;
+    max-height: 92vh;
+}
 
 .slide {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-color: var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     opacity: 0;
     visibility: hidden;
-    transform: scale(1.04);
-    transition: opacity 900ms var(--e-glide), transform 1600ms var(--e-soft), visibility 0s linear 900ms;
+    transition: opacity 900ms var(--e-glide), visibility 0s linear 900ms;
 }
 
 .slide.is-active {
     opacity: 1;
     visibility: visible;
-    transform: scale(1);
-    transition: opacity 900ms var(--e-glide), transform 7000ms linear, visibility 0s;
+    transition: opacity 900ms var(--e-glide), visibility 0s;
 }
 
-/* Slide pertama ikut menentukan tinggi seksi supaya tidak nol. */
-.slide:first-child { position: relative; }
-
-.hero-overlay {
+.slide-img {
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(1100px 620px at 50% 12%, rgba(255, 31, 31, 0.14), transparent 62%),
-        linear-gradient(180deg, rgba(6, 6, 7, 0.78), rgba(6, 6, 7, 0.62) 50%, var(--ink));
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.03);
+    transition: transform 7000ms linear;
 }
+
+.slide.is-active .slide-img { transform: scale(1); }
 
 /* Garis merah tipis yang menutup bagian bawah hero */
 .hero-slider::after {
@@ -348,12 +355,6 @@ body.has-custom-cursor * { cursor: none !important; }
     flex-direction: column;
     align-items: center;
     padding: 90px 24px;
-}
-
-.hero-logo {
-    width: min(460px, 78vw);
-    margin-bottom: 30px;
-    filter: drop-shadow(0 0 40px rgba(255, 31, 31, 0.28));
 }
 
 .hero-badge {
@@ -971,7 +972,18 @@ body.has-custom-cursor * { cursor: none !important; }
         cursor: pointer;
     }
     .brand-logo { height: 28px; }
-    .hero-badge { position: static; margin-bottom: 24px; }
+    /* Badge tetap absolut: sebagai flex item statis ia akan berjajar dengan
+       .hero-content dan mendorong teks hero keluar layar. */
+    .hero-badge {
+        top: 14px;
+        left: 14px;
+        right: 14px;
+        font-size: 10.5px;
+        letter-spacing: 0.6px;
+        padding: 9px 12px;
+    }
+
+    .hero-badge i { font-size: 17px; }
     .services-grid, .gallery-grid, .contact-grid { grid-template-columns: 1fr; }
     .features-grid { grid-template-columns: repeat(2, 1fr); }
     .footer-grid { grid-template-columns: 1fr; }
@@ -1394,7 +1406,8 @@ body.has-custom-cursor * { cursor: none !important; }
 }
 
 @media (max-width: 768px) {
-    .hero-slider, .slides { min-height: 88vh; }
+    /* Di layar sempit rasio 16:9 terlalu pendek untuk memuat teks hero. */
+    .slides { min-height: 620px; max-height: none; }
     .slider-nav { display: none; }
     .slider-dots { bottom: 62px; }
     .service-pills { grid-template-columns: 1fr; }

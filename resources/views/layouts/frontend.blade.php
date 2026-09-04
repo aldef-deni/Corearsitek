@@ -63,7 +63,6 @@
         </nav>
 
         <div class="nav-actions">
-            <a href="{{ route('admin.login') }}" title="Masuk Admin"><i class="fa-regular fa-user"></i></a>
             <span class="lang-btn">EN</span>
             <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
         </div>

@@ -22,7 +22,6 @@
 
 @php
     $wa = 'https://wa.me/' . preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '');
-    $logo = $contents['logo_image'] ?? 'images/logo.png';
 
     // Kalau admin belum menambah banner, pakai gambar hero dari Konten Situs
     // supaya halaman depan tidak pernah kosong.
@@ -45,8 +44,9 @@
 <section id="beranda" class="hero-slider" data-slider data-interval="6500">
     <div class="slides">
         @foreach ($slides as $i => $slide)
-            <article class="slide {{ $i === 0 ? 'is-active' : '' }}" data-slide
-                     style="background-image: url('{{ asset($slide->image) }}');">
+            <article class="slide {{ $i === 0 ? 'is-active' : '' }}" data-slide>
+                <img src="{{ asset($slide->image) }}" alt="{{ $slide->title ?: ($contents['site_name'] ?? 'CoreArsitek') }}"
+                     class="slide-img" {{ $i === 0 ? '' : 'loading=lazy' }}>
                 <div class="hero-overlay"></div>
 
                 @if (!empty($slide->badge_text))
@@ -57,7 +57,6 @@
                 @endif
 
                 <div class="container hero-content">
-                    <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}" class="hero-logo">
                     @if (!empty($slide->title))
                         <h1 class="hero-title">{{ $slide->title }}</h1>
                     @endif
