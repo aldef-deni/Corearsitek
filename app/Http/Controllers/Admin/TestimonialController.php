@@ -22,7 +22,7 @@ class TestimonialController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'role' => ['nullable', 'string', 'max:255'],
             'quote' => ['required', 'string'],
-            'avatar' => ['nullable', 'image', 'max:5120'],
+            'avatar' => UploadHelper::rules(),
             'sort_order' => ['nullable', 'integer'],
         ]);
 
@@ -45,7 +45,7 @@ class TestimonialController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'role' => ['nullable', 'string', 'max:255'],
             'quote' => ['required', 'string'],
-            'avatar' => ['nullable', 'image', 'max:5120'],
+            'avatar' => UploadHelper::rules(),
             'sort_order' => ['nullable', 'integer'],
         ]);
 

@@ -29,8 +29,8 @@
             <div class="form-inline">
                 <div class="field form-grow">
                     <label>Foto Klien</label>
-                    <input type="file" name="avatar" accept="image/*">
-                    <small class="hint">Opsional. Kalau kosong, inisial nama dipakai sebagai avatar.</small>
+                    <input type="file" name="avatar" accept=".jpg,.jpeg,.png">
+                    <small class="hint">Opsional; kalau kosong, inisial nama dipakai sebagai avatar. {{ \App\Support\UploadHelper::hint() }}</small>
                 </div>
                 <div class="field field-sm">
                     <label>Urutan</label>
@@ -75,7 +75,7 @@
                     <div class="form-inline">
                         <div class="field form-grow">
                             <label>Ganti Foto</label>
-                            <input type="file" name="avatar" accept="image/*">
+                            <input type="file" name="avatar" accept=".jpg,.jpeg,.png">
                         </div>
                         <div class="field field-sm">
                             <label>Urutan</label>

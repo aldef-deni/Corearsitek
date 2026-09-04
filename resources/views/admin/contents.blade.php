@@ -16,7 +16,7 @@
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         <img src="{{ asset($item->value) }}" alt="{{ $item->label }}" class="thumb thumb-lg">
-                        <input type="file" name="contents[{{ $item->id }}][image]" accept="image/*">
+                        <input type="file" name="contents[{{ $item->id }}][image]" accept=".jpg,.jpeg,.png">
                         <small class="hint">
                             @if ($item->key === 'logo_image')
                                 Logo tampil di navbar, hero, dan footer. Gunakan PNG transparan yang dirancang untuk latar gelap.
@@ -41,8 +41,8 @@
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         <img src="{{ asset($item->value) }}" alt="{{ $item->label }}" class="thumb thumb-lg">
-                        <input type="file" name="contents[{{ $item->id }}][image]" accept="image/*">
-                        <small class="hint">Format JPG/PNG/SVG, maks 5MB.</small>
+                        <input type="file" name="contents[{{ $item->id }}][image]" accept=".jpg,.jpeg,.png">
+                        <small class="hint">{{ \App\Support\UploadHelper::hint() }}</small>
                     </div>
                 @elseif (in_array($item->key, ['hero_title', 'hero_subtitle', 'award_badge'], true))
                     <div class="field">

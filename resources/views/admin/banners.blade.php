@@ -47,8 +47,8 @@
             <div class="form-inline">
                 <div class="field form-grow">
                     <label>Gambar Banner</label>
-                    <input type="file" name="image" accept="image/*" required>
-                    <small class="hint">Disarankan 1920&times;1080 px untuk Beranda dan 1920&times;640 px untuk halaman lain. Maks 5MB.</small>
+                    <input type="file" name="image" accept=".jpg,.jpeg,.png" required>
+                    <small class="hint">Disarankan 1920&times;1080 px untuk Beranda dan 1920&times;640 px untuk halaman lain. {{ \App\Support\UploadHelper::hint() }}</small>
                 </div>
                 <div class="field field-sm">
                     <label>Urutan</label>
@@ -115,7 +115,7 @@
                         <div class="form-inline">
                             <div class="field form-grow">
                                 <label>Ganti Gambar</label>
-                                <input type="file" name="image" accept="image/*">
+                                <input type="file" name="image" accept=".jpg,.jpeg,.png">
                             </div>
                             <div class="field field-sm">
                                 <label>Urutan</label>

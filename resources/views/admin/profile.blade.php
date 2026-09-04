@@ -54,8 +54,8 @@
 
                     <div class="field">
                         <label for="avatar">Foto Profil</label>
-                        <input type="file" name="avatar" id="avatar" accept="image/*">
-                        <small class="hint">JPG/PNG, maks 5MB. Gambar persegi memberi hasil terbaik.</small>
+                        <input type="file" name="avatar" id="avatar" accept=".jpg,.jpeg,.png">
+                        <small class="hint">{{ \App\Support\UploadHelper::hint() }} Gambar persegi memberi hasil terbaik.</small>
                     </div>
 
                     <div class="form-inline">

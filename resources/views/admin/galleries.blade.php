@@ -19,7 +19,8 @@
             </div>
             <div class="field">
                 <label>Foto</label>
-                <input type="file" name="image" accept="image/*" required>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png" required>
+                <small class="hint">{{ \App\Support\UploadHelper::hint() }}</small>
             </div>
             <div class="field field-sm">
                 <label>Urutan</label>
@@ -47,7 +48,7 @@
                 </div>
                 <div class="field">
                     <label>Ganti Foto</label>
-                    <input type="file" name="image" accept="image/*">
+                    <input type="file" name="image" accept=".jpg,.jpeg,.png">
                 </div>
                 <div class="field field-sm">
                     <label>Urutan</label>

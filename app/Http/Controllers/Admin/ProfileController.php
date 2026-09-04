@@ -26,7 +26,7 @@ class ProfileController extends Controller
             'phone' => ['nullable', 'string', 'max:50'],
             'position' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
-            'avatar' => ['nullable', 'image', 'max:5120'],
+            'avatar' => UploadHelper::rules(),
         ]);
 
         if ($request->hasFile('avatar')) {

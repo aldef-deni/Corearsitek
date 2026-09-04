@@ -21,7 +21,7 @@ class ContentController extends Controller
         $data = $request->validate([
             'contents' => ['required', 'array'],
             'contents.*.value' => ['nullable', 'string'],
-            'contents.*.image' => ['nullable', 'image', 'max:5120'],
+            'contents.*.image' => UploadHelper::rules(),
         ]);
 
         foreach ($data['contents'] as $id => $fields) {
