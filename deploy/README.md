@@ -84,6 +84,34 @@ sudo php artisan db:seed --class=ProcessStepSeeder --force
 sudo php artisan db:seed --class=TestimonialSeeder --force
 ```
 
+## Ekstensi PHP exif
+
+Dipasang manual pada 2026-09-04 karena tidak ikut bawaan aaPanel. Tanpa exif,
+GD membuang tag rotasi saat gambar disimpan ulang sehingga foto dari ponsel
+bisa tampil miring setelah dikompres.
+
+Kalau PHP 8.4 di panel pernah di-upgrade atau dipasang ulang, ekstensi ini
+kemungkinan hilang dan perlu dibangun lagi:
+
+```bash
+P=/www/server/php/84
+cd $P/src/ext/exif
+sudo $P/bin/phpize
+sudo ./configure --with-php-config=$P/bin/php-config
+sudo make -j$(nproc) && sudo make install
+
+# Daftarkan di kedua berkas ini: php.ini dipakai FPM, php-cli.ini dipakai artisan
+for f in php.ini php-cli.ini; do
+  sudo sed -i 's|^extension = zip.so|extension = zip.so
+extension = exif.so|' $P/etc/$f
+done
+
+sudo /etc/init.d/php-fpm-84 reload
+```
+
+Cek hasilnya dengan `php -m | grep exif`. PHP 8.4 dipakai bersama seluruh situs
+di VM ini, jadi lakukan `reload` (bukan `restart`) supaya situs lain tidak putus.
+
 ## Akun admin
 
 Seeder **tidak lagi** memuat password bawaan (repo ini publik). Saat akun admin
