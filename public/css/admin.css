@@ -358,16 +358,23 @@ img { max-width: 100%; display: block; }
 .thumb-lg { max-height: 220px; }
 
 /* ---------- Alerts ---------- */
+/* Menempel di bawah topbar supaya pesannya tetap terbaca meski halaman
+   langsung melompat ke kartu yang barusan diubah, jauh di bawah. */
 .alert {
+    position: sticky;
+    top: 66px;
+    z-index: 30;
     padding: 14px 18px;
     border-radius: 10px;
     margin-bottom: 20px;
     font-size: 14px;
 }
 
-.alert-success { background: rgba(31, 174, 84, 0.12); color: #55d98a; border: 1px solid rgba(31, 174, 84, 0.4); }
+/* Latarnya dibuat pekat, bukan tembus pandang, karena kartu di bawahnya
+   ikut bergulir melewati pesan ini. */
+.alert-success { background: #10261a; color: #55d98a; border: 1px solid rgba(31, 174, 84, 0.4); }
 
-.alert-error { background: var(--red-soft); color: var(--red-light); border: 1px solid var(--red-line); }
+.alert-error { background: #2a1113; color: var(--red-light); border: 1px solid var(--red-line); }
 
 .alert ul { padding-left: 18px; }
 
@@ -763,3 +770,7 @@ img { max-width: 100%; display: block; }
 
     .card-row-actions .btn { width: 100%; justify-content: center; }
 }
+
+/* Sasaran lompatan setelah menyimpan/menduplikasi klien: sisakan ruang di
+   atasnya supaya kartunya tidak menempel persis di tepi layar. */
+#klien, [id^="klien-"] { scroll-margin-top: 148px; }

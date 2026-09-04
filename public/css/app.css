@@ -2954,9 +2954,11 @@ body.has-custom-cursor * { cursor: none !important; }
 
 .clients { background: var(--ink); padding: 90px 0; border-top: 1px solid var(--line); }
 
+/* Enam logo per baris. Kolomnya 1fr dan kartunya berperbandingan tetap,
+   jadi semua kartu berukuran persis sama termasuk di baris terakhir. */
 .client-grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 14px;
 }
 

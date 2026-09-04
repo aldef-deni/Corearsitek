@@ -123,7 +123,7 @@
     @endif
 
     {{-- ---------- Logo klien ---------- --}}
-    <h2 class="group-title" style="margin-top: 34px;">
+    <h2 class="group-title" id="klien" style="margin-top: 34px;">
         <i class="fa-solid fa-handshake"></i> Logo Klien
         <span class="group-count">{{ $clients->count() }} klien</span>
     </h2>
@@ -162,7 +162,7 @@
     </div>
 
     @forelse ($clients as $client)
-        <div class="card card-row">
+        <div class="card card-row" id="klien-{{ $client->id }}">
             <div class="card-row-thumb card-row-logo">
                 <img src="{{ asset($client->logo) }}" alt="{{ $client->name }}">
             </div>
