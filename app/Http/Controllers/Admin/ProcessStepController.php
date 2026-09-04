@@ -17,23 +17,23 @@ class ProcessStepController extends Controller
 
     public function store(Request $request)
     {
-        ProcessStep::create($this->validated($request));
+        $baru = ProcessStep::create($this->validated($request));
 
-        return back()->with('success', 'Tahap kerja berhasil ditambahkan.');
+        return $this->kembaliKeBaris('tahap', $baru, 'Tahap kerja berhasil ditambahkan.');
     }
 
     public function update(Request $request, ProcessStep $processStep)
     {
         $processStep->update($this->validated($request));
 
-        return back()->with('success', 'Tahap kerja berhasil diperbarui.');
+        return $this->kembaliKeBaris('tahap', $processStep, 'Tahap kerja berhasil diperbarui.');
     }
 
     public function destroy(ProcessStep $processStep)
     {
         $processStep->delete();
 
-        return back()->with('success', 'Tahap kerja berhasil dihapus.');
+        return $this->kembaliKeBaris('tahap', null, 'Tahap kerja berhasil dihapus.');
     }
 
     private function validated(Request $request): array

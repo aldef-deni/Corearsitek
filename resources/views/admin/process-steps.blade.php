@@ -8,7 +8,7 @@
         <small>Tahapan kerja yang tampil berurutan di halaman depan.</small>
     </h1>
 
-    <div class="card">
+    <div id="baris-tahap" class="card">
         <h2>Tambah Tahap</h2>
         <form method="POST" action="{{ route('admin.process-steps.store') }}">
             @csrf
@@ -36,7 +36,7 @@
     </div>
 
     @forelse ($steps as $step)
-        <div class="card card-row">
+        <div id="baris-tahap-{{ $step->id }}" class="card card-row">
             <div class="card-row-icon"><i class="fa-solid {{ $step->icon }}"></i></div>
             <form method="POST" action="{{ route('admin.process-steps.update', $step) }}" class="form-inline form-grow">
                 @csrf

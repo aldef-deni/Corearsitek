@@ -34,9 +34,9 @@ class TestimonialController extends Controller
 
         $data['is_active'] = $request->boolean('is_active');
 
-        Testimonial::create($data);
+        $baru = Testimonial::create($data);
 
-        return back()->with('success', 'Testimoni berhasil ditambahkan.');
+        return $this->kembaliKeBaris('testimoni', $baru, 'Testimoni berhasil ditambahkan.');
     }
 
     public function update(Request $request, Testimonial $testimonial)
@@ -60,7 +60,7 @@ class TestimonialController extends Controller
 
         $testimonial->update($data);
 
-        return back()->with('success', 'Testimoni berhasil diperbarui.');
+        return $this->kembaliKeBaris('testimoni', $testimonial, 'Testimoni berhasil diperbarui.');
     }
 
     public function destroy(Testimonial $testimonial)
@@ -68,6 +68,6 @@ class TestimonialController extends Controller
         UploadHelper::deleteIfExists($testimonial->avatar);
         $testimonial->delete();
 
-        return back()->with('success', 'Testimoni berhasil dihapus.');
+        return $this->kembaliKeBaris('testimoni', null, 'Testimoni berhasil dihapus.');
     }
 }

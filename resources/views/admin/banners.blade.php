@@ -8,7 +8,7 @@
         <small>Tiap halaman punya bannernya sendiri. Kalau satu halaman diisi lebih dari satu banner, tampilannya otomatis jadi slider.</small>
     </h1>
 
-    <div class="card">
+    <div id="baris-banner" class="card">
         <h2>Tambah Banner</h2>
         <form method="POST" action="{{ route('admin.banners.store') }}" enctype="multipart/form-data">
             @csrf
@@ -72,7 +72,7 @@
         </h2>
 
         @forelse ($daftar as $banner)
-            <div class="card">
+            <div id="baris-banner-{{ $banner->id }}" class="card">
                 <div class="card-row">
                     <div class="card-row-thumb card-row-thumb-wide">
                         <img src="{{ asset($banner->image) }}" alt="{{ $banner->title }}">

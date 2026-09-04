@@ -24,9 +24,9 @@ class ServiceController extends Controller
             'sort_order' => ['nullable', 'integer'],
         ]);
 
-        Service::create($data);
+        $baru = Service::create($data);
 
-        return back()->with('success', 'Layanan berhasil ditambahkan.');
+        return $this->kembaliKeBaris('layanan', $baru, 'Layanan berhasil ditambahkan.');
     }
 
     public function update(Request $request, Service $service)
@@ -40,13 +40,13 @@ class ServiceController extends Controller
 
         $service->update($data);
 
-        return back()->with('success', 'Layanan berhasil diperbarui.');
+        return $this->kembaliKeBaris('layanan', $service, 'Layanan berhasil diperbarui.');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
 
-        return back()->with('success', 'Layanan berhasil dihapus.');
+        return $this->kembaliKeBaris('layanan', null, 'Layanan berhasil dihapus.');
     }
 }

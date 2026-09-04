@@ -18,23 +18,23 @@ class AdvantageController extends Controller
 
     public function store(Request $request)
     {
-        Advantage::create($this->validated($request));
+        $baru = Advantage::create($this->validated($request));
 
-        return back()->with('success', 'Poin berhasil ditambahkan.');
+        return $this->kembaliKeBaris('poin', $baru, 'Poin berhasil ditambahkan.');
     }
 
     public function update(Request $request, Advantage $advantage)
     {
         $advantage->update($this->validated($request));
 
-        return back()->with('success', 'Poin berhasil diperbarui.');
+        return $this->kembaliKeBaris('poin', $advantage, 'Poin berhasil diperbarui.');
     }
 
     public function destroy(Advantage $advantage)
     {
         $advantage->delete();
 
-        return back()->with('success', 'Poin berhasil dihapus.');
+        return $this->kembaliKeBaris('poin', null, 'Poin berhasil dihapus.');
     }
 
     private function validated(Request $request): array

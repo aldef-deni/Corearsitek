@@ -24,7 +24,7 @@ class ClientController extends Controller
 
         $client = Client::create($data);
 
-        return $this->kembaliKeKlien($client, 'Klien berhasil ditambahkan.');
+        return $this->kembaliKeBaris('klien', $client, 'Klien berhasil ditambahkan.');
     }
 
     public function update(Request $request, Client $client)
@@ -47,7 +47,7 @@ class ClientController extends Controller
 
         $client->update($data);
 
-        return $this->kembaliKeKlien($client, 'Klien berhasil diperbarui.');
+        return $this->kembaliKeBaris('klien', $client, 'Klien berhasil diperbarui.');
     }
 
     /**
@@ -69,7 +69,7 @@ class ClientController extends Controller
             ->where('sort_order', '>=', $salinan->sort_order)
             ->increment('sort_order');
 
-        return $this->kembaliKeKlien($salinan, 'Klien diduplikasi. Ubah nama dan logonya seperlunya.');
+        return $this->kembaliKeBaris('klien', $salinan, 'Klien diduplikasi. Ubah nama dan logonya seperlunya.');
     }
 
     public function destroy(Client $client)
@@ -77,19 +77,6 @@ class ClientController extends Controller
         UploadHelper::deleteIfExists($client->logo);
         $client->delete();
 
-        return $this->kembaliKeKlien(null, 'Klien berhasil dihapus.');
-    }
-
-    /**
-     * Semua aksi klien dijalankan dari tengah halaman "Tentang CoreArsitek"
-     * yang panjang. Tanpa penanda, halaman selalu kembali ke paling atas dan
-     * pengguna harus menggulir ulang. Fragmen ini membuat peramban langsung
-     * berhenti di kartu yang baru saja diubah.
-     */
-    private function kembaliKeKlien(?Client $client, string $pesan)
-    {
-        $fragment = $client ? 'klien-' . $client->id : 'klien';
-
-        return back()->withFragment($fragment)->with('success', $pesan);
+        return $this->kembaliKeBaris('klien', null, 'Klien berhasil dihapus.');
     }
 }

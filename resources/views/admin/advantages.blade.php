@@ -8,7 +8,7 @@
         <small>Dua daftar berdampingan di halaman depan: kerugian bila tanpa jasa arsitek, dan alasan memilih CoreArsitek.</small>
     </h1>
 
-    <div class="card">
+    <div id="baris-poin" class="card">
         <h2>Tambah Poin</h2>
         <form method="POST" action="{{ route('admin.advantages.store') }}">
             @csrf
@@ -44,7 +44,7 @@
         </h2>
 
         @forelse ($daftar as $poin)
-            <div class="card card-row">
+            <div id="baris-poin-{{ $poin->id }}" class="card card-row">
                 <form method="POST" action="{{ route('admin.advantages.update', $poin) }}" class="form-inline form-grow">
                     @csrf
                     @method('PUT')

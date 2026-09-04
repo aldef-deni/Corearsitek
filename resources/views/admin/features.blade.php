@@ -5,7 +5,7 @@
 @section('content')
     <h1 class="page-title">Keunggulan <small>(Apa yang Anda Dapatkan?)</small></h1>
 
-    <div class="card">
+    <div id="baris-fitur" class="card">
         <h2>Tambah Keunggulan</h2>
         <form method="POST" action="{{ route('admin.features.store') }}" class="form-inline">
             @csrf
@@ -26,7 +26,7 @@
     </div>
 
     @foreach ($features as $feature)
-        <div class="card card-row">
+        <div id="baris-fitur-{{ $feature->id }}" class="card card-row">
             <div class="card-row-icon"><i class="fa-solid {{ $feature->icon }}"></i></div>
             <form method="POST" action="{{ route('admin.features.update', $feature) }}" class="form-inline form-grow">
                 @csrf

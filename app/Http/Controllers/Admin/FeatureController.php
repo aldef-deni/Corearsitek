@@ -23,9 +23,9 @@ class FeatureController extends Controller
             'sort_order' => ['nullable', 'integer'],
         ]);
 
-        Feature::create($data);
+        $baru = Feature::create($data);
 
-        return back()->with('success', 'Keunggulan berhasil ditambahkan.');
+        return $this->kembaliKeBaris('fitur', $baru, 'Keunggulan berhasil ditambahkan.');
     }
 
     public function update(Request $request, Feature $feature)
@@ -38,13 +38,13 @@ class FeatureController extends Controller
 
         $feature->update($data);
 
-        return back()->with('success', 'Keunggulan berhasil diperbarui.');
+        return $this->kembaliKeBaris('fitur', $feature, 'Keunggulan berhasil diperbarui.');
     }
 
     public function destroy(Feature $feature)
     {
         $feature->delete();
 
-        return back()->with('success', 'Keunggulan berhasil dihapus.');
+        return $this->kembaliKeBaris('fitur', null, 'Keunggulan berhasil dihapus.');
     }
 }

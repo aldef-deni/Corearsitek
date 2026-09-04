@@ -8,7 +8,7 @@
         <small>Tampil pada bagian testimoni di halaman depan.</small>
     </h1>
 
-    <div class="card">
+    <div id="baris-testimoni" class="card">
         <h2>Tambah Testimoni</h2>
         <form method="POST" action="{{ route('admin.testimonials.store') }}" enctype="multipart/form-data">
             @csrf
@@ -46,7 +46,7 @@
     </div>
 
     @forelse ($testimonials as $testimonial)
-        <div class="card">
+        <div id="baris-testimoni-{{ $testimonial->id }}" class="card">
             <div class="card-row">
                 @if ($testimonial->avatar)
                     <div class="card-row-avatar">

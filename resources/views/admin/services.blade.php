@@ -5,7 +5,7 @@
 @section('content')
     <h1 class="page-title">Layanan</h1>
 
-    <div class="card">
+    <div id="baris-layanan" class="card">
         <h2>Tambah Layanan</h2>
         <form method="POST" action="{{ route('admin.services.store') }}" class="form-inline">
             @csrf
@@ -30,7 +30,7 @@
     </div>
 
     @foreach ($services as $service)
-        <div class="card card-row">
+        <div id="baris-layanan-{{ $service->id }}" class="card card-row">
             <div class="card-row-icon"><i class="fa-solid {{ $service->icon }}"></i></div>
             <form method="POST" action="{{ route('admin.services.update', $service) }}" class="form-inline form-grow">
                 @csrf

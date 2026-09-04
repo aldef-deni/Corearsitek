@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <div class="card">
+    <div id="baris-galeri" class="card">
         <h2>Tambah Foto</h2>
         <form method="POST" action="{{ route('admin.galleries.store') }}" enctype="multipart/form-data" class="form-inline">
             @csrf
@@ -40,7 +40,7 @@
     </div>
 
     @foreach ($galleries as $gallery)
-        <div class="card card-row">
+        <div id="baris-galeri-{{ $gallery->id }}" class="card card-row">
             <div class="card-row-thumb">
                 <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}">
             </div>

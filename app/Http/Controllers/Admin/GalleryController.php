@@ -27,9 +27,9 @@ class GalleryController extends Controller
 
         $data['image'] = UploadHelper::image($request->file('image'));
 
-        Gallery::create($data);
+        $baru = Gallery::create($data);
 
-        return back()->with('success', 'Galeri berhasil ditambahkan.');
+        return $this->kembaliKeBaris('galeri', $baru, 'Galeri berhasil ditambahkan.');
     }
 
     public function update(Request $request, Gallery $gallery)
@@ -48,7 +48,7 @@ class GalleryController extends Controller
 
         $gallery->update($data);
 
-        return back()->with('success', 'Galeri berhasil diperbarui.');
+        return $this->kembaliKeBaris('galeri', $gallery, 'Galeri berhasil diperbarui.');
     }
 
     public function destroy(Gallery $gallery)
@@ -56,6 +56,6 @@ class GalleryController extends Controller
         UploadHelper::deleteIfExists($gallery->image);
         $gallery->delete();
 
-        return back()->with('success', 'Galeri berhasil dihapus.');
+        return $this->kembaliKeBaris('galeri', null, 'Galeri berhasil dihapus.');
     }
 }

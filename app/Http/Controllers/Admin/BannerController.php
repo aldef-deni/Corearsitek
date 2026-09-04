@@ -34,9 +34,9 @@ class BannerController extends Controller
         $data['image'] = UploadHelper::image($request->file('image'));
         $data['is_active'] = $request->boolean('is_active');
 
-        Banner::create($data);
+        $baru = Banner::create($data);
 
-        return back()->with('success', 'Banner berhasil ditambahkan.');
+        return $this->kembaliKeBaris('banner', $baru, 'Banner berhasil ditambahkan.');
     }
 
     public function update(Request $request, Banner $banner)
@@ -63,7 +63,7 @@ class BannerController extends Controller
 
         $banner->update($data);
 
-        return back()->with('success', 'Banner berhasil diperbarui.');
+        return $this->kembaliKeBaris('banner', $banner, 'Banner berhasil diperbarui.');
     }
 
     public function destroy(Banner $banner)
@@ -71,6 +71,6 @@ class BannerController extends Controller
         UploadHelper::deleteIfExists($banner->image);
         $banner->delete();
 
-        return back()->with('success', 'Banner berhasil dihapus.');
+        return $this->kembaliKeBaris('banner', null, 'Banner berhasil dihapus.');
     }
 }

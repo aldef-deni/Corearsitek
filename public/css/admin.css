@@ -771,9 +771,10 @@ img { max-width: 100%; display: block; }
     .card-row-actions .btn { width: 100%; justify-content: center; }
 }
 
-/* Sasaran lompatan setelah menyimpan/menduplikasi klien: sisakan ruang di
-   atasnya supaya kartunya tidak menempel persis di tepi layar. */
-#klien, [id^="klien-"] { scroll-margin-top: 148px; }
+/* Sasaran lompatan setelah menambah, menyimpan, atau menghapus sebuah baris.
+   Ruang di atasnya disisakan untuk topbar dan pesan berhasil yang menempel,
+   supaya barisnya tidak tertutup keduanya. */
+[id^="baris-"] { scroll-margin-top: 148px; }
 
 /* ================================================================
    Data Pengajuan
