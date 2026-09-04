@@ -300,4 +300,23 @@ class UploadHelper
             unlink(public_path($path));
         }
     }
+
+    /**
+     * Gandakan berkas yang sudah tersimpan, lalu kembalikan path salinannya.
+     * Dipakai saat sebuah data diduplikasi supaya salinannya punya berkas
+     * sendiri dan aman dihapus tanpa mengganggu data aslinya.
+     *
+     * Mengembalikan null kalau berkas asalnya sudah tidak ada.
+     */
+    public static function duplicateFile(?string $path): ?string
+    {
+        if (! $path || ! str_starts_with($path, 'uploads/') || ! is_file(public_path($path))) {
+            return null;
+        }
+
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $baru = 'uploads/' . time() . '_' . uniqid() . ($ext ? '.' . $ext : '');
+
+        return copy(public_path($path), public_path($baru)) ? $baru : null;
+    }
 }

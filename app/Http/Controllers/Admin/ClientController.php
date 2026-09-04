@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Support\UploadHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -47,6 +48,28 @@ class ClientController extends Controller
         $client->update($data);
 
         return back()->with('success', 'Klien berhasil diperbarui.');
+    }
+
+    /**
+     * Salin satu klien beserta logonya. Nama salinan diberi akhiran
+     * "(salinan)" dan urutannya menyusul tepat di belakang aslinya,
+     * jadi tinggal disunting seperlunya.
+     */
+    public function duplicate(Client $client)
+    {
+        $salinan = $client->replicate();
+        $salinan->name = Str::limit($client->name, 240, '') . ' (salinan)';
+        $salinan->sort_order = $client->sort_order + 1;
+        $salinan->logo = UploadHelper::duplicateFile($client->logo) ?? $client->logo;
+        $salinan->save();
+
+        // Geser klien lain yang urutannya bertabrakan agar salinannya
+        // benar-benar muncul persis di bawah aslinya.
+        Client::where('id', '!=', $salinan->id)
+            ->where('sort_order', '>=', $salinan->sort_order)
+            ->increment('sort_order');
+
+        return back()->with('success', 'Klien diduplikasi. Ubah nama dan logonya seperlunya.');
     }
 
     public function destroy(Client $client)

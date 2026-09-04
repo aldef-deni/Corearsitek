@@ -196,12 +196,21 @@
                     <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                 </div>
             </form>
-            <form method="POST" action="{{ route('admin.clients.destroy', $client) }}"
-                  onsubmit="return confirm('Hapus klien ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger" title="Hapus"><i class="fa-solid fa-trash"></i></button>
-            </form>
+            <div class="card-row-actions">
+                {{-- Menyalin klien ini beserta logonya, tinggal ganti nama. --}}
+                <form method="POST" action="{{ route('admin.clients.duplicate', $client) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost" title="Duplikasi klien ini">
+                        <i class="fa-regular fa-clone"></i> Duplikasi
+                    </button>
+                </form>
+                <form method="POST" action="{{ route('admin.clients.destroy', $client) }}"
+                      onsubmit="return confirm('Hapus klien ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </div>
         </div>
     @empty
         <div class="card">

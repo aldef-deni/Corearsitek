@@ -57,6 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])
             ->name('portfolios.images.destroy');
         Route::resource('advantages', AdvantageController::class)->except(['show', 'create', 'edit']);
+        Route::post('clients/{client}/duplikat', [ClientController::class, 'duplicate'])->name('clients.duplicate');
         Route::resource('clients', ClientController::class)->only(['store', 'update', 'destroy']);
         Route::resource('testimonials', TestimonialController::class)->except(['show', 'create', 'edit']);
         Route::resource('process-steps', ProcessStepController::class)
