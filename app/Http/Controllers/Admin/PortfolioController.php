@@ -130,7 +130,7 @@ class PortfolioController extends Controller
             'description' => ['nullable', 'string', 'max:5000'],
             'sort_order' => ['nullable', 'integer'],
             'cover_image' => UploadHelper::rules(required: $coverRequired),
-            'images' => ['nullable', 'array', 'max:12'],
+            'images' => ['nullable', 'array', 'max:' . UploadHelper::MAX_BATCH],
             'images.*' => UploadHelper::rules(),
         ]);
     }

@@ -158,7 +158,7 @@
                 <div class="field">
                     <label for="images">Pilih beberapa foto sekaligus</label>
                     <input type="file" name="images[]" id="images" accept=".jpg,.jpeg,.png" multiple>
-                    <small class="hint">Maksimal 12 foto sekali unggah. {{ \App\Support\UploadHelper::hint() }}</small>
+                    <small class="hint">{{ \App\Support\UploadHelper::batchHint() }}</small>
                 </div>
             </div>
         @endunless

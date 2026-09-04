@@ -12,6 +12,17 @@ class UploadHelper
     /** Format yang boleh diunggah. */
     public const ALLOWED_MIMES = 'jpg,jpeg,png';
 
+    /** Banyak berkas maksimal dalam satu kali unggah beruntun. */
+    public const MAX_BATCH = 8;
+
+    /**
+     * Batas total satu permintaan, disisakan di bawah client_max_body_size
+     * nginx (128 MB) dan post_max_size PHP. Kalau terlampaui, nginx menolak
+     * dengan halaman 413 mentah sebelum Laravel sempat menampilkan pesan,
+     * jadi batas ini juga diperiksa di sisi peramban.
+     */
+    public const MAX_TOTAL_KB = 117760;
+
     /** Sisi terpanjang gambar setelah dikompres. */
     private const MAX_EDGE = 2200;
 
@@ -41,7 +52,14 @@ class UploadHelper
     public static function hint(): string
     {
         return 'Format JPG, JPEG, atau PNG. Maksimal ' . (int) (self::MAX_UPLOAD_KB / 1024)
-            . ' MB. Gambar otomatis dikompres agar halaman tetap ringan.';
+            . ' MB per berkas. Gambar otomatis dikompres agar halaman tetap ringan.';
+    }
+
+    /** Keterangan tambahan untuk kolom unggah banyak berkas sekaligus. */
+    public static function batchHint(): string
+    {
+        return 'Maksimal ' . self::MAX_BATCH . ' foto sekali unggah, total '
+            . (int) (self::MAX_TOTAL_KB / 1024) . ' MB. ' . self::hint();
     }
 
     /**

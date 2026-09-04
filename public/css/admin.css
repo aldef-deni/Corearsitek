@@ -711,3 +711,9 @@ img { max-width: 100%; display: block; }
 @media (max-width: 900px) {
     .row-actions { width: 100%; }
 }
+
+.upload-alert ul { margin: 0; padding-left: 18px; }
+
+.upload-alert li { margin-bottom: 6px; }
+
+.upload-alert li:last-child { margin-bottom: 0; }

@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
-<body>
+<body data-upload-max-kb="{{ \App\Support\UploadHelper::MAX_UPLOAD_KB }}"
+      data-upload-total-kb="{{ \App\Support\UploadHelper::MAX_TOTAL_KB }}"
+      data-upload-max-batch="{{ \App\Support\UploadHelper::MAX_BATCH }}">
 <aside class="sidebar">
     <div class="sidebar-brand">
         <a href="{{ route('admin.dashboard') }}" aria-label="CoreArsitek Admin">
@@ -91,5 +93,6 @@
         @yield('content')
     </div>
 </main>
+<script src="{{ asset('js/admin.js') }}?v={{ @filemtime(public_path('js/admin.js')) ?: 1 }}"></script>
 </body>
 </html>
