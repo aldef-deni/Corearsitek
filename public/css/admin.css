@@ -943,3 +943,45 @@ img { max-width: 100%; display: block; }
     letter-spacing: 2px;
     text-transform: uppercase;
 }
+
+/* Kilau menyapu di atas tombol, seperti tombol utama di halaman publik.
+   Bedanya di sini hanya berjalan saat disorot: daftar di dashboard bisa
+   berisi puluhan tombol, dan semuanya berkilau serentak akan mengganggu.
+   Opacity diatur dari dalam keyframes supaya begitu animasinya berhenti
+   kilaunya ikut hilang, tidak tertinggal diam di tepi kiri tombol. */
+.btn-flash { position: relative; overflow: hidden; isolation: isolate; }
+
+.btn-flash::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    left: -35%;
+    width: 28%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transform: skewX(-18deg);
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.14) 35%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(255, 255, 255, 0.14) 65%,
+        transparent);
+}
+
+.btn-flash:hover::after,
+.btn-flash:focus-visible::after {
+    animation: kilau-tombol 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes kilau-tombol {
+    0% { left: -35%; opacity: 1; }
+    /* Jeda di ujung supaya sapuannya berjarak, tidak terasa gelisah. */
+    55%, 100% { left: 120%; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-flash:hover::after,
+    .btn-flash:focus-visible::after { animation: none; opacity: 0; }
+}

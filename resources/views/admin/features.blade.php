@@ -43,7 +43,7 @@
                     <label>Urutan</label>
                     <input type="number" name="sort_order" value="{{ $feature->sort_order }}">
                 </div>
-                <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
             </form>
             <div class="card-row-actions">
                 {{-- Menyalin baris ini beserta isinya, tinggal ubah seperlunya. --}}
