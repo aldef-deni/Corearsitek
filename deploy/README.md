@@ -156,13 +156,17 @@ Untuk benar-benar mengirim lewat Gmail:
 ```
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_SCHEME=tls
+MAIL_PORT=465
+MAIL_SCHEME=smtps
 MAIL_USERNAME=corearsitek@gmail.com
 MAIL_PASSWORD="app-password-16-karakter"
 MAIL_FROM_ADDRESS="corearsitek@gmail.com"
 MAIL_FROM_NAME="CoreArsitek"
 ```
+
+`MAIL_SCHEME` hanya menerima `smtp` atau `smtps`. Nilai `tls` atau `ssl` ditolak
+dengan pesan *The "tls" scheme is not supported*. Kombinasi yang benar: port 465
+dengan `MAIL_SCHEME=smtps`, atau port 587 dengan `MAIL_SCHEME=null` (STARTTLS).
 
 4. Muat ulang cache konfigurasi: `sudo -u www php artisan config:cache`.
 
