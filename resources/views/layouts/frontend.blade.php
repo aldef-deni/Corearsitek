@@ -87,7 +87,7 @@
                 </a>
             </div>
 
-            <nav class="footer-col" aria-label="Menu footer">
+            <nav class="footer-col footer-nav" aria-label="Menu footer">
                 <h4>Jelajahi</h4>
                 <ul class="footer-menu">
                     <li><a href="{{ route('home') }}">Beranda</a></li>

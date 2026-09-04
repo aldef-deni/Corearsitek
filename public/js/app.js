@@ -530,30 +530,99 @@
             buku.querySelector('[data-book-prev]').addEventListener('click', function () { ke(posisi - 1); });
             buku.querySelector('[data-book-next]').addEventListener('click', function () { ke(posisi + 1); });
 
-            spread.addEventListener('click', function (e) {
-                if (e.target.closest('.book-btn')) return;
-                var r = spread.getBoundingClientRect();
-                // Mode satu halaman: seluruh bidang membuka ke depan.
-                ke(!ganda || e.clientX - r.left > r.width / 2 ? posisi + 1 : posisi - 1);
-            });
-
             buku.tabIndex = 0;
             buku.addEventListener('keydown', function (e) {
                 if (e.key === 'ArrowRight') { e.preventDefault(); ke(posisi + 1); }
                 if (e.key === 'ArrowLeft') { e.preventDefault(); ke(posisi - 1); }
             });
 
-            var sentuhX = null;
-            spread.addEventListener('touchstart', function (e) {
-                sentuhX = e.changedTouches[0].clientX;
-            }, { passive: true });
+            /* ---- Menyeret halaman ----
+               Memakai pointer event supaya tetikus, sentuhan, dan pena
+               ditangani lewat satu jalur yang sama. Halaman mengikuti jari
+               atau kursor selama diseret, lalu menutup sendiri ke posisi
+               terdekat begitu dilepas. */
+            var seret = null;
+            var jarakTerakhir = 0;
 
-            spread.addEventListener('touchend', function (e) {
-                if (sentuhX === null) return;
-                var beda = e.changedTouches[0].clientX - sentuhX;
-                if (Math.abs(beda) > 45) ke(posisi + (beda < 0 ? 1 : -1));
-                sentuhX = null;
-            }, { passive: true });
+            function lebarHalaman() {
+                var r = spread.getBoundingClientRect();
+                return ganda ? r.width / 2 : r.width;
+            }
+
+            function mulaiSeret(e) {
+                if (e.button !== undefined && e.button !== 0) return;
+                // Tombol navigasi dan tautan di dalam halaman tetap normal.
+                if (e.target.closest('.book-btn') || e.target.closest('a')) return;
+
+                jarakTerakhir = 0;
+                seret = { x0: e.clientX, y0: e.clientY, lem: null, maju: true, jauh: 0, kemajuan: 0 };
+            }
+
+            function gerakSeret(e) {
+                if (!seret) return;
+
+                var dx = e.clientX - seret.x0;
+                var dy = e.clientY - seret.y0;
+                seret.jauh = Math.abs(dx);
+
+                if (!seret.lem) {
+                    // Tunggu sampai gerakannya jelas mendatar, supaya menggulir
+                    // halaman ke bawah tidak terbaca sebagai membalik lembar.
+                    if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) return;
+
+                    seret.maju = dx < 0;
+                    seret.lem = lembar[seret.maju ? posisi : posisi - 1] || null;
+
+                    if (!seret.lem) { seret = null; return; }
+
+                    seret.lem.classList.add('is-dragging');
+                    // Lembar yang ditarik kembali harus terlihat lagi.
+                    seret.lem.classList.remove('is-flipped');
+                    seret.lem.style.zIndex = lembar.length + 1;
+                }
+
+                if (e.cancelable) e.preventDefault();
+
+                seret.kemajuan = Math.min(Math.max(Math.abs(dx) / lebarHalaman(), 0), 1);
+                var sudut = seret.maju ? -180 * seret.kemajuan : -180 * (1 - seret.kemajuan);
+                seret.lem.style.transform = 'rotateY(' + sudut + 'deg)';
+            }
+
+            function selesaiSeret() {
+                if (!seret) return;
+
+                var s = seret;
+                seret = null;
+                jarakTerakhir = s.jauh;
+
+                if (!s.lem) return;
+
+                s.lem.classList.remove('is-dragging');
+                s.lem.style.transform = '';
+                s.lem.style.zIndex = '';
+
+                // Lewat sepertiga jalan dianggap sebagai niat membalik.
+                if (s.kemajuan > 0.34) {
+                    posisi = Math.max(0, Math.min(lembar.length, posisi + (s.maju ? 1 : -1)));
+                }
+
+                gambar();
+            }
+
+            spread.addEventListener('pointerdown', mulaiSeret);
+            spread.addEventListener('pointermove', gerakSeret);
+            window.addEventListener('pointerup', selesaiSeret);
+            window.addEventListener('pointercancel', selesaiSeret);
+
+            // Klik hanya berlaku kalau memang bukan akhir dari seretan.
+            spread.addEventListener('click', function (e) {
+                if (e.target.closest('.book-btn') || e.target.closest('a')) return;
+                if (jarakTerakhir > 8) { jarakTerakhir = 0; return; }
+
+                var r = spread.getBoundingClientRect();
+                // Mode satu halaman: seluruh bidang membuka ke depan.
+                ke(!ganda || e.clientX - r.left > r.width / 2 ? posisi + 1 : posisi - 1);
+            });
 
             gambar();
         }
@@ -662,10 +731,14 @@
                 requestAnimationFrame(function () { segarkan(); menunggu = false; });
             }
 
+            var pakaiTitik = !rak.hasAttribute('data-swipe-nodots');
+
             function pasang() {
-                if (titik) return;
+                if (rak.classList.contains('cards-swipe')) return;
 
                 rak.classList.add('cards-swipe');
+
+                if (!pakaiTitik) return;
 
                 titik = document.createElement('div');
                 titik.className = 'swipe-dots';
@@ -689,11 +762,10 @@
             }
 
             function lepas() {
-                if (!titik) return;
+                if (!rak.classList.contains('cards-swipe')) return;
                 rak.classList.remove('cards-swipe');
                 rak.removeEventListener('scroll', padaGeser);
-                titik.remove();
-                titik = null;
+                if (titik) { titik.remove(); titik = null; }
                 rak.scrollLeft = 0;
             }
 

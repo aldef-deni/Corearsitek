@@ -67,7 +67,7 @@
                 <p class="section-lead">Sebagian karya yang sudah kami selesaikan — dari hunian klasik hingga villa tropis.</p>
             </div>
 
-            <div class="mosaic" data-swipe data-reveal-group="70">
+            <div class="mosaic" data-swipe data-swipe-nodots data-reveal-group="70">
                 @foreach ($portfolios as $i => $karya)
                     <a href="{{ route('portfolio.show', $karya) }}" class="mosaic-item reveal {{ $i === 0 ? 'mosaic-lead' : '' }}">
                         <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">

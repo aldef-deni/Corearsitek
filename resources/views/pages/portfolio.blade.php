@@ -130,7 +130,7 @@
         <div class="contact-cta reveal">
             <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}"
                target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI GRATIS VIA WHATSAPP
+                <i class="fa-brands fa-whatsapp"></i> KONSULTASI
             </a>
         </div>
     </div>
