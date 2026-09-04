@@ -717,3 +717,27 @@ img { max-width: 100%; display: block; }
 .upload-alert li { margin-bottom: 6px; }
 
 .upload-alert li:last-child { margin-bottom: 0; }
+
+@media (max-width: 700px) {
+    /* Kolom formulir menumpuk penuh agar tidak terpotong di layar sempit. */
+    .form-inline { flex-direction: column; align-items: stretch; gap: 0; }
+
+    .form-inline .field,
+    .form-inline .field-sm { flex: 1 1 auto; min-width: 0; margin-bottom: 14px; }
+
+    .form-inline .btn { width: 100%; justify-content: center; }
+
+    .card-row { flex-direction: column; }
+
+    .row-actions { width: 100%; }
+
+    .row-actions .btn { flex: 1; justify-content: center; }
+
+    .toolbar .btn { flex: 1; justify-content: center; }
+
+    .admin-content { padding: 18px 16px; }
+
+    .filter-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
+
+    .filter-tab { flex: 0 0 auto; }
+}

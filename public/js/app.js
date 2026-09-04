@@ -377,12 +377,213 @@
         });
     }
 
+    /* ---------------- Flipbook foto karya ----------------
+       Peningkatan bertahap: markup aslinya tetap daftar foto biasa, buku
+       hanya dirakit oleh JavaScript. Tanpa JS halaman tetap utuh terbaca.
+
+       Dua mode:
+       - dua lembar  : layar lebar dan ponsel dalam posisi mendatar
+       - satu lembar : ponsel/tablet dalam posisi tegak, agar fotonya
+                       tidak menyusut jadi terlalu kecil                     */
+
+    var BUKU_DUA_HALAMAN = '(min-width: 900px), (orientation: landscape) and (min-width: 560px)';
+
+    function initFlipbook() {
+        var root = document.querySelector('[data-flipbook]');
+        if (!root) return;
+
+        var daftar = root.querySelector('[data-flip-list]');
+        var foto = Array.prototype.slice.call(root.querySelectorAll('[data-flip-photo]'));
+        if (!daftar || foto.length < 2) return;
+
+        var lebar = window.matchMedia(BUKU_DUA_HALAMAN);
+        var judul = root.dataset.flipbookTitle || '';
+
+        var buku = null;
+        var lembar = [];
+        var posisi = 0;
+        var ganda = null;
+
+        function buatSisi(kelas, isi) {
+            var el = document.createElement('div');
+            el.className = 'book-side ' + kelas;
+            el.innerHTML = isi;
+            return el;
+        }
+
+        /** Pindahkan gambar aslinya ke muka lembar, bukan menyalin, supaya
+            tidak diunduh dua kali. */
+        function isiMuka(muka, indeks) {
+            var sumber = foto[indeks];
+
+            if (!sumber) {
+                muka.classList.add('leaf-kosong');
+                return;
+            }
+
+            var img = sumber.querySelector('img');
+            if (img) muka.appendChild(img);
+
+            var teks = sumber.querySelector('figcaption');
+            if (teks) muka.appendChild(teks);
+
+            muka.insertAdjacentHTML('beforeend', '<span class="leaf-no">' + (indeks + 1) + '</span>');
+        }
+
+        function rakit() {
+            ganda = lebar.matches;
+
+            // Mode dua halaman memuat dua foto per lembar; mode satu halaman
+            // satu foto per lembar dengan punggung kosong.
+            var jumlah = ganda ? Math.ceil(foto.length / 2) : foto.length;
+
+            buku = document.createElement('div');
+            buku.className = 'book' + (ganda ? '' : ' is-single');
+
+            var spread = document.createElement('div');
+            spread.className = 'book-spread';
+
+            if (ganda) {
+                spread.appendChild(buatSisi('book-left', '<span class="book-plate">' + judul + '</span>'));
+            }
+            spread.appendChild(buatSisi('book-right', '<span class="book-plate">Selesai</span>'));
+
+            lembar = [];
+
+            for (var i = 0; i < jumlah; i++) {
+                var lem = document.createElement('div');
+                lem.className = 'leaf';
+
+                var depan = document.createElement('div');
+                depan.className = 'leaf-face leaf-front';
+                isiMuka(depan, ganda ? i * 2 : i);
+                lem.appendChild(depan);
+
+                var belakang = document.createElement('div');
+                belakang.className = 'leaf-face leaf-back';
+                ganda ? isiMuka(belakang, i * 2 + 1) : belakang.classList.add('leaf-kosong');
+                lem.appendChild(belakang);
+
+                spread.appendChild(lem);
+                lembar.push(lem);
+            }
+
+            buku.appendChild(spread);
+
+            var bar = document.createElement('div');
+            bar.className = 'book-bar';
+            bar.innerHTML =
+                '<button type="button" class="book-btn" data-book-prev aria-label="Halaman sebelumnya">'
+                + '<i class="fa-solid fa-chevron-left"></i></button>'
+                + '<span class="book-count" data-book-count></span>'
+                + '<button type="button" class="book-btn" data-book-next aria-label="Halaman berikutnya">'
+                + '<i class="fa-solid fa-chevron-right"></i></button>';
+            buku.appendChild(bar);
+
+            daftar.parentNode.insertBefore(buku, daftar);
+            daftar.hidden = true;
+
+            buku.querySelector('[data-book-prev]').addEventListener('click', function () { ke(posisi - 1); });
+            buku.querySelector('[data-book-next]').addEventListener('click', function () { ke(posisi + 1); });
+
+            spread.addEventListener('click', function (e) {
+                if (e.target.closest('.book-btn')) return;
+                var r = spread.getBoundingClientRect();
+                // Mode satu halaman: seluruh bidang membuka ke depan.
+                ke(!ganda || e.clientX - r.left > r.width / 2 ? posisi + 1 : posisi - 1);
+            });
+
+            buku.tabIndex = 0;
+            buku.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowRight') { e.preventDefault(); ke(posisi + 1); }
+                if (e.key === 'ArrowLeft') { e.preventDefault(); ke(posisi - 1); }
+            });
+
+            var sentuhX = null;
+            spread.addEventListener('touchstart', function (e) {
+                sentuhX = e.changedTouches[0].clientX;
+            }, { passive: true });
+
+            spread.addEventListener('touchend', function (e) {
+                if (sentuhX === null) return;
+                var beda = e.changedTouches[0].clientX - sentuhX;
+                if (Math.abs(beda) > 45) ke(posisi + (beda < 0 ? 1 : -1));
+                sentuhX = null;
+            }, { passive: true });
+
+            gambar();
+        }
+
+        function ke(target) {
+            posisi = Math.max(0, Math.min(lembar.length, target));
+            gambar();
+        }
+
+        function gambar() {
+            lembar.forEach(function (lem, i) {
+                var terbuka = i < posisi;
+                lem.classList.toggle('is-flipped', terbuka);
+                // Yang sudah dibuka menumpuk ke kiri, yang belum ke kanan.
+                lem.style.zIndex = terbuka ? i : lembar.length - i;
+            });
+
+            buku.classList.toggle('is-awal', posisi === 0);
+            buku.classList.toggle('is-akhir', posisi === lembar.length);
+
+            buku.querySelector('[data-book-prev]').disabled = posisi === 0;
+            buku.querySelector('[data-book-next]').disabled = posisi === lembar.length;
+            buku.querySelector('[data-book-count]').textContent =
+                (ganda ? 'Lembar ' : 'Halaman ')
+                + Math.min(posisi + 1, lembar.length) + ' dari ' + lembar.length;
+        }
+
+        /** Kembalikan gambar ke daftar aslinya sebelum bukunya dibuang. */
+        function bongkar() {
+            if (!buku) return;
+
+            lembar.forEach(function (lem, i) {
+                ['front', 'back'].forEach(function (sisi, n) {
+                    var muka = lem.querySelector('.leaf-' + sisi);
+                    var indeks = ganda ? i * 2 + n : (n === 0 ? i : -1);
+                    var sumber = foto[indeks];
+                    if (!sumber || !muka) return;
+
+                    var img = muka.querySelector('img');
+                    if (img) sumber.insertBefore(img, sumber.firstChild);
+
+                    var teks = muka.querySelector('figcaption');
+                    if (teks) sumber.appendChild(teks);
+                });
+            });
+
+            buku.remove();
+            buku = null;
+            lembar = [];
+            posisi = 0;
+            daftar.hidden = false;
+        }
+
+        // Berganti orientasi mengubah jumlah halaman, jadi bukunya dirakit ulang.
+        function sesuaikan() {
+            if (buku && ganda === lebar.matches) return;
+            bongkar();
+            rakit();
+        }
+
+        rakit();
+
+        if (lebar.addEventListener) {
+            lebar.addEventListener('change', sesuaikan);
+        }
+    }
+
     /* ---------------- Bootstrap ---------------- */
 
     function init() {
         initNavToggle();
         initNavbarScroll();
         initHeroSlider();
+        initFlipbook();
         initBackToTop();
         initStaggerGroups();
         initReveal();

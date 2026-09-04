@@ -45,21 +45,38 @@
     </div>
 </section>
 
+<section class="work-book">
+    <div class="container">
+            {{-- Daftar foto ini juga jadi sumber flipbook. JavaScript merakitnya
+                 jadi buku pada layar lebar; tanpa JS daftarnya tetap tampil utuh. --}}
+            <div class="work-photos" data-flipbook data-flipbook-title="{{ $portfolio->title }}">
+                <div data-flip-list>
+                    <figure class="work-cover reveal-scale" data-flip-photo>
+                        <img src="{{ asset($portfolio->cover_image) }}" alt="{{ $portfolio->title }}">
+                    </figure>
+
+                    @foreach ($portfolio->images as $foto)
+                        <figure class="work-photo reveal" data-flip-photo>
+                            <img src="{{ asset($foto->image) }}" alt="{{ $foto->caption ?: $portfolio->title }}" loading="lazy">
+                            @if ($foto->caption)
+                                <figcaption>{{ $foto->caption }}</figcaption>
+                            @endif
+                        </figure>
+                    @endforeach
+                </div>
+            </div>
+    </div>
+</section>
+
 <section class="work-body">
     <div class="container work-split">
-        <div class="work-photos">
-            <figure class="work-cover reveal-scale">
-                <img src="{{ asset($portfolio->cover_image) }}" alt="{{ $portfolio->title }}">
-            </figure>
-
-            @foreach ($portfolio->images as $foto)
-                <figure class="work-photo reveal">
-                    <img src="{{ asset($foto->image) }}" alt="{{ $foto->caption ?: $portfolio->title }}" loading="lazy">
-                    @if ($foto->caption)
-                        <figcaption>{{ $foto->caption }}</figcaption>
-                    @endif
-                </figure>
-            @endforeach
+        <div class="work-main">
+            @if ($portfolio->description)
+                <div class="work-card reveal">
+                    <h2>Tentang Karya Ini</h2>
+                    <p class="work-desc">{{ $portfolio->description }}</p>
+                </div>
+            @endif
         </div>
 
         <aside class="work-aside">
@@ -95,12 +112,6 @@
                 </a>
             </div>
 
-            @if ($portfolio->description)
-                <div class="work-card reveal">
-                    <h2>Tentang Karya Ini</h2>
-                    <p class="work-desc">{{ $portfolio->description }}</p>
-                </div>
-            @endif
         </aside>
     </div>
 </section>

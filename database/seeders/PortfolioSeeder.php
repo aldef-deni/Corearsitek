@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Portfolio;
+use App\Models\PortfolioImage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -67,6 +68,15 @@ class PortfolioSeeder extends Seeder
             ],
         ];
 
+        // Beberapa foto tambahan per karya supaya flipbook di halaman detail
+        // langsung ada isinya. Diambil dari berkas seed yang sudah tersedia.
+        $fotoTambahan = [
+            'uploads/seed/gallery-3.svg',
+            'uploads/seed/gallery-4.svg',
+            'uploads/seed/gallery-6.svg',
+            'uploads/seed/hero.svg',
+        ];
+
         foreach ($karya as $k) {
             // Kunci pencarian harus slug yang stabil. Portfolio::uniqueSlug()
             // justru menghasilkan slug baru bila yang lama sudah ada, sehingga
@@ -91,6 +101,21 @@ class PortfolioSeeder extends Seeder
                     'sort_order' => $k['sort'],
                 ]
             );
+
+            $portfolio = Portfolio::where('slug', Str::slug($k['title']))->first();
+
+            if (! $portfolio) {
+                continue;
+            }
+
+            foreach ($fotoTambahan as $urutan => $berkas) {
+                // Berkas seed dipakai bersama beberapa karya, jadi kuncinya
+                // pasangan karya + berkas supaya tidak menumpuk saat diulang.
+                PortfolioImage::updateOrCreate(
+                    ['portfolio_id' => $portfolio->id, 'image' => $berkas],
+                    ['sort_order' => $urutan + 1]
+                );
+            }
         }
     }
 }
