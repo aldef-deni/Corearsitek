@@ -5,6 +5,15 @@
 @section('content')
     <h1 class="page-title">Dashboard</h1>
 
+    {{-- Logo besar sebagai penanda halaman: kilau menyapu terus-menerus dan
+         tepian hurufnya berdenyut merah. --}}
+    <div class="dash-hero">
+        <div class="dash-logo">
+            <img src="{{ asset($logo) }}" alt="{{ $siteName }}">
+        </div>
+        <p class="dash-hero-note">Panel Administrator {{ $siteName }}</p>
+    </div>
+
     <div class="stat-grid">
         <a class="stat-card {{ $submissionsUnread ? 'stat-card-alert' : '' }}" href="{{ route('admin.submissions.index') }}">
             <i class="fa-solid fa-inbox"></i>
@@ -66,18 +75,6 @@
             <span class="stat-value">{{ $testimonialsCount }}</span>
             <span class="stat-label">Testimoni</span>
         </a>
-    </div>
-
-    <div class="card">
-        <h2>Aksi Cepat</h2>
-        <div class="quick-actions">
-            <a class="btn btn-red" href="{{ route('admin.banners.index') }}"><i class="fa-solid fa-panorama"></i> Kelola Banner Hero</a>
-            <a class="btn btn-outline-red" href="{{ route('admin.contents.edit') }}"><i class="fa-solid fa-pen"></i> Ubah Konten Situs</a>
-            <a class="btn btn-outline-red" href="{{ route('admin.portfolios.create') }}"><i class="fa-solid fa-plus"></i> Tambah Karya Portofolio</a>
-            <a class="btn btn-outline-red" href="{{ route('admin.galleries.index') }}"><i class="fa-solid fa-upload"></i> Tambah Foto Galeri</a>
-            <a class="btn btn-outline-red" href="{{ route('admin.services.index') }}"><i class="fa-solid fa-hammer"></i> Kelola Layanan</a>
-            <a class="btn btn-outline-red" href="{{ route('home') }}" target="_blank"><i class="fa-solid fa-globe"></i> Lihat Situs</a>
-        </div>
     </div>
 
     <div class="card">

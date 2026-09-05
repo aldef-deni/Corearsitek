@@ -2159,8 +2159,7 @@ body.has-custom-cursor * { cursor: none !important; }
     /* Sekelompok tombol dibuat sama lebar; kalau tidak, panjangnya berbeda-beda
        dan terlihat berantakan saat menumpuk ke bawah. */
     .hero-actions,
-    .stats-actions,
-    .quick-actions { flex-direction: column; align-items: stretch; width: 100%; }
+    .stats-actions { flex-direction: column; align-items: stretch; width: 100%; }
 
     .hero-actions .btn,
     .stats-actions .btn,

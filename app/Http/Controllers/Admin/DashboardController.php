@@ -20,6 +20,8 @@ class DashboardController extends Controller
     public function index()
     {
         return view('admin.dashboard', [
+            'logo' => SiteContent::where('key', 'logo_image')->value('value') ?: 'images/logo.png',
+            'siteName' => SiteContent::where('key', 'site_name')->value('value') ?: 'CoreArsitek',
             'submissionsCount' => Submission::count(),
             'submissionsUnread' => Submission::unread()->count(),
             'bannersCount' => Banner::count(),

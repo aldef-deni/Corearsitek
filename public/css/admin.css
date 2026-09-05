@@ -197,8 +197,6 @@ img { max-width: 100%; display: block; }
 
 .stat-label { color: var(--text-dim); font-size: 13px; }
 
-.quick-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
 .guide-list { padding-left: 20px; color: var(--text-muted); }
 
 .guide-list li { margin-bottom: 8px; }
@@ -984,4 +982,95 @@ img { max-width: 100%; display: block; }
 @media (prefers-reduced-motion: reduce) {
     .btn-flash:hover::after,
     .btn-flash:focus-visible::after { animation: none; opacity: 0; }
+}
+
+/* ================================================================
+   Logo besar di atas kartu dashboard
+   ================================================================ */
+
+.dash-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin: 6px 0 30px;
+    padding: 34px 20px 30px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background:
+        radial-gradient(620px 220px at 50% 0%, rgba(255, 31, 31, 0.12), transparent 70%),
+        linear-gradient(180deg, var(--ink-2), var(--ink));
+}
+
+/* Pembungkus ini yang memotong kilau agar tidak melebar ke luar logo. */
+.dash-logo {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 6px 10px;
+}
+
+.dash-logo img {
+    display: block;
+    width: min(420px, 74vw);
+    height: auto;
+    /* drop-shadow mengikuti bentuk huruf pada PNG transparan, jadi denyutnya
+       muncul di tepi tulisan — bukan sebagai kotak di sekeliling gambar. */
+    animation: logo-denyut 2.6s ease-in-out infinite;
+}
+
+@keyframes logo-denyut {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(255, 31, 31, 0.30))
+                drop-shadow(0 0 13px rgba(255, 31, 31, 0.16));
+    }
+    50% {
+        filter: drop-shadow(0 0 13px rgba(255, 31, 31, 0.85))
+                drop-shadow(0 0 32px rgba(255, 31, 31, 0.45));
+    }
+}
+
+/* Kilau yang menyapu logo terus-menerus. */
+.dash-logo::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    left: -35%;
+    width: 26%;
+    z-index: 2;
+    pointer-events: none;
+    transform: skewX(-18deg);
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.10) 35%,
+        rgba(255, 255, 255, 0.42) 50%,
+        rgba(255, 255, 255, 0.10) 65%,
+        transparent);
+    animation: logo-kilau 3.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes logo-kilau {
+    0% { left: -35%; }
+    /* Jeda panjang di ujung supaya sapuannya tidak terasa gelisah. */
+    58%, 100% { left: 120%; }
+}
+
+.dash-hero-note {
+    color: var(--text-dim);
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dash-logo img { animation: none; filter: drop-shadow(0 0 10px rgba(255, 31, 31, 0.4)); }
+
+    .dash-logo::after { animation: none; opacity: 0; }
+}
+
+@media (max-width: 720px) {
+    .dash-hero { margin-bottom: 22px; padding: 26px 16px 22px; }
+
+    .dash-hero-note { font-size: 10.5px; letter-spacing: 1.8px; text-align: center; }
 }
