@@ -2169,7 +2169,7 @@ body.has-custom-cursor * { cursor: none !important; }
     .services .stats-card {
         position: relative;
         z-index: 3;
-        margin: -62px auto 44px;
+        margin: -162px auto 44px;
         padding: 32px 20px 26px;
         border-radius: 18px;
         /* Menindih foto banner, jadi latarnya dibuat pekat agar teks tetap
