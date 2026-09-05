@@ -11,7 +11,7 @@ class AdvantageController extends Controller
 {
     public function index()
     {
-        return view('admin.advantages', [
+        return view('admin.benefit', [
             'advantages' => Advantage::orderBy('sort_order')->orderBy('id')->get()->groupBy('type'),
         ]);
     }

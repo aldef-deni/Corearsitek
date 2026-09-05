@@ -45,8 +45,8 @@
         <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
             <i class="fa-solid fa-images"></i> Galeri
         </a>
-        <a href="{{ route('admin.advantages.index') }}" class="{{ request()->routeIs('admin.advantages.*') ? 'active' : '' }}">
-            <i class="fa-solid fa-scale-balanced"></i> Untung &amp; Rugi
+        <a href="{{ route('admin.benefit.index') }}" class="{{ request()->routeIs('admin.benefit.*') ? 'active' : '' }}">
+            <i class="fa-solid fa-scale-balanced"></i> Benefit CoreArsitek
         </a>
         <a href="{{ route('admin.process-steps.index') }}" class="{{ request()->routeIs('admin.process-steps.*') ? 'active' : '' }}">
             <i class="fa-solid fa-diagram-project"></i> Proses Kerja

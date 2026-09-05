@@ -74,7 +74,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('portfolios', PortfolioController::class)->except(['show']);
         Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])
             ->name('portfolios.images.destroy');
-        Route::resource('advantages', AdvantageController::class)->except(['show', 'create', 'edit']);
+        // URL-nya "benefit" mengikuti nama menunya; parameternya tetap
+        // {advantage} supaya cocok dengan model binding AdvantageController.
+        Route::resource('benefit', AdvantageController::class)
+            ->parameters(['benefit' => 'advantage'])
+            ->except(['show', 'create', 'edit']);
         Route::post('clients/{client}/duplikat', [ClientController::class, 'duplicate'])->name('clients.duplicate');
         Route::resource('clients', ClientController::class)->only(['store', 'update', 'destroy']);
         // Pengajuan calon klien: hanya dibaca dan ditindaklanjuti, tidak dibuat manual.

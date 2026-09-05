@@ -60,10 +60,10 @@
             <span class="stat-value">{{ $stepsCount }}</span>
             <span class="stat-label">Proses Kerja</span>
         </a>
-        <a class="stat-card" href="{{ route('admin.advantages.index') }}">
+        <a class="stat-card" href="{{ route('admin.benefit.index') }}">
             <i class="fa-solid fa-scale-balanced"></i>
             <span class="stat-value">{{ $advantagesCount }}</span>
-            <span class="stat-label">Untung &amp; Rugi</span>
+            <span class="stat-label">Benefit CoreArsitek</span>
         </a>
         <a class="stat-card" href="{{ route('admin.about.edit') }}">
             <i class="fa-regular fa-building"></i>
@@ -132,7 +132,7 @@
                 besar dalam modal.
             </li>
             <li>
-                <strong>Untung &amp; Rugi</strong> — dua daftar berdampingan di Beranda: kerugian bila
+                <strong>Benefit CoreArsitek</strong> — dua daftar berdampingan di Beranda: kerugian bila
                 membangun tanpa jasa arsitek, dan alasan memilih CoreArsitek. Pilih daftarnya lewat kolom
                 <em>Jenis</em>.
             </li>

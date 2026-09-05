@@ -1,16 +1,16 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Untung Rugi')
+@section('title', 'Benefit CoreArsitek')
 
 @section('content')
     <h1 class="page-title">
-        Untung &amp; Rugi
+        Benefit CoreArsitek
         <small>Dua daftar berdampingan di halaman depan: kerugian bila tanpa jasa arsitek, dan alasan memilih CoreArsitek.</small>
     </h1>
 
     <div id="baris-poin" class="card">
         <h2>Tambah Poin</h2>
-        <form method="POST" action="{{ route('admin.advantages.store') }}">
+        <form method="POST" action="{{ route('admin.benefit.store') }}">
             @csrf
             <div class="form-inline">
                 <div class="field">
@@ -45,7 +45,7 @@
 
         @forelse ($daftar as $poin)
             <div id="baris-poin-{{ $poin->id }}" class="card card-row">
-                <form method="POST" action="{{ route('admin.advantages.update', $poin) }}" class="form-inline form-grow">
+                <form method="POST" action="{{ route('admin.benefit.update', $poin) }}" class="form-inline form-grow">
                     @csrf
                     @method('PUT')
                     <div class="field">
@@ -67,7 +67,7 @@
                     </div>
                     <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                 </form>
-                <form method="POST" action="{{ route('admin.advantages.destroy', $poin) }}"
+                <form method="POST" action="{{ route('admin.benefit.destroy', $poin) }}"
                       onsubmit="return confirm('Hapus poin ini?')">
                     @csrf
                     @method('DELETE')
