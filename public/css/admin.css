@@ -1103,3 +1103,18 @@ img { max-width: 100%; display: block; }
 }
 
 .input-en::placeholder { color: var(--text-dim); font-style: italic; }
+
+/* Tombol Simpan Semua di kaki daftar. */
+.save-all {
+    display: flex;
+    justify-content: center;
+    margin-top: 26px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+}
+
+.save-all .btn { padding: 13px 30px; letter-spacing: 2px; }
+
+@media (max-width: 720px) {
+    .save-all .btn { width: 100%; justify-content: center; }
+}

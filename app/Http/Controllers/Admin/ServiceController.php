@@ -57,6 +57,26 @@ class ServiceController extends Controller
         return $this->kembaliKeBaris('layanan', $salinan, 'Layanan diduplikasi. Ubah judul dan keterangannya seperlunya.');
     }
 
+    /**
+     * Simpan seluruh baris di halaman ini sekaligus. Berkas gambar tidak ikut
+     * — penggantian foto tetap lewat tombol Simpan pada barisnya sendiri.
+     */
+    public function saveAll(Request $request)
+    {
+        $berubah = $this->simpanBanyak($request, Service::class, [
+            'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'subtitle_en' => ['nullable', 'string', 'max:255'],
+            'icon' => ['nullable', 'string', 'max:100'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+
+        return $this->kembaliKeBaris('layanan', null, $berubah
+            ? $berubah . ' baris Layanan disimpan.'
+            : 'Tidak ada perubahan untuk disimpan.');
+    }
+
     public function destroy(Service $service)
     {
         $service->delete();

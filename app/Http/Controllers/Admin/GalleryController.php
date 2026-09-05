@@ -55,6 +55,25 @@ class GalleryController extends Controller
         return $this->kembaliKeBaris('galeri', $gallery, 'Galeri berhasil diperbarui.');
     }
 
+    /**
+     * Simpan seluruh baris di halaman ini sekaligus. Berkas gambar tidak ikut
+     * — penggantian foto tetap lewat tombol Simpan pada barisnya sendiri.
+     */
+    public function saveAll(Request $request)
+    {
+        $berubah = $this->simpanBanyak($request, Gallery::class, [
+            'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'description_en' => ['nullable', 'string', 'max:1000'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+
+        return $this->kembaliKeBaris('galeri', null, $berubah
+            ? $berubah . ' baris Galeri disimpan.'
+            : 'Tidak ada perubahan untuk disimpan.');
+    }
+
     public function destroy(Gallery $gallery)
     {
         UploadHelper::deleteIfExists($gallery->image);

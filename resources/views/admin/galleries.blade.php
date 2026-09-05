@@ -44,7 +44,8 @@
             <div class="card-row-thumb">
                 <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}">
             </div>
-            <form method="POST" action="{{ route('admin.galleries.update', $gallery) }}" enctype="multipart/form-data" class="form-inline form-grow">
+            <form method="POST" action="{{ route('admin.galleries.update', $gallery) }}" enctype="multipart/form-data"
+                  class="form-inline form-grow" data-row="{{ $gallery->id }}">
                 @csrf
                 @method('PUT')
                 <div class="field">
@@ -65,7 +66,7 @@
                     <label>Urutan</label>
                     <input type="number" name="sort_order" value="{{ $gallery->sort_order }}">
                 </div>
-                <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
             </form>
             <form method="POST" action="{{ route('admin.galleries.destroy', $gallery) }}" onsubmit="return confirm('Hapus foto ini?')">
                 @csrf
@@ -74,4 +75,15 @@
             </form>
         </div>
     @endforeach
+
+    @if ($galleries->count())
+        {{-- Mengumpulkan isian seluruh baris di atas lalu mengirimnya sekaligus.
+             Penggantian foto tidak ikut; itu tetap lewat tombol Simpan barisnya. --}}
+        <div class="save-all">
+            <button type="button" class="btn btn-red btn-flash"
+                    data-save-all="{{ route('admin.galleries.saveAll') }}" data-token="{{ csrf_token() }}">
+                <i class="fa-solid fa-floppy-disk"></i> SIMPAN SEMUA
+            </button>
+        </div>
+    @endif
 @endsection

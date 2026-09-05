@@ -63,10 +63,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('contents', [ContentController::class, 'update'])->name('contents.update');
 
         Route::resource('banners', BannerController::class)->except(['show', 'create', 'edit']);
+        Route::put('services/simpan-semua', [ServiceController::class, 'saveAll'])->name('services.saveAll');
         Route::post('services/{service}/duplikat', [ServiceController::class, 'duplicate'])->name('services.duplicate');
         Route::resource('services', ServiceController::class)->except(['show', 'create', 'edit']);
+        Route::put('features/simpan-semua', [FeatureController::class, 'saveAll'])->name('features.saveAll');
         Route::post('features/{feature}/duplikat', [FeatureController::class, 'duplicate'])->name('features.duplicate');
         Route::resource('features', FeatureController::class)->except(['show', 'create', 'edit']);
+        Route::put('galleries/simpan-semua', [GalleryController::class, 'saveAll'])->name('galleries.saveAll');
         Route::resource('galleries', GalleryController::class)->except(['show', 'create', 'edit']);
         Route::resource('portfolios', PortfolioController::class)->except(['show']);
         Route::delete('portfolios/{portfolio}/images/{image}', [PortfolioController::class, 'destroyImage'])

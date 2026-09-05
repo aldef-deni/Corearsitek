@@ -28,7 +28,8 @@
     @foreach ($features as $feature)
         <div id="baris-fitur-{{ $feature->id }}" class="card card-row">
             <div class="card-row-icon"><i class="fa-solid {{ $feature->icon }}"></i></div>
-            <form method="POST" action="{{ route('admin.features.update', $feature) }}" class="form-inline form-grow">
+            <form method="POST" action="{{ route('admin.features.update', $feature) }}" class="form-inline form-grow"
+                  data-row="{{ $feature->id }}">
                 @csrf
                 @method('PUT')
                 <div class="field">
@@ -62,4 +63,15 @@
             </div>
         </div>
     @endforeach
+
+    @if ($features->count())
+        {{-- Mengumpulkan isian seluruh baris di atas lalu mengirimnya sekaligus.
+             Penggantian foto tidak ikut; itu tetap lewat tombol Simpan barisnya. --}}
+        <div class="save-all">
+            <button type="button" class="btn btn-red btn-flash"
+                    data-save-all="{{ route('admin.features.saveAll') }}" data-token="{{ csrf_token() }}">
+                <i class="fa-solid fa-floppy-disk"></i> SIMPAN SEMUA
+            </button>
+        </div>
+    @endif
 @endsection

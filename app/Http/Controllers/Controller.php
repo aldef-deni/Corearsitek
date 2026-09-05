@@ -49,4 +49,46 @@ abstract class Controller
 
         return $salinan;
     }
+
+    /**
+     * Simpan banyak baris sekaligus dari satu halaman daftar.
+     *
+     * Isian dikirim sebagai rows[<id>][<kolom>]. Hanya baris yang benar-benar
+     * berubah yang disentuh, supaya kolom updated_at tidak ikut bergeser pada
+     * data yang tidak diapa-apakan.
+     *
+     * @param  class-string<Model>  $model
+     * @param  array<string, array<int, string>>  $aturan  Aturan validasi per kolom.
+     * @return int Banyak baris yang benar-benar berubah.
+     */
+    protected function simpanBanyak(\Illuminate\Http\Request $request, string $model, array $aturan): int
+    {
+        $validasi = ['rows' => ['required', 'array']];
+
+        foreach ($aturan as $kolom => $rule) {
+            $validasi['rows.*.' . $kolom] = $rule;
+        }
+
+        $data = $request->validate($validasi)['rows'];
+
+        $baris = $model::findMany(array_keys($data))->keyBy('id');
+        $berubah = 0;
+
+        foreach ($data as $id => $isian) {
+            $satu = $baris->get((int) $id);
+
+            if (! $satu) {
+                continue;
+            }
+
+            $satu->fill(array_intersect_key($isian, $aturan));
+
+            if ($satu->isDirty()) {
+                $satu->save();
+                $berubah++;
+            }
+        }
+
+        return $berubah;
+    }
 }

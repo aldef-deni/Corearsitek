@@ -54,6 +54,24 @@ class FeatureController extends Controller
         return $this->kembaliKeBaris('fitur', $salinan, 'Keunggulan diduplikasi. Ubah label dan ikonnya seperlunya.');
     }
 
+    /**
+     * Simpan seluruh baris di halaman ini sekaligus. Berkas gambar tidak ikut
+     * — penggantian foto tetap lewat tombol Simpan pada barisnya sendiri.
+     */
+    public function saveAll(Request $request)
+    {
+        $berubah = $this->simpanBanyak($request, Feature::class, [
+            'label' => ['required', 'string', 'max:255'],
+            'label_en' => ['nullable', 'string', 'max:255'],
+            'icon' => ['nullable', 'string', 'max:100'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+
+        return $this->kembaliKeBaris('fitur', null, $berubah
+            ? $berubah . ' baris Keunggulan disimpan.'
+            : 'Tidak ada perubahan untuk disimpan.');
+    }
+
     public function destroy(Feature $feature)
     {
         $feature->delete();

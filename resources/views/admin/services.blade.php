@@ -32,7 +32,8 @@
     @foreach ($services as $service)
         <div id="baris-layanan-{{ $service->id }}" class="card card-row">
             <div class="card-row-icon"><i class="fa-solid {{ $service->icon }}"></i></div>
-            <form method="POST" action="{{ route('admin.services.update', $service) }}" class="form-inline form-grow">
+            <form method="POST" action="{{ route('admin.services.update', $service) }}" class="form-inline form-grow"
+                  data-row="{{ $service->id }}">
                 @csrf
                 @method('PUT')
                 <div class="field">
@@ -71,4 +72,15 @@
             </div>
         </div>
     @endforeach
+
+    @if ($services->count())
+        {{-- Mengumpulkan isian seluruh baris di atas lalu mengirimnya sekaligus.
+             Penggantian foto tidak ikut; itu tetap lewat tombol Simpan barisnya. --}}
+        <div class="save-all">
+            <button type="button" class="btn btn-red btn-flash"
+                    data-save-all="{{ route('admin.services.saveAll') }}" data-token="{{ csrf_token() }}">
+                <i class="fa-solid fa-floppy-disk"></i> SIMPAN SEMUA
+            </button>
+        </div>
+    @endif
 @endsection

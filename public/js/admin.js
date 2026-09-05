@@ -96,8 +96,62 @@
         });
     }
 
+
+    /* ================================================================
+       Simpan Semua
+
+       Tiap baris punya formulirnya sendiri supaya tombol Simpan, Duplikasi,
+       dan Hapus bisa berdiri terpisah — dan formulir tidak boleh bersarang.
+       Karena itu "Simpan Semua" tidak bisa sekadar membungkus semuanya:
+       isian dari setiap baris dikumpulkan lalu dikirim lewat satu formulir
+       bayangan sebagai rows[<id>][<kolom>].
+       ================================================================ */
+
+    function isian(form, nama, nilai) {
+        var el = document.createElement('input');
+        el.type = 'hidden';
+        el.name = nama;
+        el.value = nilai;
+        form.appendChild(el);
+    }
+
+    function initSimpanSemua() {
+        var tombol = document.querySelector('[data-save-all]');
+        if (!tombol) return;
+
+        tombol.addEventListener('click', function () {
+            var baris = document.querySelectorAll('[data-row]');
+            if (!baris.length) return;
+
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = tombol.dataset.saveAll;
+            form.hidden = true;
+
+            isian(form, '_token', tombol.dataset.token);
+            isian(form, '_method', 'PUT');
+
+            baris.forEach(function (b) {
+                var id = b.dataset.row;
+
+                b.querySelectorAll('input, select, textarea').forEach(function (el) {
+                    // Berkas tidak bisa ikut lewat formulir bayangan, dan
+                    // token per baris tidak diperlukan lagi di sini.
+                    if (!el.name || el.type === 'file' || el.name === '_token' || el.name === '_method') return;
+                    if ((el.type === 'checkbox' || el.type === 'radio') && !el.checked) return;
+
+                    isian(form, 'rows[' + id + '][' + el.name + ']', el.value);
+                });
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    }
+
     function init() {
         document.querySelectorAll('form').forEach(pasang);
+        initSimpanSemua();
     }
 
     if (document.readyState === 'loading') {
