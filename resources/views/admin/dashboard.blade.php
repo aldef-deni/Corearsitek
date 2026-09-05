@@ -3,10 +3,8 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <h1 class="page-title">Dashboard</h1>
-
-    {{-- Logo besar sebagai penanda halaman: kilau menyapu terus-menerus dan
-         tepian hurufnya berdenyut merah. --}}
+    {{-- Tanpa judul teks: logo inilah penanda halamannya. Kilau menyapu
+         terus-menerus dan tepian hurufnya berdenyut merah. --}}
     <div class="dash-hero">
         <div class="dash-logo">
             <img src="{{ asset($logo) }}" alt="{{ $siteName }}">
