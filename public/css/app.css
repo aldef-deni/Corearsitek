@@ -1386,7 +1386,8 @@ body.has-custom-cursor * { cursor: none !important; }
     .book .book-spread { min-height: min(460px, 56vh); max-height: 74vh; }
     .slider-nav { display: none; }
     .slider-dots { bottom: 62px; }
-    .service-pills { grid-template-columns: 1fr; }
+    /* Dua kartu per baris seperti rujukan; satu kolom terasa terlalu kosong. */
+    .service-pills { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .mosaic { grid-template-columns: 1fr; grid-auto-rows: 220px; }
     .mosaic-lead { grid-column: span 1; grid-row: span 1; }
     .process-grid { grid-template-columns: 1fr; }
@@ -3012,13 +3013,29 @@ body.has-custom-cursor * { cursor: none !important; }
 }
 
 @media (max-width: 768px) {
-    .service-pill { padding: 20px 14px; gap: 9px; }
+    .service-pill {
+        /* Tinggi minimum menyamakan semua kartu meski judulnya satu baris. */
+        min-height: 152px;
+        padding: 22px 12px;
+        gap: 14px;
+        border-radius: 14px;
+        justify-content: center;
+    }
 
-    .service-pill i:first-child { font-size: 26px; }
+    .service-pill i:first-child { font-size: 34px; margin-bottom: 0; }
 
-    .pill-text small { font-size: 10.5px; letter-spacing: 1.6px; }
+    .pill-text { gap: 1px; }
 
-    .pill-text strong { font-size: 13px; }
+    /* Kedua baris judul disamakan bobot dan warnanya supaya terbaca sebagai
+       satu kalimat utuh, bukan label kecil di atas judul. */
+    .pill-text small,
+    .pill-text strong {
+        color: #fff;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        line-height: 1.4;
+    }
 
     .bleed-hero { aspect-ratio: 16 / 10; }
 
