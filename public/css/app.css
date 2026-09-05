@@ -2161,6 +2161,41 @@ body.has-custom-cursor * { cursor: none !important; }
     .hero-actions,
     .stats-actions { flex-direction: column; align-items: stretch; width: 100%; }
 
+    /* ---------- Kartu angka di halaman Layanan ----------
+       Diangkat menindih tepi bawah banner supaya jadi satu kesatuan dengan
+       hero, bukan blok terpisah yang mengambang di bawahnya. */
+    .services { padding-top: 0; }
+
+    .services .stats-card {
+        position: relative;
+        z-index: 3;
+        margin: -62px auto 44px;
+        padding: 32px 20px 26px;
+        border-radius: 18px;
+        /* Menindih foto banner, jadi latarnya dibuat pekat agar teks tetap
+           terbaca dan tepinya tidak lebur ke gambar di belakangnya. */
+        background:
+            radial-gradient(circle at 50% -10%, rgba(255, 31, 31, 0.22), transparent 62%),
+            linear-gradient(180deg, #121216, #08080a);
+        box-shadow: 0 26px 60px -28px rgba(0, 0, 0, 0.95);
+    }
+
+    .services .stats-number {
+        font-size: clamp(52px, 15vw, 74px);
+        letter-spacing: -1px;
+        color: var(--red);
+        text-shadow: 0 0 30px rgba(255, 31, 31, 0.55);
+    }
+
+    .services .stats-label { margin: 6px 0 24px; font-size: 13.5px; letter-spacing: 0.4px; }
+
+    .services .stats-actions { gap: 12px; }
+
+    .services .stats-actions .btn { padding: 15px 18px; letter-spacing: 2px; }
+
+    /* Di atas latar kartu yang pekat, garis tipis bawaan nyaris tak terlihat. */
+    .services .stats-actions .btn-outline-red { border-color: rgba(255, 31, 31, 0.55); color: #fff; }
+
     .hero-actions .btn,
     .stats-actions .btn,
     .contact-cta .btn,
