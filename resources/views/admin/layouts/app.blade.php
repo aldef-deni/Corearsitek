@@ -86,6 +86,17 @@
                 <small>{{ Auth::user()->position ?: 'Administrator' }}</small>
             </span>
         </a>
+
+        {{-- Keluar juga ada di kaki menu samping, tapi di sana letaknya jauh di
+             bawah dan tidak terlihat tanpa menggulir. Yang ini selalu tampak. --}}
+        <form method="POST" action="{{ route('admin.logout') }}"
+              onsubmit="return confirm('Keluar dari dashboard?')">
+            @csrf
+            <button type="submit" class="topbar-logout" title="Keluar dari dashboard">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Keluar</span>
+            </button>
+        </form>
     </header>
 
     <div class="admin-content">
