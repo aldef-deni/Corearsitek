@@ -2169,7 +2169,15 @@ body.has-custom-cursor * { cursor: none !important; }
     .services .stats-card {
         position: relative;
         z-index: 3;
-        margin: -162px auto 44px;
+        /* Digeser lewat `top`, bukan margin negatif. Margin negatif pada anak
+           pertama akan menyatu dengan margin section-nya (margin collapsing)
+           sehingga seluruh section — berikut latar gelapnya — ikut naik dan
+           memotong banner. Dengan `top`, kotak tata letaknya tetap di tempat:
+           hanya kartunya yang menerobos ke atas banner. Margin bawahnya
+           dikurangi sebanyak pergeseran itu supaya jarak ke kartu layanan di
+           bawahnya tetap 44px seperti terlihat. */
+        top: -162px;
+        margin: 0 auto -118px;
         padding: 32px 20px 26px;
         border-radius: 18px;
         /* Menindih foto banner, jadi latarnya dibuat pekat agar teks tetap
