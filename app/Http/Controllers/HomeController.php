@@ -16,7 +16,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $contents = SiteContent::pluck('value', 'key')->toArray();
+        $contents = SiteContent::teks();
 
         return view('home', [
             'contents' => $contents,

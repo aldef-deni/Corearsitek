@@ -39,10 +39,12 @@
                     <label>Judul</label>
                     <input type="text" name="title" value="{{ $service->title }}" required>
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'title_en', 'label' => 'Judul', 'nilai' => $service->title_en])
                 <div class="field">
                     <label>Deskripsi</label>
                     <input type="text" name="subtitle" value="{{ $service->subtitle }}">
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'subtitle_en', 'label' => 'Deskripsi', 'nilai' => $service->subtitle_en])
                 <div class="field">
                     <label>Ikon</label>
                     <input type="text" name="icon" value="{{ $service->icon }}">

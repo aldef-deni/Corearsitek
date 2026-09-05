@@ -19,6 +19,7 @@ class FeatureController extends Controller
     {
         $data = $request->validate([
             'label' => ['required', 'string', 'max:255'],
+            'label_en' => ['nullable', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:100'],
             'sort_order' => ['nullable', 'integer'],
         ]);
@@ -32,6 +33,7 @@ class FeatureController extends Controller
     {
         $data = $request->validate([
             'label' => ['required', 'string', 'max:255'],
+            'label_en' => ['nullable', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:100'],
             'sort_order' => ['nullable', 'integer'],
         ]);

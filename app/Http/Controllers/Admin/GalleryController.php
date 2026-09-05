@@ -20,8 +20,10 @@ class GalleryController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'image' => UploadHelper::rules(required: true),
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string', 'max:1000'],
             'sort_order' => ['nullable', 'integer'],
         ]);
 
@@ -36,8 +38,10 @@ class GalleryController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'image' => UploadHelper::rules(),
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string', 'max:1000'],
             'sort_order' => ['nullable', 'integer'],
         ]);
 

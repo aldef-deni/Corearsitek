@@ -35,6 +35,7 @@
                     <label>Label</label>
                     <input type="text" name="label" value="{{ $feature->label }}" required>
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'label_en', 'label' => 'Label', 'nilai' => $feature->label_en])
                 <div class="field">
                     <label>Ikon</label>
                     <input type="text" name="icon" value="{{ $feature->icon }}">

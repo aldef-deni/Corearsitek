@@ -1074,3 +1074,32 @@ img { max-width: 100%; display: block; }
 
     .dash-hero-note { font-size: 10.5px; letter-spacing: 1.8px; text-align: center; }
 }
+
+/* ================================================================
+   Kolom pendamping bahasa Inggris
+   ================================================================ */
+
+/* Penanda kecil di sebelah label supaya kolom Inggris langsung terbaca
+   sebagai pendamping, bukan kolom baru yang wajib diisi. */
+.tag-en {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--red-soft);
+    border: 1px solid var(--red-line);
+    color: var(--red-light);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    vertical-align: 1px;
+}
+
+/* Dipakai di Konten Situs, yang kolomnya berpasangan langsung tanpa label
+   tersendiri. Garis kiri merah menandai barisnya sebagai versi Inggris. */
+.input-en {
+    margin-top: 6px;
+    border-left: 2px solid var(--red-line) !important;
+}
+
+.input-en::placeholder { color: var(--text-dim); font-style: italic; }

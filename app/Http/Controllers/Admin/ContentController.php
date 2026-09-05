@@ -21,6 +21,7 @@ class ContentController extends Controller
         $data = $request->validate([
             'contents' => ['required', 'array'],
             'contents.*.value' => ['nullable', 'string'],
+            'contents.*.value_en' => ['nullable', 'string'],
             'contents.*.image' => UploadHelper::rules(),
         ]);
 
@@ -32,6 +33,11 @@ class ContentController extends Controller
                 $item->value = UploadHelper::image($fields['image']);
             } elseif (array_key_exists('value', $fields)) {
                 $item->value = $fields['value'];
+            }
+
+            // Terjemahan disimpan terpisah; kolom gambar tidak pernah punya versi Inggris.
+            if (array_key_exists('value_en', $fields)) {
+                $item->value_en = $fields['value_en'];
             }
 
             $item->save();

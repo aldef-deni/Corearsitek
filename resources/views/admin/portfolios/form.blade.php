@@ -37,6 +37,7 @@
                        placeholder="Desain Rumah Modern 2 Lantai Bapak AS di Bandung">
                 <small class="hint">Tulis apa adanya seperti contoh; judul ini yang tampil di kartu portofolio.</small>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'title_en', 'label' => 'Judul', 'nilai' => old('title_en', $portfolio->title_en)])
 
             <div class="form-inline">
                 <div class="field">
@@ -57,6 +58,7 @@
                         @endforeach
                     </datalist>
                 </div>
+                @include('admin.partials.field-en', ['nama' => 'style_en', 'label' => 'Gaya Desain', 'nilai' => old('style_en', $portfolio->style_en)])
                 <div class="field">
                     <label for="project_date">Tanggal Karya</label>
                     <input type="date" name="project_date" id="project_date"
@@ -75,6 +77,7 @@
                     <input type="text" name="location" id="location"
                            value="{{ old('location', $portfolio->location) }}" placeholder="Bandung, Jawa Barat">
                 </div>
+                @include('admin.partials.field-en', ['nama' => 'location_en', 'label' => 'Lokasi', 'nilai' => old('location_en', $portfolio->location_en)])
             </div>
         </div>
 
@@ -109,6 +112,7 @@
                 <textarea name="description" id="description" rows="5"
                           placeholder="Ceritakan singkat konsep dan keunikan karya ini.">{{ old('description', $portfolio->description) }}</textarea>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'description_en', 'label' => 'Deskripsi', 'nilai' => old('description_en', $portfolio->description_en), 'tipe' => 'textarea', 'rows' => 5])
         </div>
 
         <div class="card">

@@ -42,6 +42,7 @@ class AdvantageController extends Controller
         return $request->validate([
             'type' => ['required', Rule::in(array_keys(Advantage::TYPES))],
             'text' => ['required', 'string', 'max:255'],
+            'text_en' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer'],
         ]);
     }

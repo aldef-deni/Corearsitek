@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PunyaTerjemahan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
+    use PunyaTerjemahan;
+
     /** Kategori karya, dipakai sebagai tab penyaring di halaman portofolio. */
     public const CATEGORIES = [
         'desain-rumah' => 'Desain Rumah',
@@ -40,6 +43,10 @@ class Portfolio extends Model
         'is_featured',
         'is_active',
         'sort_order',
+        'title_en',
+        'style_en',
+        'location_en',
+        'description_en',
     ];
 
     protected $casts = [
@@ -83,9 +90,17 @@ class Portfolio extends Model
             ->orderByDesc('id');
     }
 
+    /**
+     * Label kategori mengikuti bahasa aktif. Kategorinya daftar tetap, jadi
+     * terjemahannya cukup ditaruh di berkas bahasa, bukan kolom tersendiri.
+     */
     public function categoryLabel(): string
     {
-        return self::CATEGORIES[$this->category] ?? $this->category;
+        $kunci = 'situs.kategori_karya.' . $this->category;
+
+        return __($kunci) !== $kunci
+            ? __($kunci)
+            : (self::CATEGORIES[$this->category] ?? $this->category);
     }
 
     /**
@@ -95,17 +110,19 @@ class Portfolio extends Model
     {
         $specs = [];
 
+        $en = \App\Support\Bahasa::inggris();
+
         if ($this->building_area) {
-            $specs[] = 'LB ' . self::number($this->building_area) . ' m²';
+            $specs[] = ($en ? 'Built ' : 'LB ') . self::number($this->building_area) . ' m²';
         }
 
         if ($this->land_width && $this->land_length) {
-            $specs[] = 'Lebar ' . self::number($this->land_width)
-                . ' m × Panjang ' . self::number($this->land_length) . ' m';
+            $specs[] = ($en ? 'Width ' : 'Lebar ') . self::number($this->land_width)
+                . ($en ? ' m × Length ' : ' m × Panjang ') . self::number($this->land_length) . ' m';
         }
 
         if ($this->floors) {
-            $specs[] = $this->floors . ' lantai';
+            $specs[] = $this->floors . ($en ? ($this->floors > 1 ? ' floors' : ' floor') : ' lantai');
         }
 
         return $specs;

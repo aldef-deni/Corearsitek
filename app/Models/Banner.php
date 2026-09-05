@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PunyaTerjemahan;
 use Illuminate\Database\Eloquent\Model;
 
 class Banner extends Model
 {
+    use PunyaTerjemahan;
+
     /**
      * Halaman yang bisa punya banner sendiri.
      * Kunci disimpan di kolom `page`, nilainya dipakai sebagai label di dashboard.
@@ -29,6 +32,10 @@ class Banner extends Model
         'button_url',
         'is_active',
         'sort_order',
+        'title_en',
+        'subtitle_en',
+        'badge_text_en',
+        'button_text_en',
     ];
 
     protected $casts = [

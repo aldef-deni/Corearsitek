@@ -29,6 +29,8 @@
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                     </div>
                 @endif
             @endforeach
@@ -48,6 +50,8 @@
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                     </div>
                 @endif
             @endforeach
@@ -60,6 +64,8 @@
                     <div class="field">
                         <label>{{ $item->label }}</label>
                         <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                     </div>
                 @endif
             @endforeach
@@ -73,8 +79,11 @@
                         <label>{{ $item->label }}</label>
                         @if ($item->type === 'textarea')
                             <textarea name="contents[{{ $item->id }}][value]" rows="5">{{ $item->value }}</textarea>
+                            <textarea class="input-en" name="contents[{{ $item->id }}][value_en]" rows="5" placeholder="English — kosongkan untuk memakai teks Indonesia">{{ $item->value_en }}</textarea>
                         @else
                             <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                         @endif
                     </div>
                 @endif
@@ -92,6 +101,8 @@
                             @if ($item->key === 'contact_maps_url') <small>(kosongkan kalau belum ada)</small>@endif
                         </label>
                         <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                     </div>
                 @endif
             @endforeach
@@ -110,8 +121,11 @@
                         </label>
                         @if ($item->type === 'textarea')
                             <textarea name="contents[{{ $item->id }}][value]" rows="4">{{ $item->value }}</textarea>
+                            <textarea class="input-en" name="contents[{{ $item->id }}][value_en]" rows="4" placeholder="English — kosongkan untuk memakai teks Indonesia">{{ $item->value_en }}</textarea>
                         @else
                             <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                         @endif
                     </div>
                 @endif
@@ -126,8 +140,11 @@
                         <label>{{ $item->label }}</label>
                         @if ($item->type === 'textarea')
                             <textarea name="contents[{{ $item->id }}][value]" rows="3">{{ $item->value }}</textarea>
+                            <textarea class="input-en" name="contents[{{ $item->id }}][value_en]" rows="3" placeholder="English — kosongkan untuk memakai teks Indonesia">{{ $item->value_en }}</textarea>
                         @else
                             <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                         @endif
                     </div>
                 @endif
@@ -142,8 +159,11 @@
                         <label>{{ $item->label }}</label>
                         @if ($item->type === 'textarea')
                             <textarea name="contents[{{ $item->id }}][value]" rows="4">{{ $item->value }}</textarea>
+                            <textarea class="input-en" name="contents[{{ $item->id }}][value_en]" rows="4" placeholder="English — kosongkan untuk memakai teks Indonesia">{{ $item->value_en }}</textarea>
                         @else
                             <input type="text" name="contents[{{ $item->id }}][value]" value="{{ $item->value }}">
+                        <input type="text" class="input-en" name="contents[{{ $item->id }}][value_en]"
+                               value="{{ $item->value_en }}" placeholder="English — kosongkan untuk memakai teks Indonesia">
                         @endif
                     </div>
                 @endif

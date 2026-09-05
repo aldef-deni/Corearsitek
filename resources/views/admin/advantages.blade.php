@@ -60,6 +60,7 @@
                         <label>Isi Poin</label>
                         <input type="text" name="text" value="{{ $poin->text }}" required>
                     </div>
+                        @include('admin.partials.field-en', ['nama' => 'text_en', 'label' => 'Teks', 'nilai' => $poin->text_en])
                     <div class="field field-sm">
                         <label>Urutan</label>
                         <input type="number" name="sort_order" value="{{ $poin->sort_order }}">

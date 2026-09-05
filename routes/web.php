@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubmissionController as AdminSubmissionController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\BahasaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SubmissionController;
@@ -34,6 +35,9 @@ Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [SubmissionController::class, 'store'])
     ->middleware('throttle:5,10')
     ->name('contact.store');
+
+// Pengalih bahasa. Pilihannya disimpan di cookie, jadi berlaku di semua halaman.
+Route::get('/bahasa/{lokal}', [BahasaController::class, 'ganti'])->name('bahasa');
 
 // ---------- Admin ----------
 Route::prefix('admin')->name('admin.')->group(function () {

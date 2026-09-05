@@ -67,11 +67,13 @@
                             <label>Keterangan</label>
                             <input type="text" name="role" value="{{ $testimonial->role }}">
                         </div>
+                        @include('admin.partials.field-en', ['nama' => 'role_en', 'label' => 'Keterangan', 'nilai' => $testimonial->role_en])
                     </div>
                     <div class="field">
                         <label>Testimoni</label>
                         <textarea name="quote" rows="3" required>{{ $testimonial->quote }}</textarea>
                     </div>
+                    @include('admin.partials.field-en', ['nama' => 'quote_en', 'label' => 'Testimoni', 'nilai' => $testimonial->quote_en, 'tipe' => 'textarea', 'rows' => 3])
                     <div class="form-inline">
                         <div class="field form-grow">
                             <label>Ganti Foto</label>

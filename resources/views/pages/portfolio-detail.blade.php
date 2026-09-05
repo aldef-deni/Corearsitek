@@ -1,14 +1,14 @@
 @extends('layouts.frontend')
 
-@section('title', $portfolio->title . ' — ' . ($contents['site_name'] ?? 'CoreArsitek'))
-@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($portfolio->description ?: $portfolio->title), 155))
+@section('title', $portfolio->t('title') . ' — ' . ($contents['site_name'] ?? 'CoreArsitek'))
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($portfolio->t('description') ?: $portfolio->t('title')), 155))
 
 @section('structured_data')
 <script type="application/ld+json">
 {
     "@@context": "https://schema.org",
     "@@type": "CreativeWork",
-    "name": "{{ $portfolio->title }}",
+    "name": "{{ $portfolio->t('title') }}",
     "url": "{{ route('portfolio.show', $portfolio) }}",
     "image": "{{ asset($portfolio->cover_image) }}",
     "dateCreated": "{{ $portfolio->project_date?->format('Y-m-d') }}",
@@ -37,17 +37,17 @@
             <a href="{{ route('portfolio', ['kategori' => $portfolio->category]) }}">{{ $portfolio->categoryLabel() }}</a>
         </nav>
 
-        <h1 class="work-title">{{ $portfolio->title }}</h1>
+        <h1 class="work-title">{{ $portfolio->t('title') }}</h1>
 
         <p class="work-meta">
             @if ($portfolio->project_date)
                 <span><i class="fa-regular fa-calendar"></i> {{ $portfolio->project_date->translatedFormat('d F Y') }}</span>
             @endif
-            @if ($portfolio->location)
-                <span><i class="fa-solid fa-location-dot"></i> {{ $portfolio->location }}</span>
+            @if ($portfolio->t('location'))
+                <span><i class="fa-solid fa-location-dot"></i> {{ $portfolio->t('location') }}</span>
             @endif
-            @if ($portfolio->style)
-                <span><i class="fa-solid fa-palette"></i> {{ $portfolio->style }}</span>
+            @if ($portfolio->t('style'))
+                <span><i class="fa-solid fa-palette"></i> {{ $portfolio->t('style') }}</span>
             @endif
         </p>
     </div>
@@ -62,31 +62,31 @@
             {{-- Halaman sampul, dipasang di lembar kiri saat buku masih tertutup. --}}
             <template data-flip-cover>
                 <img src="{{ asset($logo) }}" alt="{{ $contents['site_name'] ?? 'CoreArsitek' }}" class="book-logo">
-                <h2 class="book-cover-title">{{ $portfolio->title }}</h2>
+                <h2 class="book-cover-title">{{ $portfolio->t('title') }}</h2>
                 <dl class="book-cover-specs">
-                    <dt>Kategori</dt><dd>{{ $portfolio->categoryLabel() }}</dd>
+                    <dt>{{ __('situs.kategori') }}</dt><dd>{{ $portfolio->categoryLabel() }}</dd>
 
-                    @if ($portfolio->style)
-                        <dt>Gaya</dt><dd>{{ $portfolio->style }}</dd>
+                    @if ($portfolio->t('style'))
+                        <dt>{{ __('situs.gaya') }}</dt><dd>{{ $portfolio->t('style') }}</dd>
                     @endif
                     @if ($portfolio->client)
-                        <dt>Klien</dt><dd>{{ $portfolio->client }}</dd>
+                        <dt>{{ __('situs.klien') }}</dt><dd>{{ $portfolio->client }}</dd>
                     @endif
-                    @if ($portfolio->location)
-                        <dt>Lokasi</dt><dd>{{ $portfolio->location }}</dd>
+                    @if ($portfolio->t('location'))
+                        <dt>{{ __('situs.lokasi') }}</dt><dd>{{ $portfolio->t('location') }}</dd>
                     @endif
                     @if ($portfolio->floors)
-                        <dt>Lantai</dt><dd>{{ $portfolio->floors }}</dd>
+                        <dt>{{ __('situs.lantai') }}</dt><dd>{{ $portfolio->floors }}</dd>
                     @endif
                     @if ($portfolio->building_area)
-                        <dt>Luas Bangunan</dt><dd>{{ $angka($portfolio->building_area) }} m&sup2;</dd>
+                        <dt>{{ __('situs.luas_bangunan') }}</dt><dd>{{ $angka($portfolio->building_area) }} m&sup2;</dd>
                     @endif
                     @if ($portfolio->land_width && $portfolio->land_length)
-                        <dt>Dimensi Lahan</dt>
+                        <dt>{{ __('situs.dimensi_lahan') }}</dt>
                         <dd>{{ $angka($portfolio->land_width) }} m &times; {{ $angka($portfolio->land_length) }} m</dd>
                     @endif
                     @if ($portfolio->project_date)
-                        <dt>Tanggal</dt><dd>{{ $portfolio->project_date->translatedFormat('d F Y') }}</dd>
+                        <dt>{{ __('situs.tanggal') }}</dt><dd>{{ $portfolio->project_date->translatedFormat('d F Y') }}</dd>
                     @endif
                 </dl>
             </template>
@@ -104,9 +104,9 @@
 
                 @foreach ($portfolio->images as $foto)
                     <figure class="work-photo reveal" data-flip-photo>
-                        <img src="{{ asset($foto->image) }}" alt="{{ $foto->caption ?: $portfolio->title }}" loading="lazy">
-                        @if ($foto->caption)
-                            <figcaption>{{ $foto->caption }}</figcaption>
+                        <img src="{{ asset($foto->image) }}" alt="{{ $foto->t('caption') ?: $portfolio->t('title') }}" loading="lazy">
+                        @if ($foto->t('caption'))
+                            <figcaption>{{ $foto->t('caption') }}</figcaption>
                         @endif
                     </figure>
                 @endforeach
@@ -115,7 +115,7 @@
 
         <div class="work-cta reveal">
             <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI DESAIN SERUPA
+                <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi_serupa') }}
             </a>
         </div>
     </div>

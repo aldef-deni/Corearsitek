@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'Galeri — ' . ($contents['site_name'] ?? 'CoreArsitek'))
+@section('title', __('situs.galeri') . ' — ' . ($contents['site_name'] ?? 'CoreArsitek'))
 @section('meta_description', 'Galeri foto karya dan kegiatan ' . ($contents['site_name'] ?? 'CoreArsitek') . '.')
 
 @php
@@ -21,15 +21,15 @@
 <section class="gallery">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">DOKUMENTASI</span>
-            <h2 class="section-title">GALERI FOTO</h2>
-            <p class="section-lead">Kumpulan foto karya dan kegiatan kami. Ketuk foto mana pun untuk membukanya sebagai buku yang bisa dibalik.</p>
+            <span class="eyebrow">{{ __('situs.eyebrow_galeri') }}</span>
+            <h2 class="section-title">{{ __('situs.judul_galeri') }}</h2>
+            <p class="section-lead">{{ __('situs.lead_galeri') }}</p>
         </div>
     </div>
 
     @if ($galleries->isEmpty())
         <div class="container">
-            <p class="empty-state">Belum ada foto galeri. Tambahkan melalui dashboard admin pada menu Galeri.</p>
+            <p class="empty-state">{{ __('situs.galeri_kosong') }}</p>
         </div>
     @else
         {{-- Di luar .container supaya deretannya menempel ke tepi layar. --}}
@@ -40,14 +40,14 @@
                 <button type="button" class="gb-item"
                         data-gbook-item
                         data-src="{{ asset($gallery->image) }}"
-                        data-title="{{ $gallery->title }}"
-                        data-desc="{{ $gallery->description }}"
-                        aria-label="Buka foto {{ $gallery->title }} dalam buku galeri">
-                    <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy">
+                        data-title="{{ $gallery->t('title') }}"
+                        data-desc="{{ $gallery->t('description') }}"
+                        aria-label="{{ __('situs.buka_foto', ['judul' => $gallery->t('title')]) }}">
+                    <img src="{{ asset($gallery->image) }}" alt="{{ $gallery->t('title') }}" loading="lazy">
                     <span class="gb-cap">
-                        <strong>{{ $gallery->title }}</strong>
-                        @if ($gallery->description)
-                            <small>{{ $gallery->description }}</small>
+                        <strong>{{ $gallery->t('title') }}</strong>
+                        @if ($gallery->t('description'))
+                            <small>{{ $gallery->t('description') }}</small>
                         @endif
                     </span>
                     <span class="gb-zoom" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
@@ -59,11 +59,11 @@
 
 <section class="contact">
     <div class="container">
-        <h2 class="section-title reveal">INGIN KARYA SEPERTI INI?</h2>
+        <h2 class="section-title reveal">{{ __('situs.seperti_ini') }}</h2>
         <div class="contact-cta reveal">
             <a href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}"
                target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI GRATIS VIA WHATSAPP
+                <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi') }}
             </a>
         </div>
     </div>

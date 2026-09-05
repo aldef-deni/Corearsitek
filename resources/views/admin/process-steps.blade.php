@@ -49,10 +49,12 @@
                     <label>Judul</label>
                     <input type="text" name="title" value="{{ $step->title }}" required>
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'title_en', 'label' => 'Judul', 'nilai' => $step->title_en])
                 <div class="field form-grow">
                     <label>Keterangan</label>
                     <input type="text" name="description" value="{{ $step->description }}">
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'description_en', 'label' => 'Keterangan', 'nilai' => $step->description_en])
                 <div class="field field-sm">
                     <label>Urutan</label>
                     <input type="number" name="sort_order" value="{{ $step->sort_order }}">

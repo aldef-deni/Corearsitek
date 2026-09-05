@@ -49,7 +49,7 @@
                     @php
                         // "JASA DESAIN RUMAH" dipecah jadi dua baris seperti
                         // rujukan: label di atas, jenis layanan di bawah.
-                        $judul = trim($service->title);
+                        $judul = trim($service->t('title'));
                         $atas = \Illuminate\Support\Str::startsWith(strtoupper($judul), 'JASA DESAIN')
                             ? 'JASA DESAIN' : '';
                         $bawah = $atas ? trim(mb_substr($judul, mb_strlen($atas))) : $judul;
@@ -77,20 +77,20 @@
     <section class="showcase">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">PORTOFOLIO</span>
-                <h2 class="section-title">DESAIN PILIHAN</h2>
-                <p class="section-lead">Sebagian karya yang sudah kami selesaikan — dari hunian klasik hingga villa tropis.</p>
+                <span class="eyebrow">{{ __('situs.eyebrow_portofolio') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_portofolio') }}</h2>
+                <p class="section-lead">{{ __('situs.lead_portofolio') }}</p>
             </div>
         </div>
 
         {{-- Sengaja di luar .container: gambarnya menempel ke tepi layar. --}}
         <div class="showcase-bleed">
             <a href="{{ route('portfolio.show', $utama) }}" class="bleed-hero reveal">
-                <img src="{{ asset($utama->cover_image) }}" alt="{{ $utama->title }}">
-                <span class="bleed-tag">DESAIN POPULER</span>
+                <img src="{{ asset($utama->cover_image) }}" alt="{{ $utama->t('title') }}">
+                <span class="bleed-tag">{{ __('situs.desain_populer') }}</span>
                 <span class="bleed-caption">
-                    <strong>{{ $utama->title }}</strong>
-                    <small>{{ collect([$utama->categoryLabel(), $utama->location])->filter()->implode(' · ') }}</small>
+                    <strong>{{ $utama->t('title') }}</strong>
+                    <small>{{ collect([$utama->categoryLabel(), $utama->t('location')])->filter()->implode(' · ') }}</small>
                 </span>
             </a>
 
@@ -98,10 +98,10 @@
                 <div class="bleed-row" data-swipe data-swipe-nodots>
                     @foreach ($sisa as $karya)
                         <a href="{{ route('portfolio.show', $karya) }}" class="bleed-item">
-                            <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->title }}" loading="lazy">
+                            <img src="{{ asset($karya->cover_image) }}" alt="{{ $karya->t('title') }}" loading="lazy">
                             <span class="bleed-caption">
-                                <strong>{{ $karya->title }}</strong>
-                                <small>{{ collect([$karya->categoryLabel(), $karya->location])->filter()->implode(' · ') }}</small>
+                                <strong>{{ $karya->t('title') }}</strong>
+                                <small>{{ collect([$karya->categoryLabel(), $karya->t('location')])->filter()->implode(' · ') }}</small>
                             </span>
                         </a>
                     @endforeach
@@ -112,7 +112,7 @@
         <div class="container">
             <div class="section-cta reveal">
                 <a href="{{ route('portfolio') }}" class="btn btn-red btn-flash magnetic" data-magnetic="0.1">
-                    <i class="fa-solid fa-images"></i> LIHAT SEMUA PORTOFOLIO
+                    <i class="fa-solid fa-images"></i> {{ __('situs.lihat_semua_portofolio') }}
                 </a>
             </div>
         </div>
@@ -124,14 +124,14 @@
     <section id="keunggulan" class="features">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">KEUNGGULAN</span>
-                <h2 class="section-title">APA YANG ANDA DAPATKAN?</h2>
+                <span class="eyebrow">{{ __('situs.eyebrow_keunggulan') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_keunggulan') }}</h2>
             </div>
             <div class="features-grid" data-reveal-group="35">
                 @foreach ($features as $feature)
                     <div class="feature-item reveal">
                         <i class="fa-solid {{ $feature->icon }}"></i>
-                        <span>{{ $feature->label }}</span>
+                        <span>{{ $feature->t('label') }}</span>
                     </div>
                 @endforeach
             </div>
@@ -145,10 +145,10 @@
         @if ($kerugian->count())
             <div class="ledger-block ledger-loss">
                 <div class="container">
-                    <h2 class="section-title reveal">APA KERUGIAN TANPA JASA ARSITEK?</h2>
+                    <h2 class="section-title reveal">{{ __('situs.judul_rugi') }}</h2>
                     <ul class="ledger-list" data-reveal-group="30">
                         @foreach ($kerugian as $poin)
-                            <li class="reveal"><i class="fa-solid fa-xmark"></i> {{ $poin->text }}</li>
+                            <li class="reveal"><i class="fa-solid fa-xmark"></i> {{ $poin->t('text') }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -158,17 +158,17 @@
         @if ($keunggulan->count())
             <div class="ledger-block ledger-gain">
                 <div class="container">
-                    <h2 class="section-title reveal">MENGAPA COREARSITEK?</h2>
+                    <h2 class="section-title reveal">{{ __('situs.judul_untung') }}</h2>
                     <ul class="ledger-list" data-reveal-group="30">
                         @foreach ($keunggulan as $poin)
-                            <li class="reveal"><i class="fa-solid fa-check"></i> {{ $poin->text }}</li>
+                            <li class="reveal"><i class="fa-solid fa-check"></i> {{ $poin->t('text') }}</li>
                         @endforeach
                     </ul>
 
                     <div class="section-cta reveal">
                         <a href="{{ $wa }}" target="_blank" rel="noopener"
                            class="btn btn-red btn-flash magnetic" data-magnetic="0.12">
-                            <i class="fa-brands fa-whatsapp"></i> KONSULTASI
+                            <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi') }}
                         </a>
                     </div>
                 </div>
@@ -182,9 +182,9 @@
     <section class="process">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">ALUR KERJA</span>
-                <h2 class="section-title">PROSES KERJA KAMI</h2>
-                <p class="section-lead">Empat tahap yang jelas, dari obrolan pertama sampai gambar kerja di tangan Anda.</p>
+                <span class="eyebrow">{{ __('situs.eyebrow_proses') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_proses_kami') }}</h2>
+                <p class="section-lead">{{ __('situs.lead_proses') }}</p>
             </div>
 
             <ol class="process-grid" data-swipe data-reveal-group="90">
@@ -192,8 +192,8 @@
                     <li class="process-step reveal">
                         <span class="process-num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                         <i class="fa-solid {{ $step->icon }}"></i>
-                        <h3>{{ $step->title }}</h3>
-                        <p>{{ $step->description }}</p>
+                        <h3>{{ $step->t('title') }}</h3>
+                        <p>{{ $step->t('description') }}</p>
                     </li>
                 @endforeach
             </ol>
@@ -206,15 +206,15 @@
     <section class="testimonials">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">ULASAN</span>
-                <h2 class="section-title">TESTIMONI KLIEN</h2>
+                <span class="eyebrow">{{ __('situs.eyebrow_ulasan') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_ulasan') }}</h2>
             </div>
 
             <div class="testimonial-grid" data-swipe data-reveal-group="90">
                 @foreach ($testimonials as $testimonial)
                     <figure class="testimonial-card reveal" data-tilt="3">
                         <i class="fa-solid fa-quote-left quote-mark"></i>
-                        <blockquote>{{ $testimonial->quote }}</blockquote>
+                        <blockquote>{{ $testimonial->t('quote') }}</blockquote>
                         <figcaption>
                             @if ($testimonial->avatar)
                                 <img src="{{ asset($testimonial->avatar) }}" alt="{{ $testimonial->name }}" class="testimonial-avatar" loading="lazy">
@@ -224,7 +224,7 @@
                             <span>
                                 <strong>{{ $testimonial->name }}</strong>
                                 @if ($testimonial->role)
-                                    <small>{{ $testimonial->role }}</small>
+                                    <small>{{ $testimonial->t('role') }}</small>
                                 @endif
                             </span>
                         </figcaption>
@@ -239,11 +239,11 @@
 <section class="about-band">
     <div class="container about-split">
         <div class="reveal-left">
-            <span class="eyebrow">TENTANG KAMI</span>
+            <span class="eyebrow">{{ __('situs.eyebrow_tentang') }}</span>
             <h2 class="section-title section-title-left">{{ $contents['about_title'] ?? 'TENTANG COREARSITEK' }}</h2>
             <p class="about-copy">{{ $contents['about_text'] ?? '' }}</p>
             <a href="{{ route('about') }}" class="btn btn-outline-red magnetic" data-magnetic="0.1">
-                <i class="fa-solid fa-arrow-right"></i> SELENGKAPNYA
+                <i class="fa-solid fa-arrow-right"></i> {{ __('situs.selengkapnya') }}
             </a>
         </div>
         <div class="about-figures reveal-right">
@@ -272,8 +272,8 @@
     <section class="clients">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">DIPERCAYA OLEH</span>
-                <h2 class="section-title">KLIEN KAMI</h2>
+                <span class="eyebrow">{{ __('situs.eyebrow_klien') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_klien') }}</h2>
             </div>
 
             <div class="client-grid" data-reveal-group="30">
@@ -298,29 +298,29 @@
 <section id="kontak" class="contact">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">KONTAK</span>
-            <h2 class="section-title">HUBUNGI KAMI</h2>
+            <span class="eyebrow">{{ __('situs.kontak') }}</span>
+            <h2 class="section-title">{{ __('situs.judul_hubungi') }}</h2>
         </div>
         <div class="contact-grid" data-reveal-group="90">
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-location-dot"></i>
-                <h3>Alamat</h3>
+                <h3>{{ __('situs.alamat') }}</h3>
                 <p>{{ $contents['contact_address'] ?? '' }}</p>
             </div>
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-phone"></i>
-                <h3>Telepon</h3>
+                <h3>{{ __('situs.telepon') }}</h3>
                 <p>{{ $contents['contact_phone'] ?? '' }}</p>
             </div>
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-envelope"></i>
-                <h3>Email</h3>
+                <h3>{{ __('situs.email') }}</h3>
                 <p>{{ $contents['contact_email'] ?? '' }}</p>
             </div>
         </div>
         <div class="contact-cta reveal">
             <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI
+                <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi') }}
             </a>
         </div>
     </div>

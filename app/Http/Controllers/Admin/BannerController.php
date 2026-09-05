@@ -23,10 +23,14 @@ class BannerController extends Controller
         $data = $request->validate([
             'page' => ['required', 'string', Rule::in(array_keys(Banner::PAGES))],
             'title' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
+            'subtitle_en' => ['nullable', 'string', 'max:255'],
             'badge_text' => ['nullable', 'string', 'max:255'],
+            'badge_text_en' => ['nullable', 'string', 'max:255'],
             'image' => UploadHelper::rules(required: true),
             'button_text' => ['nullable', 'string', 'max:100'],
+            'button_text_en' => ['nullable', 'string', 'max:100'],
             'button_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer'],
         ]);
@@ -44,10 +48,14 @@ class BannerController extends Controller
         $data = $request->validate([
             'page' => ['required', 'string', Rule::in(array_keys(Banner::PAGES))],
             'title' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
+            'subtitle_en' => ['nullable', 'string', 'max:255'],
             'badge_text' => ['nullable', 'string', 'max:255'],
+            'badge_text_en' => ['nullable', 'string', 'max:255'],
             'image' => UploadHelper::rules(),
             'button_text' => ['nullable', 'string', 'max:100'],
+            'button_text_en' => ['nullable', 'string', 'max:100'],
             'button_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer'],
         ]);

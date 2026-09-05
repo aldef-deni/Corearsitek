@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PunyaTerjemahan;
 use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
+    use PunyaTerjemahan;
+
     protected $fillable = [
         'name',
         'role',
@@ -13,6 +16,8 @@ class Testimonial extends Model
         'avatar',
         'is_active',
         'sort_order',
+        'role_en',
+        'quote_en',
     ];
 
     protected $casts = [

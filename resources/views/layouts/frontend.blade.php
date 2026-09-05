@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ \App\Support\Bahasa::kodeHtml() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
     <meta property="og:description" content="@yield('meta_description', $contents['meta_description'] ?? '')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset($ogImage) }}">
-    <meta property="og:locale" content="id_ID">
+    <meta property="og:locale" content="{{ str_replace('-', '_', \App\Support\Bahasa::kodeHtml()) }}">
 
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
@@ -55,17 +55,24 @@
         </a>
 
         <nav class="nav-links">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
-            <a href="{{ route('portfolio') }}" class="{{ request()->routeIs('portfolio*') ? 'active' : '' }}">Portofolio</a>
-            <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Layanan</a>
-            <a href="{{ route('gallery') }}" class="{{ request()->routeIs('gallery') ? 'active' : '' }}">Galeri</a>
-            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Tentang CoreArsitek</a>
-            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Kontak</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">{{ __('situs.beranda') }}</a>
+            <a href="{{ route('portfolio') }}" class="{{ request()->routeIs('portfolio*') ? 'active' : '' }}">{{ __('situs.portofolio') }}</a>
+            <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">{{ __('situs.layanan') }}</a>
+            <a href="{{ route('gallery') }}" class="{{ request()->routeIs('gallery') ? 'active' : '' }}">{{ __('situs.galeri') }}</a>
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('situs.tentang') }}</a>
+            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('situs.kontak') }}</a>
         </nav>
 
         <div class="nav-actions">
-            <span class="lang-btn">EN</span>
-            <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+            {{-- Hanya ada dua bahasa, jadi tombolnya cukup menampilkan tujuan
+                 berikutnya: sedang Indonesia berarti tombolnya "EN". --}}
+            <a class="lang-btn" href="{{ route('bahasa', \App\Support\Bahasa::lawan()) }}"
+               title="{{ \App\Support\Bahasa::PILIHAN[\App\Support\Bahasa::lawan()][1] }}"
+               aria-label="{{ __('situs.ganti_bahasa') }}">
+                <i class="fa-solid fa-globe"></i>
+                <span>{{ \App\Support\Bahasa::PILIHAN[\App\Support\Bahasa::lawan()][0] }}</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="{{ __('situs.buka_menu') }}"><i class="fa-solid fa-bars"></i></button>
         </div>
     </div>
 </header>
@@ -83,24 +90,24 @@
 
                 <a class="footer-wa" href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}"
                    target="_blank" rel="noopener">
-                    <i class="fa-brands fa-whatsapp"></i> Konsultasi via WhatsApp
+                    <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi_wa') }}
                 </a>
             </div>
 
             <nav class="footer-col footer-nav" aria-label="Menu footer">
-                <h4>Jelajahi</h4>
+                <h4>{{ __('situs.jelajahi') }}</h4>
                 <ul class="footer-menu">
-                    <li><a href="{{ route('home') }}">Beranda</a></li>
-                    <li><a href="{{ route('portfolio') }}">Portofolio</a></li>
-                    <li><a href="{{ route('services') }}">Layanan</a></li>
-                    <li><a href="{{ route('gallery') }}">Galeri</a></li>
-                    <li><a href="{{ route('about') }}">Tentang CoreArsitek</a></li>
-                    <li><a href="{{ route('contact') }}">Kontak</a></li>
+                    <li><a href="{{ route('home') }}">{{ __('situs.beranda') }}</a></li>
+                    <li><a href="{{ route('portfolio') }}">{{ __('situs.portofolio') }}</a></li>
+                    <li><a href="{{ route('services') }}">{{ __('situs.layanan') }}</a></li>
+                    <li><a href="{{ route('gallery') }}">{{ __('situs.galeri') }}</a></li>
+                    <li><a href="{{ route('about') }}">{{ __('situs.tentang') }}</a></li>
+                    <li><a href="{{ route('contact') }}">{{ __('situs.kontak') }}</a></li>
                 </ul>
             </nav>
 
             <div class="footer-col">
-                <h4>Hubungi Kami</h4>
+                <h4>{{ __('situs.judul_hubungi') }}</h4>
                 <ul class="footer-contact">
                     @if (!empty($contents['contact_address']))
                         <li>
@@ -128,14 +135,14 @@
     <div class="footer-bottom">
         <div class="container footer-bottom-inner">
             <span>{{ $contents['footer_copyright'] ?? '© ' . date('Y') . ' CoreArsitek. All rights reserved.' }}</span>
-            <a href="{{ route('admin.login') }}" class="footer-admin">Masuk Admin</a>
+            <a href="{{ route('admin.login') }}" class="footer-admin">{{ __('situs.masuk_admin') }}</a>
         </div>
     </div>
 </footer>
 
 <div class="floating-actions">
     <a class="fab fab-wa" href="https://wa.me/{{ preg_replace('/\D/', '', $contents['whatsapp_number'] ?? '') }}" target="_blank" rel="noopener" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-    <a class="fab fab-top" href="#" id="backToTop" title="Kembali ke atas"><i class="fa-solid fa-arrow-up"></i></a>
+    <a class="fab fab-top" href="#" id="backToTop" title="{{ __('situs.kembali_atas') }}"><i class="fa-solid fa-arrow-up"></i></a>
 </div>
 
 <script src="{{ asset('js/app.js') }}?v={{ @filemtime(public_path('js/app.js')) ?: 1 }}"></script>

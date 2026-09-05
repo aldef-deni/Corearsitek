@@ -18,7 +18,7 @@ class SubmissionReceived extends Mailable
 
     public function __construct(public Submission $submission)
     {
-        $this->contents = \App\Models\SiteContent::pluck('value', 'key')->toArray();
+        $this->contents = \App\Models\SiteContent::teks();
     }
 
     public function envelope(): Envelope

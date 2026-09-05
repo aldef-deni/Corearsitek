@@ -21,7 +21,9 @@ class TestimonialController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'role' => ['nullable', 'string', 'max:255'],
+            'role_en' => ['nullable', 'string', 'max:255'],
             'quote' => ['required', 'string'],
+            'quote_en' => ['nullable', 'string', 'max:1000'],
             'avatar' => UploadHelper::rules(),
             'sort_order' => ['nullable', 'integer'],
         ]);
@@ -44,7 +46,9 @@ class TestimonialController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'role' => ['nullable', 'string', 'max:255'],
+            'role_en' => ['nullable', 'string', 'max:255'],
             'quote' => ['required', 'string'],
+            'quote_en' => ['nullable', 'string', 'max:1000'],
             'avatar' => UploadHelper::rules(),
             'sort_order' => ['nullable', 'integer'],
         ]);

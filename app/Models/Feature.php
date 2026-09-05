@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PunyaTerjemahan;
 use Illuminate\Database\Eloquent\Model;
 
 class Feature extends Model
 {
-    protected $fillable = ['icon', 'label', 'sort_order'];
+    use PunyaTerjemahan;
+
+    protected $fillable = ['icon', 'label', 'sort_order', 'label_en'];
 }

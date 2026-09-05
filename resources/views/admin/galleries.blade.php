@@ -51,10 +51,12 @@
                     <label>Judul</label>
                     <input type="text" name="title" value="{{ $gallery->title }}" required>
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'title_en', 'label' => 'Judul', 'nilai' => $gallery->title_en])
                 <div class="field">
                     <label>Deskripsi</label>
                     <input type="text" name="description" value="{{ $gallery->description }}">
                 </div>
+                    @include('admin.partials.field-en', ['nama' => 'description_en', 'label' => 'Deskripsi', 'nilai' => $gallery->description_en])
                 <div class="field">
                     <label>Ganti Foto</label>
                     <input type="file" name="image" accept=".jpg,.jpeg,.png">

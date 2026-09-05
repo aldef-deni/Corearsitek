@@ -93,20 +93,24 @@
                                 <label>Judul</label>
                                 <input type="text" name="title" value="{{ $banner->title }}">
                             </div>
+                            @include('admin.partials.field-en', ['nama' => 'title_en', 'label' => 'Judul', 'nilai' => $banner->title_en])
                             <div class="field">
                                 <label>Subjudul</label>
                                 <input type="text" name="subtitle" value="{{ $banner->subtitle }}">
                             </div>
+                            @include('admin.partials.field-en', ['nama' => 'subtitle_en', 'label' => 'Subjudul', 'nilai' => $banner->subtitle_en])
                         </div>
                         <div class="form-inline">
                             <div class="field">
                                 <label>Teks Badge</label>
                                 <input type="text" name="badge_text" value="{{ $banner->badge_text }}">
                             </div>
+                            @include('admin.partials.field-en', ['nama' => 'badge_text_en', 'label' => 'Teks Badge', 'nilai' => $banner->badge_text_en])
                             <div class="field">
                                 <label>Teks Tombol</label>
                                 <input type="text" name="button_text" value="{{ $banner->button_text }}">
                             </div>
+                            @include('admin.partials.field-en', ['nama' => 'button_text_en', 'label' => 'Teks Tombol', 'nilai' => $banner->button_text_en])
                             <div class="field">
                                 <label>Link Tombol</label>
                                 <input type="text" name="button_url" value="{{ $banner->button_url }}">

@@ -26,8 +26,8 @@
     'slides' => $banners,
     'variant' => 'page',
     'fallbackImage' => $contents['hero_image'] ?? '',
-    'fallbackTitle' => $contents['about_title'] ?? 'TENTANG COREARSITEK',
-    'fallbackSubtitle' => 'Hunian aman, nyaman, dan elegan',
+    'fallbackTitle' => $contents['about_title'] ?? __('situs.tentang'),
+    'fallbackSubtitle' => $contents['hero_subtitle'] ?? '',
     'siteName' => $contents['site_name'] ?? 'CoreArsitek',
 ])
 
@@ -35,8 +35,8 @@
 <section class="about-intro">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">TENTANG KAMI</span>
-            <h2 class="section-title">{{ $contents['about_title'] ?? 'TENTANG COREARSITEK' }}</h2>
+            <span class="eyebrow">{{ __('situs.eyebrow_tentang') }}</span>
+            <h2 class="section-title">{{ $contents['about_title'] ?? __('situs.tentang') }}</h2>
         </div>
 
         @if (!empty($contents['about_text']))
@@ -59,7 +59,7 @@
             @if (!empty($contents['about_vision']))
                 <article class="vm-card reveal-left">
                     <span class="vm-icon"><i class="fa-solid fa-eye"></i></span>
-                    <h3>Visi</h3>
+                    <h3>{{ __('situs.visi') }}</h3>
                     <p>{{ $contents['about_vision'] }}</p>
                 </article>
             @endif
@@ -67,7 +67,7 @@
             @if ($misi->count())
                 <article class="vm-card reveal-right">
                     <span class="vm-icon"><i class="fa-solid fa-bullseye"></i></span>
-                    <h3>Misi</h3>
+                    <h3>{{ __('situs.misi') }}</h3>
                     <ol class="vm-list">
                         @foreach ($misi as $poin)
                             <li>{{ $poin }}</li>
@@ -87,8 +87,8 @@
             @if (!empty($contents['about_profile_image']))
                 <div class="profile-photo reveal-left">
                     <img src="{{ asset($contents['about_profile_image']) }}"
-                         alt="{{ $contents['about_profile_name'] ?? 'Profil' }}">
-                    <span class="profile-tag">Profil</span>
+                         alt="{{ $contents['about_profile_name'] ?? __('situs.profil') }}">
+                    <span class="profile-tag">{{ __('situs.profil') }}</span>
                 </div>
             @endif
 
@@ -111,7 +111,7 @@
 
                 @if ($keahlian->count())
                     <div class="profile-skills">
-                        <h4>Bidang Keahlian</h4>
+                        <h4>{{ __('situs.bidang_keahlian') }}</h4>
                         <ul>
                             @foreach ($keahlian as $item)
                                 <li>{{ $item }}</li>
@@ -128,25 +128,25 @@
 <section class="about-band">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">REKAM JEJAK</span>
-            <h2 class="section-title">ANGKA KAMI</h2>
+            <span class="eyebrow">{{ __('situs.eyebrow_angka') }}</span>
+            <h2 class="section-title">{{ __('situs.judul_angka') }}</h2>
         </div>
         <div class="about-figures about-figures-wide" data-reveal-group="60">
             <div class="about-figure reveal">
                 <span class="figure-value">{{ $contents['stats_number'] ?? '2707' }}+</span>
-                <span class="figure-label">Desain Selesai</span>
+                <span class="figure-label">{{ __('situs.desain_selesai') }}</span>
             </div>
             <div class="about-figure reveal">
                 <span class="figure-value">12+</span>
-                <span class="figure-label">Tahun Pengalaman</span>
+                <span class="figure-label">{{ __('situs.tahun_pengalaman') }}</span>
             </div>
             <div class="about-figure reveal">
                 <span class="figure-value">100%</span>
-                <span class="figure-label">Kepuasan Klien</span>
+                <span class="figure-label">{{ __('situs.kepuasan_klien') }}</span>
             </div>
             <div class="about-figure reveal">
                 <span class="figure-value">24</span>
-                <span class="figure-label">Item Deliverable</span>
+                <span class="figure-label">{{ __('situs.item_deliverable') }}</span>
             </div>
         </div>
     </div>
@@ -157,8 +157,8 @@
     <section class="clients">
         <div class="container">
             <div class="section-head reveal">
-                <span class="eyebrow">DIPERCAYA OLEH</span>
-                <h2 class="section-title">KLIEN KAMI</h2>
+                <span class="eyebrow">{{ __('situs.eyebrow_klien') }}</span>
+                <h2 class="section-title">{{ __('situs.judul_klien') }}</h2>
             </div>
 
             <div class="client-grid" data-reveal-group="30">
@@ -183,29 +183,29 @@
 <section id="kontak" class="contact">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">KONTAK</span>
-            <h2 class="section-title">HUBUNGI KAMI</h2>
+            <span class="eyebrow">{{ __('situs.kontak') }}</span>
+            <h2 class="section-title">{{ __('situs.judul_hubungi') }}</h2>
         </div>
         <div class="contact-grid" data-reveal-group="90">
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-location-dot"></i>
-                <h3>Alamat</h3>
+                <h3>{{ __('situs.alamat') }}</h3>
                 <p>{{ $contents['contact_address'] ?? '' }}</p>
             </div>
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-phone"></i>
-                <h3>Telepon</h3>
+                <h3>{{ __('situs.telepon') }}</h3>
                 <p>{{ $contents['contact_phone'] ?? '' }}</p>
             </div>
             <div class="contact-item reveal" data-tilt="4">
                 <i class="fa-solid fa-envelope"></i>
-                <h3>Email</h3>
+                <h3>{{ __('situs.email') }}</h3>
                 <p>{{ $contents['contact_email'] ?? '' }}</p>
             </div>
         </div>
         <div class="contact-cta reveal">
             <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-red btn-flash magnetic" data-magnetic="0.12">
-                <i class="fa-brands fa-whatsapp"></i> KONSULTASI
+                <i class="fa-brands fa-whatsapp"></i> {{ __('situs.konsultasi') }}
             </a>
         </div>
     </div>

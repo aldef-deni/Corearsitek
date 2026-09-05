@@ -31,6 +31,7 @@ class AboutController extends Controller
     {
         return view('admin.about', [
             'contents' => SiteContent::pluck('value', 'key')->toArray(),
+            'contentsEn' => SiteContent::pluck('value_en', 'key')->toArray(),
             'clients' => Client::orderBy('sort_order')->orderBy('id')->get(),
         ]);
     }
@@ -49,10 +50,15 @@ class AboutController extends Controller
             'about_profile_bio' => ['nullable', 'string', 'max:5000'],
             'about_profile_skills' => ['nullable', 'string', 'max:2000'],
             'about_profile_image' => UploadHelper::rules(),
-        ]);
+        ] + collect(self::TEXT_KEYS)
+            ->mapWithKeys(fn ($k) => [$k . '_en' => ['nullable', 'string', 'max:5000']])
+            ->all());
 
         foreach (self::TEXT_KEYS as $key) {
-            SiteContent::where('key', $key)->update(['value' => $data[$key] ?? '']);
+            SiteContent::where('key', $key)->update([
+                'value' => $data[$key] ?? '',
+                'value_en' => $data[$key . '_en'] ?? '',
+            ]);
         }
 
         if ($request->hasFile('about_profile_image')) {

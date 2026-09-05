@@ -11,6 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Pilihan bahasa bukan data rahasia, dan membiarkannya terenkripsi
+        // membuatnya tidak terbaca oleh lapisan cache mana pun di depan aplikasi.
+        $middleware->encryptCookies(except: [\App\Support\Bahasa::COOKIE]);
+
+        // Bahasa ditetapkan untuk setiap permintaan web, termasuk dashboard,
+        // supaya pesan validasi ikut mengikuti pilihan pengunjung.
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);

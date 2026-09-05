@@ -27,6 +27,8 @@
                        value="{{ old('about_title', $contents['about_title'] ?? '') }}"
                        placeholder="TENTANG COREARSITEK">
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_title_en', 'label' => 'Judul', 'nilai' => old('about_title_en', $contentsEn['about_title'] ?? '')])
+
 
             <div class="field">
                 <label for="about_tagline">Tagline</label>
@@ -35,12 +37,16 @@
                        placeholder="Kalimat singkat yang mewakili CoreArsitek">
                 <small class="hint">Tampil sebagai kutipan besar di bawah pengantar.</small>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_tagline_en', 'label' => 'Tagline', 'nilai' => old('about_tagline_en', $contentsEn['about_tagline'] ?? '')])
+
 
             <div class="field">
                 <label for="about_text">Pengantar</label>
                 <textarea name="about_text" id="about_text" rows="5"
                           placeholder="Ceritakan siapa CoreArsitek dalam beberapa kalimat.">{{ old('about_text', $contents['about_text'] ?? '') }}</textarea>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_text_en', 'label' => 'Pengantar', 'nilai' => old('about_text_en', $contentsEn['about_text'] ?? ''), 'tipe' => 'textarea'])
+
         </div>
 
         <div class="card">
@@ -50,12 +56,16 @@
                 <label for="about_vision">Visi</label>
                 <textarea name="about_vision" id="about_vision" rows="4">{{ old('about_vision', $contents['about_vision'] ?? '') }}</textarea>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_vision_en', 'label' => 'Visi', 'nilai' => old('about_vision_en', $contentsEn['about_vision'] ?? ''), 'tipe' => 'textarea'])
+
 
             <div class="field">
                 <label for="about_mission">Misi</label>
                 <textarea name="about_mission" id="about_mission" rows="6">{{ old('about_mission', $contents['about_mission'] ?? '') }}</textarea>
                 <small class="hint">Tulis <strong>satu poin per baris</strong>. Tiap baris tampil sebagai butir bernomor di halaman.</small>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_mission_en', 'label' => 'Misi', 'nilai' => old('about_mission_en', $contentsEn['about_mission'] ?? ''), 'tipe' => 'textarea'])
+
         </div>
 
         <div class="card">
@@ -83,12 +93,16 @@
                            value="{{ old('about_profile_name', $contents['about_profile_name'] ?? '') }}"
                            placeholder="mis. Ade Zulham">
                 </div>
+            @include('admin.partials.field-en', ['nama' => 'about_profile_name_en', 'label' => 'Nama', 'nilai' => old('about_profile_name_en', $contentsEn['about_profile_name'] ?? '')])
+
                 <div class="field">
                     <label for="about_profile_role">Jabatan</label>
                     <input type="text" name="about_profile_role" id="about_profile_role"
                            value="{{ old('about_profile_role', $contents['about_profile_role'] ?? '') }}"
                            placeholder="Principal Architect">
                 </div>
+            @include('admin.partials.field-en', ['nama' => 'about_profile_role_en', 'label' => 'Jabatan', 'nilai' => old('about_profile_role_en', $contentsEn['about_profile_role'] ?? '')])
+
             </div>
 
             <div class="field">
@@ -96,18 +110,24 @@
                 <textarea name="about_profile_quote" id="about_profile_quote" rows="3"
                           placeholder="Satu kalimat yang mewakili cara kerja atau keyakinan Anda.">{{ old('about_profile_quote', $contents['about_profile_quote'] ?? '') }}</textarea>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_profile_quote_en', 'label' => 'Kutipan', 'nilai' => old('about_profile_quote_en', $contentsEn['about_profile_quote'] ?? ''), 'tipe' => 'textarea'])
+
 
             <div class="field">
                 <label for="about_profile_bio">Deskripsi</label>
                 <textarea name="about_profile_bio" id="about_profile_bio" rows="7"
                           placeholder="Latar belakang, pengalaman, dan pendekatan kerja.">{{ old('about_profile_bio', $contents['about_profile_bio'] ?? '') }}</textarea>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_profile_bio_en', 'label' => 'Deskripsi', 'nilai' => old('about_profile_bio_en', $contentsEn['about_profile_bio'] ?? ''), 'tipe' => 'textarea'])
+
 
             <div class="field">
                 <label for="about_profile_skills">Bidang Keahlian</label>
                 <textarea name="about_profile_skills" id="about_profile_skills" rows="6">{{ old('about_profile_skills', $contents['about_profile_skills'] ?? '') }}</textarea>
                 <small class="hint">Tulis <strong>satu keahlian per baris</strong>. Tiap baris tampil sebagai label di halaman.</small>
             </div>
+            @include('admin.partials.field-en', ['nama' => 'about_profile_skills_en', 'label' => 'Bidang Keahlian', 'nilai' => old('about_profile_skills_en', $contentsEn['about_profile_skills'] ?? ''), 'tipe' => 'textarea'])
+
         </div>
 
         <button type="submit" class="btn btn-red"><i class="fa-solid fa-floppy-disk"></i> SIMPAN HALAMAN TENTANG</button>

@@ -26,6 +26,12 @@
     ]]);
 
     $banyak = $daftar->count() > 1;
+
+    // Banner cadangan hanya objek biasa tanpa terjemahan, sedangkan banner
+    // dari dashboard punya kolom "_en". Pembungkus ini menyamakan keduanya.
+    $teks = fn ($slide, $kolom) => $slide instanceof \App\Models\Banner
+        ? $slide->t($kolom)
+        : ($slide->{$kolom} ?? '');
 @endphp
 
 <section @if ($variant === 'hero') id="beranda" @endif class="hero-slider {{ $variant === 'page' ? 'is-page' : '' }}"
@@ -35,32 +41,32 @@
             @php
                 // Banner tanpa teks tidak butuh overlay gelap; itu hanya
                 // meredupkan fotonya tanpa alasan.
-                $adaTeks = $slide->title || $slide->subtitle || $slide->button_text;
+                $adaTeks = $teks($slide, 'title') || $teks($slide, 'subtitle') || $teks($slide, 'button_text');
             @endphp
             <article class="slide {{ $i === 0 ? 'is-active' : '' }} {{ $adaTeks ? '' : 'slide-plain' }}" data-slide>
-                <img src="{{ asset($slide->image) }}" alt="{{ $slide->title ?: $siteName }}"
+                <img src="{{ asset($slide->image) }}" alt="{{ $teks($slide, 'title') ?: $siteName }}"
                      class="slide-img" {{ $i === 0 ? '' : 'loading=lazy' }}>
                 <div class="hero-overlay"></div>
 
-                @if (!empty($slide->badge_text))
+                @if (!empty($teks($slide, 'badge_text')))
                     <div class="hero-badge">
                         <i class="fa-solid fa-award"></i>
-                        <span>{!! nl2br(e($slide->badge_text)) !!}</span>
+                        <span>{!! nl2br(e($teks($slide, 'badge_text'))) !!}</span>
                     </div>
                 @endif
 
                 <div class="container hero-content">
-                    @if (!empty($slide->title))
-                        <h1 class="hero-title">{{ $slide->title }}</h1>
+                    @if (!empty($teks($slide, 'title')))
+                        <h1 class="hero-title">{{ $teks($slide, 'title') }}</h1>
                     @endif
-                    @if (!empty($slide->subtitle))
-                        <p class="hero-subtitle">{{ $slide->subtitle }}</p>
+                    @if (!empty($teks($slide, 'subtitle')))
+                        <p class="hero-subtitle">{{ $teks($slide, 'subtitle') }}</p>
                     @endif
                     {{-- Hanya tombol yang diisi admin lewat menu Banner. --}}
-                    @if (!empty($slide->button_text))
+                    @if (!empty($teks($slide, 'button_text')))
                         <div class="hero-actions">
                             <a href="{{ $slide->button_url ?: '#kontak' }}" class="btn btn-red magnetic" data-magnetic="0.12">
-                                <i class="fa-solid fa-arrow-right"></i> {{ $slide->button_text }}
+                                <i class="fa-solid fa-arrow-right"></i> {{ $teks($slide, 'button_text') }}
                             </a>
                         </div>
                     @endif
@@ -70,8 +76,8 @@
     </div>
 
     @if ($banyak)
-        <button class="slider-nav slider-prev" data-slider-prev aria-label="Banner sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="slider-nav slider-next" data-slider-next aria-label="Banner berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="slider-nav slider-prev" data-slider-prev aria-label="{{ __('situs.halaman_sebelumnya') }}"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-nav slider-next" data-slider-next aria-label="{{ __('situs.halaman_berikutnya') }}"><i class="fa-solid fa-chevron-right"></i></button>
         <div class="slider-dots" data-slider-dots>
             @foreach ($daftar as $i => $slide)
                 <button class="slider-dot {{ $i === 0 ? 'is-active' : '' }}" data-slider-dot="{{ $i }}" aria-label="Banner {{ $i + 1 }}"></button>

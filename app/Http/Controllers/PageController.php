@@ -15,7 +15,7 @@ class PageController extends Controller
 {
     private function contents(): array
     {
-        return SiteContent::pluck('value', 'key')->toArray();
+        return SiteContent::teks();
     }
 
     private function banners(string $page): Collection
