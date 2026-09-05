@@ -2176,8 +2176,8 @@ body.has-custom-cursor * { cursor: none !important; }
            hanya kartunya yang menerobos ke atas banner. Margin bawahnya
            dikurangi sebanyak pergeseran itu supaya jarak ke kartu layanan di
            bawahnya tetap 44px seperti terlihat. */
-        top: -162px;
-        margin: 0 auto -118px;
+        top: -112px;
+        margin: 0 auto -68px;
         padding: 32px 20px 26px;
         border-radius: 18px;
         /* Menindih foto banner, jadi latarnya dibuat pekat agar teks tetap
