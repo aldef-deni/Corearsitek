@@ -3062,6 +3062,11 @@ body.has-custom-cursor * { cursor: none !important; }
         gap: 14px;
         border-radius: 14px;
         justify-content: center;
+        /* Garisnya diterangkan: pada 28% transparansi tepinya nyaris lebur ke
+           latar hitam, sehingga kartunya tidak terbaca sebagai kartu. Pendar
+           tipis di luar garis menjaganya tetap lembut, tidak menyilaukan. */
+        border-color: rgba(255, 31, 31, 0.62);
+        box-shadow: 0 0 12px -2px rgba(255, 31, 31, 0.18);
     }
 
     .service-pill i:first-child { font-size: 34px; margin-bottom: 0; }
