@@ -47,5 +47,8 @@
 
     <p class="login-back"><a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Kembali ke situs</a></p>
 </div>
+
+{{-- Dipakai untuk tombol lihat password; berkas yang sama dengan dashboard. --}}
+<script src="{{ asset('js/admin.js') }}?v={{ @filemtime(public_path('js/admin.js')) ?: 1 }}"></script>
 </body>
 </html>

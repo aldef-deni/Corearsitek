@@ -149,9 +149,55 @@
         });
     }
 
+
+    /* ================================================================
+       Lihat password
+
+       Dipasang otomatis pada setiap kolom password, jadi berlaku di
+       halaman login maupun penggantian password di menu Profil tanpa
+       perlu menandai apa pun di markup.
+       ================================================================ */
+
+    function initLihatPassword() {
+        document.querySelectorAll('input[type="password"]').forEach(function (input) {
+            if (input.parentNode && input.parentNode.classList.contains('pw-wrap')) return;
+
+            var bungkus = document.createElement('div');
+            bungkus.className = 'pw-wrap';
+            input.parentNode.insertBefore(bungkus, input);
+            bungkus.appendChild(input);
+
+            var tombol = document.createElement('button');
+            tombol.type = 'button';
+            tombol.className = 'pw-toggle';
+            tombol.tabIndex = -1;
+            tombol.setAttribute('aria-label', 'Tampilkan password');
+            tombol.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            bungkus.appendChild(tombol);
+
+            tombol.addEventListener('click', function () {
+                var tampilkan = input.type === 'password';
+
+                input.type = tampilkan ? 'text' : 'password';
+                tombol.innerHTML = '<i class="fa-regular fa-eye' + (tampilkan ? '-slash' : '') + '"></i>';
+                tombol.setAttribute('aria-label', tampilkan ? 'Sembunyikan password' : 'Tampilkan password');
+
+                // Berganti tipe memindahkan kursor ke awal; dikembalikan ke
+                // ujung teks supaya pengetikan bisa langsung dilanjutkan.
+                input.focus();
+                try {
+                    input.setSelectionRange(input.value.length, input.value.length);
+                } catch (e) {
+                    /* Sebagian peramban menolak setSelectionRange pada type=password. */
+                }
+            });
+        });
+    }
+
     function init() {
         document.querySelectorAll('form').forEach(pasang);
         initSimpanSemua();
+        initLihatPassword();
     }
 
     if (document.readyState === 'loading') {

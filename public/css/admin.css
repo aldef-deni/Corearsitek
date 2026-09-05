@@ -1156,3 +1156,33 @@ img { max-width: 100%; display: block; }
 
     .topbar-logout span { display: none; }
 }
+
+/* ================================================================
+   Tombol lihat password
+   ================================================================ */
+
+.pw-wrap { position: relative; display: block; }
+
+/* Ruang di kanan disisakan agar teks panjang tidak tertutup tombolnya. */
+.pw-wrap input { padding-right: 44px !important; }
+
+.pw-toggle {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 14px;
+    cursor: pointer;
+    transition: color var(--t) var(--e), background-color var(--t) var(--e);
+}
+
+.pw-toggle:hover { color: var(--red-light); background: var(--ink-3); }
