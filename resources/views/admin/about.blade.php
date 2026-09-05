@@ -213,7 +213,7 @@
                         <label>Tampilkan</label>
                         <label class="checkbox"><input type="checkbox" name="is_active" value="1" @checked($client->is_active)> Aktif</label>
                     </div>
-                    <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                    <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                 </div>
             </form>
             <div class="card-row-actions">

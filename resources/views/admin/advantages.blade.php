@@ -65,7 +65,7 @@
                         <label>Urutan</label>
                         <input type="number" name="sort_order" value="{{ $poin->sort_order }}">
                     </div>
-                    <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                    <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                 </form>
                 <form method="POST" action="{{ route('admin.advantages.destroy', $poin) }}"
                       onsubmit="return confirm('Hapus poin ini?')">

@@ -87,7 +87,7 @@
                             <label>Tampilkan</label>
                             <label class="checkbox"><input type="checkbox" name="is_active" value="1" @checked($testimonial->is_active)> Aktif</label>
                         </div>
-                        <button type="submit" class="btn btn-ghost"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                        <button type="submit" class="btn btn-red btn-flash"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                     </div>
                 </form>
                 <form method="POST" action="{{ route('admin.testimonials.destroy', $testimonial) }}" onsubmit="return confirm('Hapus testimoni ini?')">
